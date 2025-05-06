@@ -1,2 +1,3 @@
 *.pyc
 chromedriver-win64/chromedriver.exe
+*.xml
