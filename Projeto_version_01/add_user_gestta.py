@@ -18,12 +18,12 @@ def site_gessta(dados_entrada):
     elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='password']")
 
     elemento_login.send_keys(os.getenv('EMAIL_ACESSO', ''))
-    sleep(1)
+    sleep(0.5)
     elemento_senha.send_keys(os.getenv('SENHA_ACESSO', ''))
     elemento_senha.send_keys(Keys.ENTER)
-    sleep(10)
+    sleep(6)
     elemento_configuracao = DRIVE_CHROME.find_element(By.XPATH, "//svg[@xmlns='http://www.w3.org/2000/svg']")
-    elemento_configuracao.send_keys(Keys.)
+    elemento_configuracao.send_keys(Keys.ENTER)
 
     sleep(10)
 
