@@ -22,8 +22,8 @@ def site_gessta(dados_entrada):
     elemento_senha.send_keys(os.getenv('SENHA_ACESSO', ''))
     elemento_senha.send_keys(Keys.ENTER)
     sleep(10)
-    elemento_configuracao = DRIVE_CHROME.find_element(By.XPATH, "//[@class='c-kEACt c-gHhkgk c-gHhkgk-eOzBIe-visible-false']")
-    elemento_configuracao.send_keys(Keys.ENTER)
+    elemento_configuracao = DRIVE_CHROME.find_element(By.XPATH, "//svg[@xmlns='http://www.w3.org/2000/svg']")
+    elemento_configuracao.send_keys(Keys.)
 
     sleep(10)
 
