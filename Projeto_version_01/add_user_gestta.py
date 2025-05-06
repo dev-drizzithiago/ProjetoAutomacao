@@ -1,26 +1,32 @@
 """ https://googlechromelabs.github.io/chrome-for-testing/#stable """
+import os
 from pathlib import Path
 from dotenv import load_dotenv
-import os
+from time import sleep
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
-from time import sleep
+load_dotenv()
 
-def site_gessta(url_entrada, email, senha):
-    DRIVE_CHROME.get(url_entrada)
+def site_gessta(dados_entrada):
+    DRIVE_CHROME.get(dados_entrada)
+
     elemento_login = DRIVE_CHROME.find_element(By.ID, "email")
     elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='password']")
 
-    sleep(2)
-    elemento_login.send_keys('email@email.com')
-    sleep(2)
-    elemento_senha.send_keys('senha')
+    elemento_login.send_keys(os.getenv('EMAIL_ACESSO', ''))
+    sleep(1)
+    elemento_senha.send_keys(os.getenv('SENHA_ACESSO', ''))
     elemento_senha.send_keys(Keys.ENTER)
     sleep(10)
+    elemento_configuracao = DRIVE_CHROME.find_element(By.XPATH, "//[@class='c-kEACt c-gHhkgk c-gHhkgk-eOzBIe-visible-false']")
+    elemento_configuracao.send_keys(Keys.ENTER)
+
+    sleep(10)
+
 
 
 ROOT_FOLDER = Path(__file__).parent
@@ -30,9 +36,5 @@ DRIVE_CHROME = webdriver.Chrome()
 CHROME_SERVICE = Service(executable_path=str(PATH_CHROME_DRIVER))
 
 if __name__ == '__main__':
-    load_dotenv()
-    email_acesso = os.getenv('EMAIL_ACESSO')
-    senha_acesso = os.getenv('SENHA_ACESSO')
-
     url = 'https://app.gestta.com.br/#/login/auth?isInitialPage=true'
-    site_gessta(url_entrada=url, email=email_acesso, senha=senha_acesso)
+    site_gessta(url)
