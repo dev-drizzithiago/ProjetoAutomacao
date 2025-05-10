@@ -28,7 +28,6 @@ def site_gessta(dados_entrada):
     sleep(10)
 
 
-
 ROOT_FOLDER = Path(__file__).parent
 PATH_CHROME_DRIVER = str(Path(ROOT_FOLDER / 'driver_google' / 'chromedriver.exe')).replace('\\', '/')
 
