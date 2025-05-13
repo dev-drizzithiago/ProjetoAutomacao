@@ -1,13 +1,14 @@
 from time import sleep
 import speedtest
-
+import teste_velocidade
 
 linha_formatacao = '- - ' * 20
 contador_teste = 1
 
 while True:
 
-    iniciando_obj = TesteVelocidade()
+    iniciando_obj = teste_velocidade.TesteVelocidade()
+    
     print(f'{contador_teste}° teste de velocidade')
     print(linha_formatacao)
 
