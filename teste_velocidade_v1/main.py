@@ -21,9 +21,14 @@ class TesteVelocidade:
         servidor = f'{self.modulo_speed.get_best_server()}'
         return servidor
 
+    def outros_teste(self):
+        servidor = f'{self.modulo_speed.set_mini_server()}'
+        return servidor
+
 iniciando_obj = TesteVelocidade()
 
 print(f'Teste de velocidade para o servidor {iniciando_obj.servidor_teste()}')
 print(iniciando_obj.testando_conexao_down())
 print(iniciando_obj.testando_conexao_up())
 print(iniciando_obj.teste_conexao_tempo_resposta())
+print(iniciando_obj.outros_teste())
