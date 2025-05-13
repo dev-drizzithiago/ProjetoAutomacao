@@ -8,7 +8,7 @@ contador_teste = 1
 while True:
 
     iniciando_obj = teste_velocidade.TesteVelocidade()
-    
+
     print(f'{contador_teste}° teste de velocidade')
     print(linha_formatacao)
 
