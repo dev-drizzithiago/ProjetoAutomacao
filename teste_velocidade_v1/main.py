@@ -59,6 +59,5 @@ while True:
     except speedtest.ConfigRetrievalError:
         print('Você tentou várias em um curto periodo, aguarda alguns minutos')
         sleep(120)
-
-    print(f'{contador_teste}° Finalizado!')
-    print(linha_formatacao)
+                
+    contador_teste += 1
