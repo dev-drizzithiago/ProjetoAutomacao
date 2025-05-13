@@ -26,7 +26,12 @@ class TesteVelocidade:
         Indica os dados do cliente
         :return:
         """
-        servidor = f'{self.modulo_speed.results.client}'
+        dados_cliente = f'{self.modulo_speed.results.client}'
+
+        servidor = dict(
+            IP=dados_cliente['ip'],
+            Operadora=dados_cliente['isp']
+        )
         return servidor
 
 iniciando_obj = TesteVelocidade()
