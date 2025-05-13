@@ -22,7 +22,11 @@ class TesteVelocidade:
         return servidor
 
     def outros_teste(self):
-        servidor = f'{self.modulo_speed.set_mini_server()}'
+        """
+        Indica os dados do cliente
+        :return:
+        """
+        servidor = f'{self.modulo_speed.results.client}'
         return servidor
 
 iniciando_obj = TesteVelocidade()
