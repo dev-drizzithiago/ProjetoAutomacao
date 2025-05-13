@@ -32,4 +32,7 @@ class TesteVelocidade:
             Operadora=dados_cliente['isp']
         )
         return servidor
-    
+
+
+if __name__ == "__main__":
+    print('Você não pode executar esse código por aqui, execute pelo main.py')
