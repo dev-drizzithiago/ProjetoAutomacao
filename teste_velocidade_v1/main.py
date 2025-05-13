@@ -1,4 +1,6 @@
+from time import sleep
 import speedtest
+
 
 
 class TesteVelocidade:
@@ -34,11 +36,17 @@ class TesteVelocidade:
         )
         return servidor
 
-iniciando_obj = TesteVelocidade()
 
-print(f'Teste de velocidade para o servidor {iniciando_obj.servidor_teste()}')
-print(iniciando_obj.testando_conexao_down())
-print(iniciando_obj.testando_conexao_up())
-print(iniciando_obj.teste_conexao_tempo_resposta())
-print(iniciando_obj.dados_cliente()['IP'])
-print(iniciando_obj.dados_cliente()['Operadora'])
+while True:
+    try:
+        iniciando_obj = TesteVelocidade()
+        print(f'Teste de velocidade para o servidor {iniciando_obj.servidor_teste()}')
+        print(iniciando_obj.testando_conexao_down())
+        print(iniciando_obj.testando_conexao_up())
+        print(iniciando_obj.teste_conexao_tempo_resposta())
+        print(iniciando_obj.dados_cliente()['IP'])
+        print(iniciando_obj.dados_cliente()['Operadora'])
+        sleep(60)
+    except speedtest.ConfigRetrievalError:
+        print('Você tentou várias em um curto periodo, aguarda alguns minutos')
+        sleep(60)
