@@ -21,7 +21,7 @@ class TesteVelocidade:
         servidor = f'{self.modulo_speed.get_best_server()}'
         return servidor
 
-    def outros_teste(self):
+    def dados_cliente(self):
         """
         Indica os dados do cliente
         :return:
@@ -40,4 +40,5 @@ print(f'Teste de velocidade para o servidor {iniciando_obj.servidor_teste()}')
 print(iniciando_obj.testando_conexao_down())
 print(iniciando_obj.testando_conexao_up())
 print(iniciando_obj.teste_conexao_tempo_resposta())
-print(iniciando_obj.outros_teste())
+print(iniciando_obj.dados_cliente()['IP'])
+print(iniciando_obj.dados_cliente()['Operadora'])
