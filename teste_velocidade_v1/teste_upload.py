@@ -1,4 +1,4 @@
-class TesteDownload:
+class TesteUpload:
     def __init__(self, modulo_speedtest):
         self.st = modulo_speedtest.Speedtest()
 
