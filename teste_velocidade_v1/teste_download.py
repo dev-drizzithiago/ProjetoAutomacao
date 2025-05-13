@@ -1,5 +1,6 @@
 class TesteDownload:
     print('Iniciando obj TesteDownload')
+
     def __init__(self, modulo_speedtest):
         self.st = modulo_speedtest
 
