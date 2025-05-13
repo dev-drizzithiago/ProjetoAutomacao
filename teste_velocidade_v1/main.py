@@ -1,6 +1,4 @@
 import speedtest
-import teste_download
-import teste_upload
 
 
 class TesteVelocidade:
@@ -8,10 +6,12 @@ class TesteVelocidade:
         self.modulo_speed = speedtest.Speedtest()
 
     def testando_conexao_down(self):
-        return teste_download(self.modulo_speed)
+        teste_download = f'{self.modulo_speed.download() / 1_000_000:.2f} mbps'
+        return teste_download
 
     def testando_conexao_up(self):
-        return teste_upload(self.modulo_speed)
+        teste_download = f'{self.modulo_speed.upload() / 1_000_000:.2f} mbps'
+        return teste_download
 
 
 iniciando_obj = TesteVelocidade()
