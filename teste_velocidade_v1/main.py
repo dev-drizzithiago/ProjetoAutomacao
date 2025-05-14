@@ -10,9 +10,8 @@ while True:
     iniciando_obj = teste_velocidade.TesteVelocidade()
 
     print()
-    print(f'{contador_teste}° teste de velocidade')
+    print(f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()}')
     print(linha_formatacao)
-    print(iniciando_obj.data_hora_certa())
 
     try:
         print(f'Teste Download: [{iniciando_obj.testando_conexao_down()}]')
@@ -30,4 +29,3 @@ while True:
         sleep(120)
 
     contador_teste += 1
-
