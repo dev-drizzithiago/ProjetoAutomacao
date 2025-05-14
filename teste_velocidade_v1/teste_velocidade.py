@@ -1,4 +1,7 @@
+
 import speedtest
+from datetime import datetime
+
 
 class TesteVelocidade:
     def __init__(self):
@@ -33,6 +36,10 @@ class TesteVelocidade:
         )
         return servidor
 
+    def data_hora_certa(self):
+        valor_data = datetime.now()
+        data_certa = valor_data.strftime('%d/%m/%Y - %H:%M:%S')
+        return data_certa
 
 if __name__ == "__main__":
     print('Você não pode executar esse código por aqui, execute pelo main.py')
