@@ -28,3 +28,4 @@ while True:
         sleep(120)
 
     contador_teste += 1
+
