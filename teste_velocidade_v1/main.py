@@ -9,8 +9,10 @@ while True:
 
     iniciando_obj = teste_velocidade.TesteVelocidade()
 
+    print()
     print(f'{contador_teste}° teste de velocidade')
     print(linha_formatacao)
+    print(iniciando_obj.data_hora_certa())
 
     try:
         print(f'Teste Download: [{iniciando_obj.testando_conexao_down()}]')
@@ -20,7 +22,7 @@ while True:
         print(f'Seu endereço de internet: [{iniciando_obj.dados_cliente()["IP"]}]')
         print(f'Sua operadora: [{iniciando_obj.dados_cliente()["Operadora"]}]')
 
-        print(f'{contador_teste}° Finalizado!')
+        print(f'{contador_teste}° teste finalizado!')
         print(linha_formatacao)
         sleep(120)
     except speedtest.ConfigRetrievalError:
