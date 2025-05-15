@@ -9,6 +9,14 @@ while True:
 
     iniciando_obj = teste_velocidade.TesteVelocidade()
 
+    dados_teste_velocidade = {
+        'data_teste': iniciando_obj.data_hora_certa(),
+        'teste_download': iniciando_obj.testando_conexao_down(),
+        'teste_upload': iniciando_obj.testando_conexao_up(),
+        'tempo_resposta': iniciando_obj.teste_conexao_tempo_resposta(),
+        'dados_cliente': [iniciando_obj.dados_cliente()["IP"], iniciando_obj.dados_cliente()["Operadora"]],
+    }
+
     print()
     print(f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()}')
     print(linha_formatacao)
