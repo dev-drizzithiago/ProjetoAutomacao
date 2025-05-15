@@ -20,7 +20,7 @@ while True:
             'teste_upload': iniciando_obj.testando_conexao_up(),
             'tempo_resposta': iniciando_obj.teste_conexao_tempo_resposta(),
             'dados_cliente': [iniciando_obj.dados_cliente()["IP"], iniciando_obj.dados_cliente()["Operadora"]],
-        }       
+        }
 
         print(f'Teste Download: [{iniciando_obj.testando_conexao_down()}]')
         print(f'Teste Upload: [{iniciando_obj.testando_conexao_up()}]')
