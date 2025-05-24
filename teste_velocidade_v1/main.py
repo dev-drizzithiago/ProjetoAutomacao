@@ -31,6 +31,9 @@ while True:
 
         print(f'{contador_teste}° teste finalizado!')
         print(linha_formatacao)
+
+        print(analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe())
+
         sleep(1800)
     except speedtest.ConfigRetrievalError:
         print('Você tentou várias em um curto periodo, aguarda alguns minutos')
