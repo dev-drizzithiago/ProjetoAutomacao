@@ -19,11 +19,7 @@ class AnaliseDados:
             'Operadora': self._dados_entrada['dados_cliente'][1],
         }
 
-        data_speedtest_pd = pd.DataFrame(
-            [data_speedtest]
-        )
-
-        return data_speedtest_pd
+        return pd.DataFrame([data_speedtest])
 
 
 if __name__ == '__main__':
