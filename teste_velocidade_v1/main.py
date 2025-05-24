@@ -32,7 +32,8 @@ while True:
         print(f'{contador_teste}° teste finalizado!')
         print(linha_formatacao)
 
-        print(analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe())
+        dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
+        print(dados_Data_Frame.to_csv('data'))
 
         sleep(1800)
     except speedtest.ConfigRetrievalError:
