@@ -3,3 +3,4 @@ chromedriver-win64/chromedriver.exe
 *.xml
 .env
 .env
+*.csv
