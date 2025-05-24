@@ -6,8 +6,11 @@ class AnaliseDados:
         self._dados_entrada = dados_entrada
 
     def view_dados_(self):
-        leitura_arquivo_dados = pd.read_csv('data')
-        return leitura_arquivo_dados.head()
+        try:
+            leitura_arquivo_dados = pd.read_csv('data.csv')
+            return leitura_arquivo_dados
+        except FileNotFoundError:
+            return 'Arquivo não encontrado'
 
     def create_dataframe(self):
 
@@ -33,5 +36,8 @@ if __name__ == '__main__':
     }
 
     iniciando_obj_analise_dados = AnaliseDados(dados_teste_velocidade)
-    print(iniciando_obj_analise_dados.create_dataframe())
-    print(iniciando_obj_analise_dados.view_dados_())
+    dados_para_salvar = iniciando_obj_analise_dados.create_dataframe()
+    dados_para_salvar.to_csv('data.csv')
+
+    for k, v in iniciando_obj_analise_dados.view_dados_().items():
+        print(k, v)
