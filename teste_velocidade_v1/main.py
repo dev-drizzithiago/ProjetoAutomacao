@@ -47,11 +47,11 @@ while True:
         print(f'{contador_teste}° teste finalizado!')
         print(linha_formatacao)
 
-        sleep(60)
+        sleep(1800)
 
     # Teste de servidor
     except speedtest.ConfigRetrievalError:
         print("Aguarde um momento... servidor de teste não esta respondendo")
-        sleep(60)
+        sleep(120)
 
     contador_teste += 1
