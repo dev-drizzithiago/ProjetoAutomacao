@@ -31,7 +31,7 @@ while True:
 
         # Criando data.csv
         dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
-        dados_Data_Frame.to_csv('data')
+        dados_Data_Frame.to_csv('data.csv')
 
         # lendo data.csv
         leitura_dados = analise_dados.AnaliseDados.view_dados_('data')
