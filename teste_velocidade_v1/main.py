@@ -37,6 +37,7 @@ while True:
         leitura_dados = analise_dados.AnaliseDados.view_dados_('data')
         print(leitura_dados)
 
+        print()
         print(f'{contador_teste}° teste finalizado!')
         print(linha_formatacao)
 
