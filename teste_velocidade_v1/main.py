@@ -7,42 +7,48 @@ linha_formatacao = '- - ' * 20
 contador_teste = 1
 
 while True:
-
-    iniciando_obj = teste_velocidade.TesteVelocidade()
-    print()
-    print(f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()}')
-    print(linha_formatacao)
-
     try:
-        dados_teste_velocidade = {
-            'data_teste': iniciando_obj.data_hora_certa(),
-            'teste_download': iniciando_obj.testando_conexao_down(),
-            'teste_upload': iniciando_obj.testando_conexao_up(),
-            'tempo_resposta': iniciando_obj.teste_conexao_tempo_resposta(),
-            'dados_cliente': [iniciando_obj.dados_cliente()["IP"], iniciando_obj.dados_cliente()["Operadora"]],
-        }
+        iniciando_obj = teste_velocidade.TesteVelocidade()
 
-        print(f'Teste Download: [{iniciando_obj.testando_conexao_down()}]')
-        print(f'Teste Upload: [{iniciando_obj.testando_conexao_up()}]')
-        print(f'Tempo de resposta: [{iniciando_obj.teste_conexao_tempo_resposta()}]')
-
-        print(f'Seu endereço de internet: [{iniciando_obj.dados_cliente()["IP"]}]')
-        print(f'Sua operadora: [{iniciando_obj.dados_cliente()["Operadora"]}]')
-
-        print(f'{contador_teste}° teste finalizado!')
+        print()
+        print(f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()}')
         print(linha_formatacao)
 
-        # Criando data.csv
-        dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
-        dados_Data_Frame.to_csv('data')
+        try:
+            dados_teste_velocidade = {
+                'data_teste': iniciando_obj.data_hora_certa(),
+                'teste_download': iniciando_obj.testando_conexao_down(),
+                'teste_upload': iniciando_obj.testando_conexao_up(),
+                'tempo_resposta': iniciando_obj.teste_conexao_tempo_resposta(),
+                'dados_cliente': [iniciando_obj.dados_cliente()["IP"], iniciando_obj.dados_cliente()["Operadora"]],
+            }
 
-        # lendo data.csv
-        leitura_dados = analise_dados.AnaliseDados.view_dados_('data')
-        print(leitura_dados)
+            print(f'Teste Download: [{iniciando_obj.testando_conexao_down()}]')
+            print(f'Teste Upload: [{iniciando_obj.testando_conexao_up()}]')
+            print(f'Tempo de resposta: [{iniciando_obj.teste_conexao_tempo_resposta()}]')
 
-        sleep(1800)
+            print(f'Seu endereço de internet: [{iniciando_obj.dados_cliente()["IP"]}]')
+            print(f'Sua operadora: [{iniciando_obj.dados_cliente()["Operadora"]}]')
+
+            print(f'{contador_teste}° teste finalizado!')
+            print(linha_formatacao)
+
+            # Criando data.csv
+            dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
+            dados_Data_Frame.to_csv('data')
+
+            # lendo data.csv
+            leitura_dados = analise_dados.AnaliseDados.view_dados_('data')
+            print(leitura_dados)
+
+            sleep(1800)
+        except speedtest.ConfigRetrievalError:
+            print('Você tentou várias em um curto periodo, aguarda alguns minutos')
+            sleep(240)
+
+    # Teste de servidor
     except speedtest.ConfigRetrievalError:
-        print('Você tentou várias em um curto periodo, aguarda alguns minutos')
-        sleep(240)
+        print("Aguarde um momento... servidor de teste não esta respondendo")
+        sleep(60)
 
     contador_teste += 1
