@@ -1,5 +1,5 @@
-import os.path
 
+import os
 from time import sleep
 import speedtest
 import teste_velocidade
@@ -9,6 +9,7 @@ linha_formatacao = '- - ' * 20
 contador_teste = 1
 
 while True:
+    os.system('cls')
     try:
         iniciando_obj = teste_velocidade.TesteVelocidade()
 
