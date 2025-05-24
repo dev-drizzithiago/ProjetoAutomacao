@@ -10,23 +10,19 @@ class AnaliseDados:
 
     def create_dataframe(self):
         data_speedtest = {
+            'Horario do Teste': self._dados_entrada['data_teste'],
             'Download': self._dados_entrada['teste_download'],
             'Upload': self._dados_entrada['teste_upload'],
-            'Tempo de Resposta': self._dados_entrada['data_teste'],
+            'Tempo de Resposta': self._dados_entrada['tempo_resposta'],
             'Endereço de Internet': self._dados_entrada['dados_cliente'][0],
             'Operadora': self._dados_entrada['dados_cliente'][1],
-            'Horario do Teste': self._dados_entrada['data_teste'],
+
         }
         data_speedtest_pd = pd.DataFrame(
             data_speedtest,
-            columns=[
-                'Download',
-                'Upload',
-                'Tempo de Resposta',
-                'Endereço de Internet',
-                'Operadora',
-                'Horario do Teste'
-            ],
+            columns=['Horario do Teste', 'Download', 'Upload',
+                     'Tempo de Resposta', 'Endereço de Internet', 'Operadora',
+                     ],
         )
 
         return data_speedtest_pd
