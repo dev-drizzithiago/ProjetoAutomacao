@@ -15,16 +15,22 @@ class AnaliseDados:
             'Tempo de Resposta': self._dados_entrada['data_teste'],
             'Endereço de Internet': self._dados_entrada['dados_cliente'][0],
             'Operadora': self._dados_entrada['dados_cliente'][1],
+            'Horario do Teste': self._dados_entrada['data_teste'],
         }
         data_speedtest_pd = pd.DataFrame(
             data_speedtest,
-            columns=['Download', 'Upload', 'Tempo de Resposta'],
+            columns=[
+                'Download',
+                'Upload',
+                'Tempo de Resposta',
+                'Endereço de Internet',
+                'Operadora',
+                'Horario do Teste'
+            ],
         )
 
-        data_horario_teste = {
-            'Horario do Teste': self._dados_entrada['data_teste'],
-        }
         return data_speedtest_pd
+
 
 if __name__ == '__main__':
     dados_teste_velocidade = {
@@ -38,4 +44,3 @@ if __name__ == '__main__':
     iniciando_obj_analise_dados = AnaliseDados(dados_teste_velocidade)
 
     print(iniciando_obj_analise_dados.create_dataframe())
-
