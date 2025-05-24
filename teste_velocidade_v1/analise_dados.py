@@ -7,7 +7,7 @@ class AnaliseDados:
 
     def view_dados_(self):
         leitura_arquivo_dados = pd.read_csv('data')
-        return leitura_arquivo_dados
+        return leitura_arquivo_dados.head()
 
     def create_dataframe(self):
 
@@ -33,5 +33,5 @@ if __name__ == '__main__':
     }
 
     iniciando_obj_analise_dados = AnaliseDados(dados_teste_velocidade)
-    print(iniciando_obj_analise_dados.view_dados_())
     print(iniciando_obj_analise_dados.create_dataframe())
+    print(iniciando_obj_analise_dados.view_dados_())
