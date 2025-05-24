@@ -19,10 +19,7 @@ class AnaliseDados:
 
         }
         data_speedtest_pd = pd.DataFrame(
-            data_speedtest,
-            columns=['Horario do Teste', 'Download', 'Upload',
-                     'Tempo de Resposta', 'Endereço de Internet', 'Operadora',
-                     ],
+            [data_speedtest]
         )
 
         return data_speedtest_pd
@@ -38,5 +35,4 @@ if __name__ == '__main__':
     }
 
     iniciando_obj_analise_dados = AnaliseDados(dados_teste_velocidade)
-
     print(iniciando_obj_analise_dados.create_dataframe())
