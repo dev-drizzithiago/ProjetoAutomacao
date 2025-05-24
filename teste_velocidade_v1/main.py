@@ -13,7 +13,7 @@ while True:
         iniciando_obj = teste_velocidade.TesteVelocidade()
 
         print()
-        print(f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()}')
+        print(f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()} \nProcessando, aguarde...')
         print(linha_formatacao)
 
         dados_teste_velocidade = {
@@ -34,11 +34,11 @@ while True:
         # Criando data.csv
         dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
 
-        if os.path.exists('data.csv'):
-            dados_Data_Frame.to_csv('data.csv', mode='a', header=False, index=False)
-        else:
+        if not os.path.exists('data.csv'):
             dados_Data_Frame.to_csv('data.csv', mode='a', header=True, index=False)
-            
+        else:
+            dados_Data_Frame.to_csv('data.csv', mode='a', header=False, index=False)
+
         # lendo data.csv
         leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
         print(leitura_dados)
