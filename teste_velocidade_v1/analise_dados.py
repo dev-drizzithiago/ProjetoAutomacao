@@ -16,15 +16,15 @@ class AnaliseDados:
             'Endereço de Internet': self._dados_entrada['dados_cliente'][0],
             'Operadora': self._dados_entrada['dados_cliente'][1],
         }
-        data_speedtest = pd.DataFrame(
+        data_speedtest_pd = pd.DataFrame(
             data_speedtest,
-            columns=['Download', 'Upload', 'Tempo de Resposta']
+            columns=['Download', 'Upload', 'Tempo de Resposta'],
         )
 
         data_horario_teste = {
             'Horario do Teste': self._dados_entrada['data_teste'],
         }
-        return data_speedtest
+        return data_speedtest_pd
 
 if __name__ == '__main__':
     dados_teste_velocidade = {
