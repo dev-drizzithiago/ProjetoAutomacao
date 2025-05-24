@@ -6,7 +6,8 @@ class AnaliseDados:
         self._dados_entrada = dados_entrada
 
     def view_dados_(self):
-        return self._dados_entrada
+        leitura_arquivo_dados = pd.read_csv('data')
+        return leitura_arquivo_dados
 
     def create_dataframe(self):
 
