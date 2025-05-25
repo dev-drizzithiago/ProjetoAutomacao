@@ -13,12 +13,13 @@ from PySide6.QtWidgets import QApplication
 linha_formatacao = '- - ' * 20
 
 app = QApplication(sys.argv)
+
 def abrir_janela():
     janela = JanelaPrincipal()
     janela.show()
 
-
-# Thread(target=abrir_janela())
+thread_janela = Thread(target=abrir_janela)
+thread_janela.start()
 
 def inicio_teste():
     contador_teste = 1
