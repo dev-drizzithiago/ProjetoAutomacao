@@ -67,9 +67,13 @@ def inicio_teste():
 def visualizar_dados_do_teste():
 
     # visualizando o arquivo data.csv
-    leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
-    for k, v in leitura_dados.items():
-        print(k, v)
+    leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv').reset_index(drop=True)
+
+    print(leitura_dados.keys())
+
+    for indice in range(len(leitura_dados)):
+        print(leitura_dados.iloc[indice])
+        print('- -' * 30)
 
 
 while True:
