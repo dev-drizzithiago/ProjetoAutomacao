@@ -1,17 +1,12 @@
 
 import os
-import sys
 from time import sleep
 import speedtest
 import teste_velocidade
 import analise_dados
-from _janela_view import JanelaPrincipal
 from threading import Thread
 
-from PySide6.QtWidgets import QApplication
-
 linha_formatacao = '- - ' * 20
-
 
 def inicio_teste():
     contador_teste = 1
@@ -59,7 +54,7 @@ def inicio_teste():
 
             # Conta cada teste no decorrer do processo.
             contador_teste += 1
-            sleep(1800)
+            sleep(3600)
 
         # Teste de servidor
         except speedtest.ConfigRetrievalError:
