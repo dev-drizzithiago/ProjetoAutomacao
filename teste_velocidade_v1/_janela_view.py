@@ -1,8 +1,5 @@
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QLabel
-
-app = QApplication(sys.argv) # Gerencia a aplicação.
-
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
 
 class JanelaPrincipal:
     def __init__(self):
@@ -13,9 +10,15 @@ class JanelaPrincipal:
         self.label_titulo = QLabel('Teste de velocidade', self.janela_principal)
         self.label_titulo.move(150, 10)
 
+        self.botao_iniciar_teste = QPushButton("Iniciar", self.janela_principal)
+        self.botao_iniciar_teste.setFont('Time')
+        self.botao_iniciar_teste.setStyleSheet('font-size: 40px')
+        self.botao_iniciar_teste.move(150, 30)
+
         self.janela_principal.show()  # Exibe a janela na tela.
 
 
 if __name__ == '__main__':
+    app = QApplication(sys.argv)
     iniciando_obj_janela = JanelaPrincipal()
     sys.exit(app.exec())  # Mantém a aplicação rodando até que o usuário feche a janela.
