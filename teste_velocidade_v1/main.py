@@ -34,14 +34,18 @@ def inicio_teste():
             print(f'Seu endereço de internet: [{iniciando_obj.dados_cliente()["IP"]}]')
             print(f'Sua operadora: [{iniciando_obj.dados_cliente()["Operadora"]}]')
 
-            # Criando data.csv
-            dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
 
-            # Salvando o arquivo, dentro da pasta do projeto.
-            if not os.path.exists('data.csv'):
-                dados_Data_Frame.to_csv('data.csv', mode='a', header=True, index=False)
-            else:
-                dados_Data_Frame.to_csv('data.csv', mode='a', header=False, index=False)
+            try:
+                # Criando data.csv
+                dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
+
+                # Salvando o arquivo, dentro da pasta do projeto.
+                if not os.path.exists('data.csv'):
+                    dados_Data_Frame.to_csv('data.csv', mode='a', header=True, index=False)
+                else:
+                    dados_Data_Frame.to_csv('data.csv', mode='a', header=False, index=False)
+            except Exception as error:
+                print(f'Ocorreu um erro ao salvar as informações: {error}')
 
             # visualizando o arquivo data.csv
             leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
@@ -51,9 +55,12 @@ def inicio_teste():
             print(f'{contador_teste}° teste finalizado!')
             print(linha_formatacao)
             print()
+            print()
 
             # Conta cada teste no decorrer do processo.
             contador_teste += 1
+
+            print(f'Aguardado o {contador_teste}° teste')
             sleep(3600)
 
         # Teste de servidor
@@ -62,5 +69,20 @@ def inicio_teste():
             sleep(120)
 
 
-thread_teste = Thread(target=inicio_teste, daemon=True)
-thread_teste.start()
+def visualizar_dados_do_teste():
+    ...
+
+while True:
+    try:
+        opc = input('Escolha uma opção: ')
+
+        if opc == 1:
+            inicio_teste()
+        elif opc == 2:
+            visualizar_dados_do_teste()
+        else:
+            print('Opção não existe.')
+            
+    except TypeError:
+        print('Opção incorreta, tent de novo')
+
