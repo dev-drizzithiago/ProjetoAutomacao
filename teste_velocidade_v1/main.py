@@ -45,19 +45,22 @@ def inicio_teste():
             # Criando data.csv
             dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
 
+            # Salvando o arquivo, dentro da pasta do projeto.
             if not os.path.exists('data.csv'):
                 dados_Data_Frame.to_csv('data.csv', mode='a', header=True, index=False)
             else:
                 dados_Data_Frame.to_csv('data.csv', mode='a', header=False, index=False)
 
-            # lendo data.csv
+            # visualizando o arquivo data.csv
             leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
             print(leitura_dados)
 
             print()
             print(f'{contador_teste}° teste finalizado!')
             print(linha_formatacao)
+            print()
 
+            # Conta cada teste no decorrer do processo.
             contador_teste += 1
             sleep(1800)
 
