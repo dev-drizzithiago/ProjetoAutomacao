@@ -10,7 +10,10 @@ class AnaliseDados:
             leitura_arquivo_dados = pd.read_csv('data.csv')
             return leitura_arquivo_dados
         except FileNotFoundError:
-            return 'Arquivo não encontrado'
+            return 'Arquivo não encontrado / arquivo corrompido'
+
+    def analise_em_graficos(self):
+        ...
 
     def create_dataframe(self):
 
@@ -23,9 +26,6 @@ class AnaliseDados:
             'Operadora': self._dados_entrada['dados_cliente'][1],
         }
         return pd.DataFrame([data_speedtest])
-
-    def analise_em_graficos(self):
-        ...
 
 
 if __name__ == '__main__':
