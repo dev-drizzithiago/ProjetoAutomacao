@@ -68,7 +68,9 @@ def visualizar_dados_do_teste():
 
     # visualizando o arquivo data.csv
     leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
-    print(leitura_dados)
+    for k, v in leitura_dados.items():
+        print(k, v)
+
 
 while True:
     try:
