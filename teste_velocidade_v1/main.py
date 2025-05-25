@@ -16,7 +16,7 @@ contador_teste = 1
 app = QApplication(sys.argv)
 def abrir_janela():
     janela = JanelaPrincipal()
-    sys.exit(app.exec())
+
 
 Thread(target=abrir_janela())
 
@@ -27,8 +27,7 @@ def inicio_teste():
         iniciando_obj = teste_velocidade.TesteVelocidade()
 
         print()
-        print(
-            f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()} \nProcessando, aguarde...')
+        print(f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()} \nProcessando, aguarde...')
         print(linha_formatacao)
 
         dados_teste_velocidade = {
@@ -68,6 +67,9 @@ def inicio_teste():
     except speedtest.ConfigRetrievalError:
         print("Aguarde um momento... servidor de teste não esta respondendo")
         sleep(120)
-    contador_teste += 1
-while True:
-    inicio_teste()
+
+contador_teste += 1
+
+inicio_teste()
+
+sys.exit(app.exec())
