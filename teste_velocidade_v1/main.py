@@ -47,14 +47,9 @@ def inicio_teste():
             except Exception as error:
                 print(f'Ocorreu um erro ao salvar as informações: {error}')
 
-            # visualizando o arquivo data.csv
-            leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
-            print(leitura_dados)
-
             print()
             print(f'{contador_teste}° teste finalizado!')
             print(linha_formatacao)
-            print()
             print()
 
             # Conta cada teste no decorrer do processo.
@@ -70,7 +65,10 @@ def inicio_teste():
 
 
 def visualizar_dados_do_teste():
-    ...
+
+    # visualizando o arquivo data.csv
+    leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
+    print(leitura_dados)
 
 while True:
     try:
