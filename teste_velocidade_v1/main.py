@@ -10,8 +10,8 @@ linha_formatacao = '- - ' * 20
 
 def inicio_teste():
     contador_teste = 1
-    os.system('cls')
     while True:
+        os.system('cls')
         try:
             iniciando_obj = teste_velocidade.TesteVelocidade()
 
