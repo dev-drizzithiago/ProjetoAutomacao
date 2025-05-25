@@ -81,7 +81,7 @@ while True:
                 [0] Sair 
             """
         )
-        opc = input('Escolha uma opção: ')
+        opc = int(input('Escolha uma opção: '))
 
         if opc == 1:
             inicio_teste()
