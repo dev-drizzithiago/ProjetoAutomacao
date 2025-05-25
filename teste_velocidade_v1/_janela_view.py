@@ -1,8 +1,9 @@
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
 
-class JanelaPrincipal:
+class JanelaPrincipal(QWidget):
     def __init__(self):
+        super().__init__()
         self.janela_principal = QWidget()  # Cria uma janela básica.
         self.janela_principal.setWindowTitle('Teste de velocidade')  # Define o título da janela
         self.janela_principal.resize(400, 300)
