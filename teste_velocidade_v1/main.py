@@ -74,15 +74,26 @@ def visualizar_dados_do_teste():
 
 while True:
     try:
+        print(
+            """
+                [1] Iniciar Teste
+                [2] Visualizar resultados
+                [0] Sair 
+            """
+        )
         opc = input('Escolha uma opção: ')
 
         if opc == 1:
             inicio_teste()
         elif opc == 2:
             visualizar_dados_do_teste()
+        elif opc == 0:
+            print('Fechando o processo...')
+            sleep(1)
+            break
         else:
             print('Opção não existe.')
-            
+
     except TypeError:
         print('Opção incorreta, tent de novo')
 
