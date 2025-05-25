@@ -71,10 +71,12 @@ def visualizar_dados_do_teste():
 
     print(leitura_dados.keys())
 
-    for indice in range(len(leitura_dados)):
-        print(leitura_dados.iloc[indice])
+    for index, linha in leitura_dados.iterrows():
+        print(f'Horário: {linha["Horario do Teste"]}')
+        print(f'Download: {linha["Download"]} mbps')
+        print(f'upLoad: {linha["Upload"]} mpbs')
+        print(f'Tempo Resposta: {linha["Tempo de Resposta"]} ms')
         print('- -' * 30)
-
 
 while True:
     try:
