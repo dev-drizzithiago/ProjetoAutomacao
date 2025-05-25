@@ -13,13 +13,8 @@ from PySide6.QtWidgets import QApplication
 linha_formatacao = '- - ' * 20
 
 app = QApplication(sys.argv)
-
-def abrir_janela():
-    janela = JanelaPrincipal()
-    janela.show()
-
-thread_janela = Thread(target=abrir_janela)
-thread_janela.start()
+janela = JanelaPrincipal()
+janela.show()
 
 def inicio_teste():
     contador_teste = 1
@@ -72,6 +67,7 @@ def inicio_teste():
             sleep(120)
 
 
-inicio_teste()
+thread_teste = Thread(target=inicio_teste, daemon=True)
+thread_teste.start()
 
 sys.exit(app.exec())
