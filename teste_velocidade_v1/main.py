@@ -13,63 +13,61 @@ from PySide6.QtWidgets import QApplication
 linha_formatacao = '- - ' * 20
 contador_teste = 1
 
-janela = JanelaPrincipal
-Thread(target=janela())
+app = QApplication(sys.argv)
+def abrir_janela():
+    janela = JanelaPrincipal()
+    sys.exit(app.exec())
 
+Thread(target=abrir_janela())
 
 def inicio_teste():
-    while True:
-        os.system('cls')
-        try:
-            iniciando_obj = teste_velocidade.TesteVelocidade()
 
-            print()
-            print(
-                f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()} \nProcessando, aguarde...')
-            print(linha_formatacao)
+    os.system('cls')
+    try:
+        iniciando_obj = teste_velocidade.TesteVelocidade()
 
-            dados_teste_velocidade = {
-                'data_teste': iniciando_obj.data_hora_certa(),
-                'teste_download': iniciando_obj.testando_conexao_down(),
-                'teste_upload': iniciando_obj.testando_conexao_up(),
-                'tempo_resposta': iniciando_obj.teste_conexao_tempo_resposta(),
-                'dados_cliente': [iniciando_obj.dados_cliente()["IP"], iniciando_obj.dados_cliente()["Operadora"]],
-            }
+        print()
+        print(
+            f'{contador_teste}° teste de velocidade - {iniciando_obj.data_hora_certa()} \nProcessando, aguarde...')
+        print(linha_formatacao)
 
-            print(f'Teste Download: [{iniciando_obj.testando_conexao_down()}]')
-            print(f'Teste Upload: [{iniciando_obj.testando_conexao_up()}]')
-            print(f'Tempo de resposta: [{iniciando_obj.teste_conexao_tempo_resposta()}]')
+        dados_teste_velocidade = {
+            'data_teste': iniciando_obj.data_hora_certa(),
+            'teste_download': iniciando_obj.testando_conexao_down(),
+            'teste_upload': iniciando_obj.testando_conexao_up(),
+            'tempo_resposta': iniciando_obj.teste_conexao_tempo_resposta(),
+            'dados_cliente': [iniciando_obj.dados_cliente()["IP"], iniciando_obj.dados_cliente()["Operadora"]],
+        }
 
-            print(f'Seu endereço de internet: [{iniciando_obj.dados_cliente()["IP"]}]')
-            print(f'Sua operadora: [{iniciando_obj.dados_cliente()["Operadora"]}]')
+        print(f'Teste Download: [{iniciando_obj.testando_conexao_down()}]')
+        print(f'Teste Upload: [{iniciando_obj.testando_conexao_up()}]')
+        print(f'Tempo de resposta: [{iniciando_obj.teste_conexao_tempo_resposta()}]')
 
-            # Criando data.csv
-            dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
+        print(f'Seu endereço de internet: [{iniciando_obj.dados_cliente()["IP"]}]')
+        print(f'Sua operadora: [{iniciando_obj.dados_cliente()["Operadora"]}]')
 
-            if not os.path.exists('data.csv'):
-                dados_Data_Frame.to_csv('data.csv', mode='a', header=True, index=False)
-            else:
-                dados_Data_Frame.to_csv('data.csv', mode='a', header=False, index=False)
+        # Criando data.csv
+        dados_Data_Frame = analise_dados.AnaliseDados(dados_teste_velocidade).create_dataframe()
 
-            # lendo data.csv
-            leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
-            print(leitura_dados)
+        if not os.path.exists('data.csv'):
+            dados_Data_Frame.to_csv('data.csv', mode='a', header=True, index=False)
+        else:
+            dados_Data_Frame.to_csv('data.csv', mode='a', header=False, index=False)
 
-            print()
-            print(f'{contador_teste}° teste finalizado!')
-            print(linha_formatacao)
+        # lendo data.csv
+        leitura_dados = analise_dados.AnaliseDados.view_dados_('data.csv')
+        print(leitura_dados)
 
-            sleep(1800)
+        print()
+        print(f'{contador_teste}° teste finalizado!')
+        print(linha_formatacao)
 
-            # Teste de servidor
+        sleep(1800)
 
-        except speedtest.ConfigRetrievalError:
-            print("Aguarde um momento... servidor de teste não esta respondendo")
-            sleep(120)
-
-contador_teste += 1
-
-
-inicio_teste()
-
-sys.exit(app.exec())
+    # Teste de servidor
+    except speedtest.ConfigRetrievalError:
+        print("Aguarde um momento... servidor de teste não esta respondendo")
+        sleep(120)
+    contador_teste += 1
+while True:
+    inicio_teste()
