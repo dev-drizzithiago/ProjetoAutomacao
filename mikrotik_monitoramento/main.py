@@ -39,6 +39,9 @@ if __name__ == '__main__':
     obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
     logs = obj_logs.log_dhcp()
 
+    lista_atribuicao_ip = []
+    lista_desatribuicao_ip = []
+
     for log in logs:
         # print(log)
 
@@ -51,12 +54,17 @@ if __name__ == '__main__':
         if log[chaves_logs['3']] == 'dhcp,info':
             if 'defconf assigned' in log[chaves_logs['4']]:
                 mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
-                print(mac)
+                print('a', mac)
+                lista_atribuicao_ip.append(mac)
+            elif 'defconf deassigned' in log[chaves_logs['4']]:
+                mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
+                print('d', mac)
+                lista_desatribuicao_ip.append(mac)
 
-                print(
-                    f'{log[chaves_logs['2']]}',
-                    f'- '
-                    f'{log[chaves_logs['4']]}',
-                )
+                # print(
+                #     f'{log[chaves_logs['2']]}',
+                #     f'- '
+                #     f'{log[chaves_logs['4']]}',
+                # )
 
 
