@@ -10,10 +10,15 @@ class BuscandoLogsMikrotik:
         self._logs = self.obj_conexao_fw.path('log')
         return self._logs
 
+    def log_conexao_internet(self):
+        ...
+
+    def log_conxao_bkp_internet(self):
+        ...
+
     def analise_de_logs(self):
         logs = self._logs
         for log in logs:
-
             chaves_logs = {
                 '1': '.id',
                 '2': 'time',
@@ -29,10 +34,3 @@ class BuscandoLogsMikrotik:
                     mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
                     print('d', mac)
                     self.lista_desatribuicao_ip.append(mac)
-
-
-    def log_conexao_internet(self):
-        ...
-
-    def log_conxao_bkp_internet(self):
-        ...
