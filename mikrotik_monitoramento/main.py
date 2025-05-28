@@ -37,29 +37,29 @@ if __name__ == '__main__':
     iniciando_obj_mikrotik = ConexaoFirewall()
     conexao_fw = iniciando_obj_mikrotik.conexao_fw()
     obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
-    logs = obj_logs.log_dhcp()
-
-    lista_atribuicao_ip = []
-    lista_desatribuicao_ip = []
-
-    for log in logs:
-        # print(log)
-
-        chaves_logs = {
-            '1': '.id',
-            '2': 'time',
-            '3': 'topics',
-            '4': 'message',
-        }
-        if log[chaves_logs['3']] == 'dhcp,info':
-            if 'defconf assigned' in log[chaves_logs['4']]:
-                mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
-                print('a', mac)
-                lista_atribuicao_ip.append(mac)
-            elif 'defconf deassigned' in log[chaves_logs['4']]:
-                mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
-                print('d', mac)
-                lista_desatribuicao_ip.append(mac)
+    # logs = obj_logs.log_dhcp()
+    #
+    # lista_atribuicao_ip = []
+    # lista_desatribuicao_ip = []
+    #
+    # for log in logs:
+    #     # print(log)
+    #
+    #     chaves_logs = {
+    #         '1': '.id',
+    #         '2': 'time',
+    #         '3': 'topics',
+    #         '4': 'message',
+    #     }
+    #     if log[chaves_logs['3']] == 'dhcp,info':
+    #         if 'defconf assigned' in log[chaves_logs['4']]:
+    #             mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
+    #             print('a', mac)
+    #             lista_atribuicao_ip.append(mac)
+    #         elif 'defconf deassigned' in log[chaves_logs['4']]:
+    #             mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
+    #             print('d', mac)
+    #             lista_desatribuicao_ip.append(mac)
 
                 # print(
                 #     f'{log[chaves_logs['2']]}',
