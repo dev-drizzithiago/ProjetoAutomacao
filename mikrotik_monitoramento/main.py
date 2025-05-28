@@ -47,5 +47,8 @@ if __name__ == '__main__':
             '3': 'topics',
             '4': 'message',
         }
-        print(log[chaves_logs['3']])
+        if log[chaves_logs['3']] == 'dhcp,info':
+            if 'assigned' in log[chaves_logs['4']]:
+                print(log[chaves_logs['4']])
+
 
