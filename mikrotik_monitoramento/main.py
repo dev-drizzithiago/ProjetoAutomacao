@@ -39,13 +39,13 @@ if __name__ == '__main__':
     logs = obj_logs.log_dhcp()
 
     for log in logs:
-        print(log)
+        # print(log)
 
         chaves_logs = {
-            '1': 'id',
+            '1': '.id',
             '2': 'time',
             '3': 'topics',
             '4': 'message',
         }
-        print(log[chaves_logs['1']])
-        # print(log)
+        print(log[chaves_logs['3']])
+
