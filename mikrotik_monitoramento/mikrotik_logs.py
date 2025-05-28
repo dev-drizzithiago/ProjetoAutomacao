@@ -1,6 +1,4 @@
 
-
-
 class BuscandoLogsMikrotik:
     def __init__(self, obj_principal):
         self.obj_conexao_fw = obj_principal
