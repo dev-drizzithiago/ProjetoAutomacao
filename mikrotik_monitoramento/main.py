@@ -24,21 +24,28 @@ class ConexaoFirewall:
                 host=str(self.host_fw),  # IP do seu MikroTik
                 port=str(self.port_fw),  # Porta padrão da API
             )
+
             print('Conexão realizado com sucesso. ')
+            return self.api_mikrotik
+
         except Exception as error:
             print(f'Erro ao conectar no mikrotik: {error}')
 
-        return self.api_mikrotik
-
 
 if __name__ == '__main__':
+    iniciando_obj_mikrotik = ConexaoFirewall()
+    conexao_fw = iniciando_obj_mikrotik.conexao_fw()
+    obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
+    logs = obj_logs.log_dhcp()
 
-    iniciando_obj_log = mikrotik_logs.BuscandoLogsMikrotik()
-    logs = iniciando_obj_log.log_dhcp()
+    for log in logs:
+        print(log)
 
-    iniciando_obj_ip = mikrotik_ips.InfoEndIp()
-    active_leases_ips = iniciando_obj_ip.lease_ativas()
-    print(active_leases_ips)
-
-    # for log in logs:
-    #     print(log)
+        chaves_logs = {
+            '1': 'id',
+            '2': 'time',
+            '3': 'topics',
+            '4': 'message',
+        }
+        print(log[chaves_logs['1']])
+        # print(log)
