@@ -10,3 +10,9 @@ api_mikrotik = connect(
     host=str(os.getenv('HOST_FW')), # IP do seu MikroTik
     port=str(os.getenv('PORT_FW')), # Porta padrão da API
 )
+
+logs = api_mikrotik.path('log')
+
+for log in logs:
+    print(log)
+    
