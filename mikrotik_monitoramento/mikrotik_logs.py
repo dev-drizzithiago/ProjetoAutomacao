@@ -19,6 +19,7 @@ class BuscandoLogsMikrotik:
             host=str(self.host_fw),  # IP do seu MikroTik
             port=str(self.port_fw),  # Porta padrão da API
         )
+
         return self.api_mikrotik
 
     def log_dhcp(self):
