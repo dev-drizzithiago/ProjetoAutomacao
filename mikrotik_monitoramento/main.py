@@ -49,7 +49,9 @@ if __name__ == '__main__':
             '4': 'message',
         }
         if log[chaves_logs['3']] == 'dhcp,info':
-            if 'assigned' in log[chaves_logs['4']]:
+            if 'defconf assigned' in log[chaves_logs['4']]:
+                mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
+                print(mac)
 
                 print(
                     f'{log[chaves_logs['2']]}',
