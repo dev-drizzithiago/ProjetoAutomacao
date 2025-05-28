@@ -49,6 +49,11 @@ if __name__ == '__main__':
         }
         if log[chaves_logs['3']] == 'dhcp,info':
             if 'assigned' in log[chaves_logs['4']]:
-                print(log[chaves_logs['4']])
+
+                print(
+                    f'{log[chaves_logs['2']]}',
+                    f'- '
+                    f'{log[chaves_logs['4']]}',
+                )
 
 
