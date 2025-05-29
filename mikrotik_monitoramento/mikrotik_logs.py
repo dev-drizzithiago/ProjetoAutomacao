@@ -4,6 +4,9 @@ from zoneinfo import ZoneInfo
 
 
 class BuscandoLogsMikrotik:
+    date_time = datetime.now()
+    DATA_ATUAL = date_time.strptime(date_time, '%Y-%m-%d %H:%M:%S')
+
     def __init__(self, obj_principal):
         self.obj_conexao_fw = obj_principal
 
@@ -24,9 +27,11 @@ class BuscandoLogsMikrotik:
         ...
 
     def conversao_data_timestamp(self, data_fw):
-        data_com_fuso = datetime.strptime("%Y-%m-%d %H:%M:%S").replace(tzinfo=ZoneInfo("America/Sao_Paulo"))
+        data_com_fuso = (
+            datetime.strptime(data_fw, "%Y-%m-%d %H:%M:%S"))
+
         self.__data_stamp = data_com_fuso.timestamp()
-        return data_stamp
+        return self.__data_stamp
 
     def analise_de_logs(self):
         logs = self._logs
