@@ -2,13 +2,12 @@ import mikrotik_logs
 
 
 class InfoEndIp:
-    def __init__(self):
-        self.conexao_firewall = None
+    def __init__(self, obj_principal):
+        self.obj_conexao_fw = obj_principal
 
     def lease_ativas(self):
-        self.conexao_firewall = mikrotik_logs.BuscandoLogsMikrotik()
-        fw_conectado = self.conexao_firewall.conexao_fw()
-        leases = fw_conectado.path('ip', 'dhcp-server', 'lease')
+        
+        leases = self.obj_conexao_fw.path('ip', 'dhcp-server', 'lease')
         active_leases = [lease for lease in leases if lease.get('status') == ['bound']]
 
         return active_leases
