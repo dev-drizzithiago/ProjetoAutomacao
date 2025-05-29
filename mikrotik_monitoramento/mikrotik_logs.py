@@ -36,7 +36,7 @@ class BuscandoLogsMikrotik:
                         host_name = divisao_itens[-1]
 
                         if 'note' in divisao_itens[-1]:
-                            print('a', host_name)
+                            print(f'A: {log[chaves_logs['2']]} - {host_name}')
 
                     self.lista_atribuicao_ip.append(mac)
 
