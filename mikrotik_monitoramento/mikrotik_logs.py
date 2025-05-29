@@ -35,7 +35,7 @@ class BuscandoLogsMikrotik:
                 if 'defconf assigned' in log[chaves_logs['4']]:
                     mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
                     divisao_itens = mac.split(' ')
-                    horario_unix = datetime.fromisoformat(log[chaves_logs['2']])
+                    horario_unix = datetime.timestamp(str(log[chaves_logs['2']]))
 
                     if len(divisao_itens) == 2:
                         host_name = divisao_itens[-1]
