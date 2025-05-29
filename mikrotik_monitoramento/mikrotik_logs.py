@@ -2,8 +2,10 @@
 class BuscandoLogsMikrotik:
     def __init__(self, obj_principal):
         self.obj_conexao_fw = obj_principal
+
         self.lista_atribuicao_ip = list()
         self.lista_desatribuicao_ip = list()
+
         self._logs = None
 
     def log_dhcp(self):
@@ -25,6 +27,7 @@ class BuscandoLogsMikrotik:
                 '3': 'topics',
                 '4': 'message',
             }
+
             if log[chaves_logs['3']] == 'dhcp,info':
                 if 'defconf assigned' in log[chaves_logs['4']]:
                     mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
