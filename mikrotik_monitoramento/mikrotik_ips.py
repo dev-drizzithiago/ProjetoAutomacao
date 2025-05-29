@@ -8,4 +8,4 @@ class InfoEndIp:
         leases = self.obj_conexao_fw.path('ip', 'dhcp-server', 'lease')
         active_leases = [lease for lease in leases if lease.get('status') == 'bound']
 
-        print(len(active_leases))
+        return len(active_leases)
