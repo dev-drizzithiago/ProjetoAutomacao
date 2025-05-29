@@ -36,7 +36,7 @@ if __name__ == '__main__':
     MSG_END_IP_ESGOTADO = "defconf: failed to give out IP address: pool <dhcp> is empty"
     iniciando_obj_mikrotik = ConexaoFirewall()
     conexao_fw = iniciando_obj_mikrotik.conexao_fw()
-    
+
     obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
     obj_logs.log_dhcp()
     obj_logs.analise_de_logs()
