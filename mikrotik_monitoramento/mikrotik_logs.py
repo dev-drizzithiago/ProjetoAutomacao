@@ -51,6 +51,9 @@ class BuscandoLogsMikrotik:
 
                     horario_timestamp = self.conversao_data_timestamp(log[chaves_logs['2']])
 
+                    if horario_timestamp < self.DATA_ATUAL:
+                        ...
+
                     if len(divisao_itens) == 2:
                         host_name = divisao_itens[-1]
 
