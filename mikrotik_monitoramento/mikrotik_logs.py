@@ -54,12 +54,13 @@ class BuscandoLogsMikrotik:
                     if len(divisao_itens) == 2:
                         host_name = divisao_itens[-1]
 
-                        if 'note' in divisao_itens[-1]:
-                            note_registrado = divisao_itens[-1]
-                            if note_registrado in divisao_itens[-1]:
-                                self.lista_atribuicao_ip.append(divisao_itens[-1])
-
+                        if 'note' in host_name:
+                            if host_name not in self.lista_atribuicao_ip:
+                                self.lista_atribuicao_ip.append(host_name)
 
                 elif 'defconf deassigned' in log[chaves_logs['4']]:
                     mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
                     self.lista_desatribuicao_ip.append(mac)
+
+        for item in self.lista_atribuicao_ip:
+            print(item)
