@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 
 class BuscandoLogsMikrotik:
     date_time = datetime.now()
-    DATA_ATUAL = date_time.strptime(date_time, '%Y-%m-%d %h:%m:%m')
+    # DATA_ATUAL = date_time.strptime(date_time, '%Y-%m-%d %H:%M:%S')
 
     def __init__(self, obj_principal):
         self.obj_conexao_fw = obj_principal
@@ -50,9 +50,6 @@ class BuscandoLogsMikrotik:
                     divisao_itens = mac.split(' ')
 
                     horario_timestamp = self.conversao_data_timestamp(log[chaves_logs['2']])
-
-                    if horario_timestamp < self.DATA_ATUAL:
-                        ...
 
                     if len(divisao_itens) == 2:
                         host_name = divisao_itens[-1]
