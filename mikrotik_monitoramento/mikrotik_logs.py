@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 
 class BuscandoLogsMikrotik:
     date_time = datetime.now()
-    DATA_ATUAL = date_time.strptime(date_time, '%Y-%m-%d %H:%M:%S')
+    DATA_ATUAL = date_time.strftime('%Y-%m-%d %H:%M:%S')
 
     def __init__(self, obj_principal):
         self.obj_conexao_fw = obj_principal
@@ -55,9 +55,10 @@ class BuscandoLogsMikrotik:
                         host_name = divisao_itens[-1]
 
                         if 'note' in divisao_itens[-1]:
-                            print(f'A: {horario_timestamp} - {host_name}')
+                            note_registrado = divisao_itens[-1]
+                            if note_registrado in divisao_itens[-1]:
+                                self.lista_atribuicao_ip.append(divisao_itens[-1])
 
-                    self.lista_atribuicao_ip.append(mac)
 
                 elif 'defconf deassigned' in log[chaves_logs['4']]:
                     mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
