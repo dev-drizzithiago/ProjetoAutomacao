@@ -1,3 +1,7 @@
+
+from dotenv import load_dotenv
+load_dotenv()
+
 class RoboSites:
     def __init__(self):
         self.site_acesso = None
@@ -14,7 +18,7 @@ class RoboSites:
 
 if __name__ == "__main__":
     lista_dados_acesso = {
-        'site': 'https://areadocliente.sci10.com.br/inicio.php',
+        'site': '',
         'user_acesso': '',
         'pass_acesso': '',
         'email_usuario': '',
