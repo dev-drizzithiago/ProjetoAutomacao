@@ -114,7 +114,7 @@ if __name__ == "__main__":
         'url_site': os.getenv('URL_ACESSO_SITE_SCI'),
         'user_acesso_site': os.getenv('USER_ACESSO_SITE_SCI'),
         'pass_acesso_site': os.getenv('PASS_ACESSO_SITE_SCI'),
-        'nome_completo': os.getenv('NOME_COMPLETO_SCI', ''),
+        'nome_completo': os.getenv('NOME_COMPLETO_SCI'),
         'cpf_usuario': '111.111.111-11',
         'data_nasc_usuario': '01/01/2000',
         'data_admissao_usario': '10/06/2025',
@@ -123,5 +123,6 @@ if __name__ == "__main__":
         'usuario_login': os.getenv('LOGIN_SCI'),
         'senha_usuario': os.getenv('SENHA_SCI'),
     }
+
     inicio_obj = RoboSites()
     inicio_obj.criacao_user_sci(lista_dados_acesso, SITE_TESTE)
