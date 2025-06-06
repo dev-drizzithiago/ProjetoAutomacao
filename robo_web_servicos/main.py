@@ -48,11 +48,12 @@ class RoboSites:
         sleep(5)
 
         DRIVE_CHROME.get(self.LINK_COMPLETO)
-        print('URL para adicionar usuários')
-        sleep(5)
+        print('Entrando na URL para adicionar usuários')
+        sleep(2)
 
         DRIVE_CHROME.get(LINK_COMPLETO_FORMULARIO)
-
+        sleep(2)
+        print('Entrando no FORMS para adicionar usuários')
         input()
 
 
