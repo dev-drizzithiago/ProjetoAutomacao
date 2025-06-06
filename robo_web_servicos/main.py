@@ -51,6 +51,17 @@ class RoboSites:
         DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/create')
         sleep(2)
 
+        elemento_nome_usuario = DRIVE_CHROME.find_element(By.ID, "nome")
+        elemento_email_empresa = DRIVE_CHROME.find_element(By.ID, "emailEmpresarial")
+        elemento_senha_login = DRIVE_CHROME.find_element(By.ID, "pwd")
+        elemento_papel = DRIVE_CHROME.find_element(By.XPATH, "//div[@aria-label='Select box activate']")
+        elemento_btn_submit = DRIVE_CHROME.find_element(By.CLASS_NAME, "submit btn btn-success ng-binding ladda-button")
+
+        elemento_nome_usuario.send_keys(self.dados_usuario[''])
+        elemento_email_empresa.send_keys(self.dados_usuario[''])
+        elemento_senha_login.send_keys(self.dados_usuario[''])
+        elemento_papel.send_keys('Usuário')
+        elemento_btn_submit.send_keys(self.dados_usuario[''])
 
 
     def criacao_user_sci(self, dados_usuario, site):
