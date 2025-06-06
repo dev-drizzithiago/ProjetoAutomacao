@@ -96,16 +96,14 @@ class RoboSites:
         sleep(1)
 
         elemento_btn_submit.send_keys(keys.ENTER)
-
-
+        print('Cadastro finalizado')
+        sleep(5)
         input()
-
 
 ROOT_FOLDER = Path(__file__).parent
 PATH_CHROME_DRIVER = str(Path(ROOT_FOLDER / 'driver_google' / 'chromedriver.exe')).replace('\\', '/')
 DRIVE_CHROME = webdriver.Chrome()
 CHROME_SERVICE = Service(executable_path=str(PATH_CHROME_DRIVER))
-
 
 
 if __name__ == "__main__":
