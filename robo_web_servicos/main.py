@@ -55,9 +55,7 @@ class RoboSites:
         elemento_email_empresa = DRIVE_CHROME.find_element(By.ID, "email")
         elemento_senha_login = DRIVE_CHROME.find_element(By.NAME, "password")
         elemento_papel = DRIVE_CHROME.find_element(By.XPATH, "//i[@class='caret pull-right']")
-        elemento_btn_submit = DRIVE_CHROME.find_element(
-            By.XPATH,
-            "//button[span[contains(text(), 'Salvar')]]")
+        elemento_btn_submit = DRIVE_CHROME.find_element(By.XPATH, "//button[span[contains(text(), 'Salvar')]]")
 
         elemento_nome_usuario.send_keys(self.dados_usuario['nome_completo'])
         print('Preenchendo o nome completo')
@@ -75,7 +73,7 @@ class RoboSites:
         opc_select = DRIVE_CHROME.find_element(By.XPATH, "//span[contains(text(), 'Usuário')]")
         opc_select.click()
 
-        elemento_btn_submit.send_keys(self.dados_usuario[''])
+        elemento_btn_submit.send_keys(Keys.ENTER)
 
 
     def criacao_user_sci(self, dados_usuario, site):
