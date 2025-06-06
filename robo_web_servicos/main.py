@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+from time import sleep
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -23,17 +25,20 @@ class RoboSites:
 
         DRIVE_CHROME.get(self.site_acesso)
 
-        elemento_login = DRIVE_CHROME.find_element(By.ID, "email")
-        elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='password']")
+        elemento_login = DRIVE_CHROME.find_element(By.ID, "usuario")
+        elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='senha']")
 
-        elemento_login.send_keys(os.getenv('EMAIL_ACESSO', ''))
-        sleep(0.5)
-        elemento_senha.send_keys(os.getenv('SENHA_ACESSO', ''))
+        elemento_login.send_keys(self.dados_usuario['user_acesso_site'])
+        sleep(1)
+        elemento_senha.send_keys(self.dados_usuario['pass_acesso_site'])
+        sleep(1)
         elemento_senha.send_keys(Keys.ENTER)
-        sleep(6)
+        sleep(10)
+
+        
         elemento_configuracao = DRIVE_CHROME.find_element(By.XPATH, "//svg[@xmlns='http://www.w3.org/2000/svg']")
         elemento_configuracao.send_keys(Keys.ENTER)
-        sleep(10)
+        input()
 
 
 ROOT_FOLDER = Path(__file__).parent
@@ -41,8 +46,9 @@ PATH_CHROME_DRIVER = str(Path(ROOT_FOLDER / 'driver_google' / 'chromedriver.exe'
 DRIVE_CHROME = webdriver.Chrome()
 CHROME_SERVICE = Service(executable_path=str(PATH_CHROME_DRIVER))
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
+    SITE_TESTE = os.getenv('URL_ACESSO_SITE_SCI')
     lista_dados_acesso = {
         'url_site': os.getenv('URL_ACESSO_SITE_SCI', ''),
         'user_acesso_site': os.getenv('USER_ACESSO_SITE_SCI', ''),
@@ -57,4 +63,4 @@ if __name__ == "__main__":
     }
 
     inicio_obj = RoboSites()
-
+    inicio_obj.criacao_user_sci(lista_dados_acesso, SITE_TESTE)
