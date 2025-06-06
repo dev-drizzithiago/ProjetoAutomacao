@@ -33,11 +33,10 @@ class RoboSites:
         elemento_senha.send_keys(self.dados_usuario['pass_acesso_site'])
         sleep(1)
         elemento_senha.send_keys(Keys.ENTER)
-        sleep(10)
+        sleep(5)
 
-        
-        elemento_configuracao = DRIVE_CHROME.find_element(By.XPATH, "//svg[@xmlns='http://www.w3.org/2000/svg']")
-        elemento_configuracao.send_keys(Keys.ENTER)
+
+
         input()
 
 
