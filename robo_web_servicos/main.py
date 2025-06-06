@@ -1,3 +1,4 @@
+import os
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -33,10 +34,7 @@ class RoboSites:
         sleep(6)
         elemento_configuracao = DRIVE_CHROME.find_element(By.XPATH, "//svg[@xmlns='http://www.w3.org/2000/svg']")
         elemento_configuracao.send_keys(Keys.ENTER)
-
         sleep(10)
-
-
 
 
 ROOT_FOLDER = Path(__file__).parent
@@ -47,9 +45,9 @@ CHROME_SERVICE = Service(executable_path=str(PATH_CHROME_DRIVER))
 if __name__ == "__main__":
 
     lista_dados_acesso = {
-        'url_site': '',
-        'user_acesso_site': '',
-        'pass_acesso_site': '',
+        'url_site': os.getenv('URL_ACESSO_SITE_SCI', ''),
+        'user_acesso_site': os.getenv('USER_ACESSO_SITE_SCI', ''),
+        'pass_acesso_site': os.getenv('PASS_ACESSO_SITE_SCI', ''),
         'email_usuario_pessoal': '',
         'email_usuario_empresa': '',
         'usuario_login': '',
