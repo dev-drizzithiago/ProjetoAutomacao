@@ -111,17 +111,17 @@ CHROME_SERVICE = Service(executable_path=str(PATH_CHROME_DRIVER))
 if __name__ == "__main__":
     SITE_TESTE = os.getenv('URL_ACESSO_SITE_SCI')
     lista_dados_acesso = {
-        'url_site': os.getenv('URL_ACESSO_SITE_SCI', ''),
-        'user_acesso_site': os.getenv('USER_ACESSO_SITE_SCI', ''),
-        'pass_acesso_site': os.getenv('PASS_ACESSO_SITE_SCI', ''),
-        'email_usuario_pessoal': '',
-        'email_usuario_empresa': '',
-        'usuario_login': '',
-        'senha_usuario': '',
-        'cpf_usuario': '',
-        'data_nasc_usuario': '',
-        'data_admissao_usario': '',
+        'url_site': os.getenv('URL_ACESSO_SITE_SCI'),
+        'user_acesso_site': os.getenv('USER_ACESSO_SITE_SCI'),
+        'pass_acesso_site': os.getenv('PASS_ACESSO_SITE_SCI'),
+        'nome_completo': os.getenv('NOME_COMPLETO_SCI', ''),
+        'cpf_usuario': '111.111.111-11',
+        'data_nasc_usuario': '01/01/2000',
+        'data_admissao_usario': '10/06/2025',
+        'email_usuario_pessoal': os.getenv('EMAIL_USUARIO_PESSOAL_SCI'),
+        'email_usuario_empresa': os.getenv('EMAIL_USUARIO_EMPRESA_SCI'),
+        'usuario_login': os.getenv('LOGIN_SCI'),
+        'senha_usuario': os.getenv('SENHA_SCI'),
     }
-
     inicio_obj = RoboSites()
     inicio_obj.criacao_user_sci(lista_dados_acesso, SITE_TESTE)
