@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 from time import sleep
 
+from urllib.parse import urljoin
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
@@ -11,6 +13,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class RoboSites:
+
+    LINK_URL_SCI = 'https://areadocliente.sci10.com.br/'
+    LINK_RELATIVO_INDEX = 'modulo/usuarioAdicional/index.php'
+    LINK_RELATIVO_FORMS = 'modulo/usuarioAdicional/form.php'
+    LINK_COMPLETO = urljoin(LINK_URL_SCI, LINK_RELATIVO_INDEX)
+    LINK_COMPLETO_FORMULARIO = urljoin(LINK_URL_SCI, LINK_RELATIVO_FORMS)
+
     def __init__(self):
         self.site_acesso = None
         self.dados_usuario = list()
@@ -24,18 +33,25 @@ class RoboSites:
         self.site_acesso = site
 
         DRIVE_CHROME.get(self.site_acesso)
-
+        print(f'Acesso o site {self.LINK_COMPLETO}')
         elemento_login = DRIVE_CHROME.find_element(By.ID, "usuario")
         elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='senha']")
 
         elemento_login.send_keys(self.dados_usuario['user_acesso_site'])
+        print('Entrando com usuário')
         sleep(1)
         elemento_senha.send_keys(self.dados_usuario['pass_acesso_site'])
+        print('Entrando com a senha')
         sleep(1)
         elemento_senha.send_keys(Keys.ENTER)
+        print("Apertando no entrar")
         sleep(5)
 
+        DRIVE_CHROME.get(self.LINK_COMPLETO)
+        print('URL para adicionar usuários')
+        sleep(5)
 
+        DRIVE_CHROME.get(LINK_COMPLETO_FORMULARIO)
 
         input()
 
