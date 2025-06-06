@@ -70,10 +70,14 @@ class RoboSites:
         sleep(1)
 
         elemento_papel.click()
+        sleep(10)
         opc_select = DRIVE_CHROME.find_element(By.XPATH, "//span[contains(text(), 'Usuário')]")
         opc_select.click()
+        sleep(10)
 
         elemento_btn_submit.send_keys(Keys.ENTER)
+        print('Finalizado cadastro')
+        sleep(10)
 
 
     def criacao_user_sci(self, dados_usuario, site):
