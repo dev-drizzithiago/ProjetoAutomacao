@@ -40,9 +40,11 @@ class RoboSites:
         elemento_login.send_keys(self.dados_usuario['user_acesso_site'])
         print('Entrando com usuário')
         sleep(1)
+
         elemento_senha.send_keys(self.dados_usuario['pass_acesso_site'])
         print('Entrando com a senha')
         sleep(1)
+
         elemento_senha.send_keys(Keys.ENTER)
         print("Apertando no entrar")
         sleep(5)
@@ -59,11 +61,41 @@ class RoboSites:
         elemento_cpf = DRIVE_CHROME.find_element(By.ID, "cpf")
         elemento_data = DRIVE_CHROME.find_element(By.ID, "dataNascimento")
         elemento_data_admss = DRIVE_CHROME.find_element(By.ID, "dataAdmissao")
-        elemento_data_admss_pessoal = DRIVE_CHROME.find_element(By.ID, "email")
-        elemento_data_admss_empresa = DRIVE_CHROME.find_element(By.ID, "emailEmpresarial")
-        elemento_data_admss_empresa = DRIVE_CHROME.find_element(By.ID, "emailEmpresarial")
+        elemento_email_pessoal = DRIVE_CHROME.find_element(By.ID, "email")
+        elemento_email_empresa = DRIVE_CHROME.find_element(By.ID, "emailEmpresarial")
         elemento_usuario_login = DRIVE_CHROME.find_element(By.ID, "login")
+        elemento_senha_login = DRIVE_CHROME.find_element(By.ID, "pwd")
+        elemento_senha_login_confi = DRIVE_CHROME.find_element(By.ID, "pwd2")
+        elemento_btn_submit = DRIVE_CHROME.find_element(By.ID, "botaoSubmit")
 
+        elemento_nome_usuario.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_cpf.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_data.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_data_admss.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_email_pessoal.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_email_empresa.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_usuario_login.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_senha_login.send_keys(self.dados_usuario)
+        sleep(1)
+
+        elemento_senha_login_confi.send_keys(self.dados_usuario)
+        sleep(1)
+        
+        elemento_btn_submit.send_keys(keys.ENTER)
 
 
         input()
