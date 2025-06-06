@@ -28,7 +28,7 @@ class RoboSites:
         self.dados_usuario = dados_usuario
         self.site_acesso = site
 
-        DRIVE_CHROME.get(self.site_acesso)
+        DRIVE_CHROME.get('https://app.gestta.com.br/')
         print(f'Acesso o site {self.LINK_COMPLETO}')
         elemento_login = DRIVE_CHROME.find_element(By.ID, "usuario")
         elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='senha']")
@@ -60,7 +60,11 @@ class RoboSites:
         elemento_nome_usuario.send_keys(self.dados_usuario[''])
         elemento_email_empresa.send_keys(self.dados_usuario[''])
         elemento_senha_login.send_keys(self.dados_usuario[''])
-        elemento_papel.send_keys('Usuário')
+
+        elemento_papel.click()
+        opc_select = DRIVE_CHROME.find_element(By.XPATH, "//span[contains(text(), 'Usuário')]")
+        opc_select.click()
+
         elemento_btn_submit.send_keys(self.dados_usuario[''])
 
 
@@ -158,4 +162,5 @@ if __name__ == "__main__":
     }
 
     inicio_obj = RoboSites()
+    # inicio_obj.criacao_user_sci(lista_dados_acesso, SITE_TESTE)
     inicio_obj.criacao_user_sci(lista_dados_acesso, SITE_TESTE)
