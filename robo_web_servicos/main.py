@@ -52,8 +52,20 @@ class RoboSites:
         sleep(2)
 
         DRIVE_CHROME.get(LINK_COMPLETO_FORMULARIO)
-        sleep(2)
         print('Entrando no FORMS para adicionar usuários')
+        sleep(2)
+
+        elemento_nome_usuario = DRIVE_CHROME.find_element(By.ID, "nome")
+        elemento_cpf = DRIVE_CHROME.find_element(By.ID, "cpf")
+        elemento_data = DRIVE_CHROME.find_element(By.ID, "dataNascimento")
+        elemento_data_admss = DRIVE_CHROME.find_element(By.ID, "dataAdmissao")
+        elemento_data_admss_pessoal = DRIVE_CHROME.find_element(By.ID, "email")
+        elemento_data_admss_empresa = DRIVE_CHROME.find_element(By.ID, "emailEmpresarial")
+        elemento_data_admss_empresa = DRIVE_CHROME.find_element(By.ID, "emailEmpresarial")
+        elemento_usuario_login = DRIVE_CHROME.find_element(By.ID, "login")
+
+
+
         input()
 
 
