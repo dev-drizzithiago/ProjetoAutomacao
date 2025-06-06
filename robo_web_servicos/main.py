@@ -95,7 +95,7 @@ class RoboSites:
         elemento_senha_login_confi.send_keys(self.dados_usuario['senha_usuario'])
         sleep(1)
 
-        elemento_btn_submit.send_keys(keys.ENTER)
+        elemento_btn_submit.send_keys(Keys.ENTER)
         print('Cadastro finalizado')
         sleep(5)
         input()
