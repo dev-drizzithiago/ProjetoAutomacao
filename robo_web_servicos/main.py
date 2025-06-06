@@ -34,19 +34,19 @@ class RoboSites:
         elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='password']")
 
         elemento_login.send_keys(self.dados_usuario['user_acesso_site'])
-        print('Entrando com usuário')
+        print('Entrando com usuário...')
         sleep(1)
 
         elemento_senha.send_keys(self.dados_usuario['pass_acesso_site'])
-        print('Entrando com a senha')
+        print('Entrando com a senha...')
         sleep(1)
 
         elemento_senha.send_keys(Keys.ENTER)
-        print("Apertando no entrar")
-        sleep(5)
+        print("Entrando no portal...")
+        sleep(10)
 
-        DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/list')
-        sleep(2)
+        # DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/list')
+        # sleep(2)
 
         DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/create')
         sleep(2)
@@ -54,12 +54,22 @@ class RoboSites:
         elemento_nome_usuario = DRIVE_CHROME.find_element(By.ID, "name")
         elemento_email_empresa = DRIVE_CHROME.find_element(By.ID, "email")
         elemento_senha_login = DRIVE_CHROME.find_element(By.NAME, "password")
-        elemento_papel = DRIVE_CHROME.find_element(By.XPATH, "//div[@aria-label='Select box activate']")
-        elemento_btn_submit = DRIVE_CHROME.find_element(By.CLASS_NAME, "submit btn btn-success ng-binding ladda-button")
+        elemento_papel = DRIVE_CHROME.find_element(By.XPATH, "//i[@class='caret pull-right']")
+        elemento_btn_submit = DRIVE_CHROME.find_element(
+            By.XPATH,
+            "//button[span[contains(text(), 'Salvar')]]")
 
         elemento_nome_usuario.send_keys(self.dados_usuario['nome_completo'])
+        print('Preenchendo o nome completo')
+        sleep(1)
+
         elemento_email_empresa.send_keys(self.dados_usuario['email_usuario_empresa'])
+        print('Preenchendo o email')
+        sleep(1)
+
         elemento_senha_login.send_keys(self.dados_usuario['senha_usuario'])
+        print('Preenchendo o a senha')
+        sleep(1)
 
         elemento_papel.click()
         opc_select = DRIVE_CHROME.find_element(By.XPATH, "//span[contains(text(), 'Usuário')]")
