@@ -28,6 +28,31 @@ class RoboSites:
         self.dados_usuario = dados_usuario
         self.site_acesso = site
 
+        DRIVE_CHROME.get(self.site_acesso)
+        print(f'Acesso o site {self.LINK_COMPLETO}')
+        elemento_login = DRIVE_CHROME.find_element(By.ID, "usuario")
+        elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='senha']")
+
+        elemento_login.send_keys(self.dados_usuario['user_acesso_site'])
+        print('Entrando com usuário')
+        sleep(1)
+
+        elemento_senha.send_keys(self.dados_usuario['pass_acesso_site'])
+        print('Entrando com a senha')
+        sleep(1)
+
+        elemento_senha.send_keys(Keys.ENTER)
+        print("Apertando no entrar")
+        sleep(5)
+
+        DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/list')
+        sleep(2)
+
+        DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/create')
+        sleep(2)
+
+
+
     def criacao_user_sci(self, dados_usuario, site):
         self.dados_usuario = dados_usuario
         self.site_acesso = site
@@ -47,7 +72,7 @@ class RoboSites:
 
         elemento_senha.send_keys(Keys.ENTER)
         print("Apertando no entrar")
-        sleep(5)
+        sleep(2)
 
         DRIVE_CHROME.get(self.LINK_COMPLETO)
         print('Entrando na URL para adicionar usuários')
@@ -98,7 +123,6 @@ class RoboSites:
         elemento_btn_submit.send_keys(Keys.ENTER)
         print('Cadastro finalizado')
         sleep(5)
-        input()
 
 ROOT_FOLDER = Path(__file__).parent
 PATH_CHROME_DRIVER = str(Path(ROOT_FOLDER / 'driver_google' / 'chromedriver.exe')).replace('\\', '/')
