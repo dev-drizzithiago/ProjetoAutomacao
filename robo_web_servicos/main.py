@@ -21,8 +21,7 @@ class RoboSites:
         self.dados_usuario = dados_usuario
         self.site_acesso = site
 
-
-        DRIVE_CHROME.get(dados_entrada)
+        DRIVE_CHROME.get(self.site_acesso)
 
         elemento_login = DRIVE_CHROME.find_element(By.ID, "email")
         elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='password']")
