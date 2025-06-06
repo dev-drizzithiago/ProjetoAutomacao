@@ -53,7 +53,7 @@ class RoboSites:
         print('Entrando na URL para adicionar usuários')
         sleep(2)
 
-        DRIVE_CHROME.get(LINK_COMPLETO_FORMULARIO)
+        DRIVE_CHROME.get(self.LINK_COMPLETO_FORMULARIO)
         print('Entrando no FORMS para adicionar usuários')
         sleep(2)
 
@@ -68,31 +68,31 @@ class RoboSites:
         elemento_senha_login_confi = DRIVE_CHROME.find_element(By.ID, "pwd2")
         elemento_btn_submit = DRIVE_CHROME.find_element(By.ID, "botaoSubmit")
 
-        elemento_nome_usuario.send_keys(self.dados_usuario)
+        elemento_nome_usuario.send_keys(self.dados_usuario['nome_completo'])
         sleep(1)
 
-        elemento_cpf.send_keys(self.dados_usuario)
+        elemento_cpf.send_keys(self.dados_usuario['cpf_usuario'])
         sleep(1)
 
-        elemento_data.send_keys(self.dados_usuario)
+        elemento_data.send_keys(self.dados_usuario['data_nasc_usuario'])
         sleep(1)
 
-        elemento_data_admss.send_keys(self.dados_usuario)
+        elemento_data_admss.send_keys(self.dados_usuario['data_admissao_usario'])
         sleep(1)
 
-        elemento_email_pessoal.send_keys(self.dados_usuario)
+        elemento_email_pessoal.send_keys(self.dados_usuario['email_usuario_pessoal'])
         sleep(1)
 
-        elemento_email_empresa.send_keys(self.dados_usuario)
+        elemento_email_empresa.send_keys(self.dados_usuario['email_usuario_empresa'])
         sleep(1)
 
-        elemento_usuario_login.send_keys(self.dados_usuario)
+        elemento_usuario_login.send_keys(self.dados_usuario['usuario_login'])
         sleep(1)
 
-        elemento_senha_login.send_keys(self.dados_usuario)
+        elemento_senha_login.send_keys(self.dados_usuario['senha_usuario'])
         sleep(1)
 
-        elemento_senha_login_confi.send_keys(self.dados_usuario)
+        elemento_senha_login_confi.send_keys(self.dados_usuario['senha_usuario'])
         sleep(1)
 
         elemento_btn_submit.send_keys(keys.ENTER)
