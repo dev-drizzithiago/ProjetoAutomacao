@@ -30,8 +30,8 @@ class RoboSites:
 
         DRIVE_CHROME.get('https://app.gestta.com.br/')
         print(f'Acesso o site {self.LINK_COMPLETO}')
-        elemento_login = DRIVE_CHROME.find_element(By.ID, "usuario")
-        elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='senha']")
+        elemento_login = DRIVE_CHROME.find_element(By.ID, "email")
+        elemento_senha = DRIVE_CHROME.find_element(By.XPATH, "//input[@id='password']")
 
         elemento_login.send_keys(self.dados_usuario['user_acesso_site'])
         print('Entrando com usuário')
@@ -51,15 +51,15 @@ class RoboSites:
         DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/create')
         sleep(2)
 
-        elemento_nome_usuario = DRIVE_CHROME.find_element(By.ID, "nome")
-        elemento_email_empresa = DRIVE_CHROME.find_element(By.ID, "emailEmpresarial")
-        elemento_senha_login = DRIVE_CHROME.find_element(By.ID, "pwd")
+        elemento_nome_usuario = DRIVE_CHROME.find_element(By.ID, "name")
+        elemento_email_empresa = DRIVE_CHROME.find_element(By.ID, "email")
+        elemento_senha_login = DRIVE_CHROME.find_element(By.NAME, "password")
         elemento_papel = DRIVE_CHROME.find_element(By.XPATH, "//div[@aria-label='Select box activate']")
         elemento_btn_submit = DRIVE_CHROME.find_element(By.CLASS_NAME, "submit btn btn-success ng-binding ladda-button")
 
-        elemento_nome_usuario.send_keys(self.dados_usuario[''])
-        elemento_email_empresa.send_keys(self.dados_usuario[''])
-        elemento_senha_login.send_keys(self.dados_usuario[''])
+        elemento_nome_usuario.send_keys(self.dados_usuario['nome_completo'])
+        elemento_email_empresa.send_keys(self.dados_usuario['email_usuario_empresa'])
+        elemento_senha_login.send_keys(self.dados_usuario['senha_usuario'])
 
         elemento_papel.click()
         opc_select = DRIVE_CHROME.find_element(By.XPATH, "//span[contains(text(), 'Usuário')]")
@@ -149,8 +149,8 @@ if __name__ == "__main__":
     SITE_TESTE = os.getenv('URL_ACESSO_SITE_SCI')
     lista_dados_acesso = {
         'url_site': os.getenv('URL_ACESSO_SITE_SCI'),
-        'user_acesso_site': os.getenv('USER_ACESSO_SITE_SCI'),
-        'pass_acesso_site': os.getenv('PASS_ACESSO_SITE_SCI'),
+        'user_acesso_site': os.getenv('USER_ACESSO_GESTTA'),
+        'pass_acesso_site': os.getenv('PASS_ACESSO_GESTTA'),
         'nome_completo': os.getenv('NOME_COMPLETO_SCI'),
         'cpf_usuario': '111.111.111-11',
         'data_nasc_usuario': '01/01/2000',
@@ -163,4 +163,4 @@ if __name__ == "__main__":
 
     inicio_obj = RoboSites()
     # inicio_obj.criacao_user_sci(lista_dados_acesso, SITE_TESTE)
-    inicio_obj.criacao_user_sci(lista_dados_acesso, SITE_TESTE)
+    inicio_obj.criacao_user_gesta(lista_dados_acesso, SITE_TESTE)
