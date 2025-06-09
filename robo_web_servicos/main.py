@@ -24,6 +24,9 @@ class RoboSites:
         self.site_acesso = None
         self.dados_usuario = list()
 
+    def teste_projetos_digital(self, dados_usuario, site):
+        ...
+
     def criacao_user_gesta(self, dados_usuario, site):
         self.dados_usuario = dados_usuario
         self.site_acesso = site
@@ -44,9 +47,6 @@ class RoboSites:
         elemento_senha.send_keys(Keys.ENTER)
         print("Entrando no portal...")
         sleep(10)
-
-        # DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/list')
-        # sleep(2)
 
         DRIVE_CHROME.get('https://app.gestta.com.br/admin/#/sidebar/user/create')
         sleep(2)
