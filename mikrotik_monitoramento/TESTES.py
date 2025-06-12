@@ -8,9 +8,9 @@ data_format_ano = date_now.strftime('%Y-%m-%d %H:%M').split(' ')[0]
 data_format_hora = date_now.strftime('%Y-%m-%d %H:%M').split(' ')[-1]
 data_format_minu = int(data_format_hora.split(':')[-1]) - 10
 
-data_atualizada = f'{''}'
+data_atualizada = f'{data_format_ano} {data_format_hora[0]}:{data_format_minu}'
 
-print(data_format_ano)
+print(data_atualizada)
 
 UNIX_DATA_NOW = date_now.timestamp()
 
