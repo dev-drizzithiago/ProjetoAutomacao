@@ -11,17 +11,15 @@ class ManipulacaoIcmpHosts:
         self.ip_address = endereco_ip
         ping_result = subprocess.run('ping ' + '192.168.0.1 ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True)
 
-        # for item in ping_result.stdout:
-        print(ping_result)
+        print(ping_result.stdout)
 
     def buscando_host(self, endereco_ip):
+        print('Processando hostname...')
         try:
             host_name = socket.gethostbyaddr(endereco_ip)
             print(host_name)
         except socket.herror:
             print(f'Não foi encontrado o hostname dessa do endereço de ip {endereco_ip}')
-
-
 
 
 obj_ping = ManipulacaoIcmpHosts()
