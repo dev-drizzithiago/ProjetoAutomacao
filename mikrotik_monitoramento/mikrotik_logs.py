@@ -1,5 +1,6 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
+import calculo_hora
 
 
 
@@ -42,6 +43,8 @@ class BuscandoLogsMikrotik:
                 '3': 'topics',
                 '4': 'message',
             }
+            data_log = log[chaves_logs['2']]
+            verificado_data = calculo_hora.CalculaHora()
+            verificado_data._converter_hora_atual_stamp()
 
-        for item in self.lista_desatribuicao_ip:
-            print(item)
+            print(verificado_data._comparacao_data_atual_x_log())
