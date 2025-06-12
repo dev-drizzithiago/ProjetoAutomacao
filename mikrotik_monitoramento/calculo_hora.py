@@ -35,8 +35,7 @@ class CalculaHora:
         # Transformo a data e hora em stamp, data formatada do UNIX.
         self.DATA_HORA_STAMP = datetime.timestamp(format_data_hora)
 
-        # print para analisar o resultado.
-        print('Formatação stamp inicio trabalho: ', self.DATA_HORA_STAMP)
+        # print('Formatação stamp inicio trabalho: ', self.DATA_HORA_STAMP)
 
     def converter_hora_atual_stamp(self):
 
@@ -53,7 +52,7 @@ class CalculaHora:
         # Para saber se esta tudo cereto, eu transformei o stamp no formata de horario padrão
         self.DATA_HORA_INICIO_FORMAT = datetime.fromtimestamp(self.UNIX_DATA_DIA)
 
-        print('Formatação decimal inicio trabalho: ', self.DATA_HORA_INICIO_FORMAT)
+        # print('Formatação decimal inicio trabalho: ', self.DATA_HORA_INICIO_FORMAT)
 
     def converter_hora_log_stamp(self, entrada_hora_log):
 
