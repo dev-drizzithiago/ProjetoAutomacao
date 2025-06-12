@@ -42,20 +42,6 @@ class BuscandoLogsMikrotik:
                 '3': 'topics',
                 '4': 'message',
             }
-            print(log[chaves_logs['2']])
-
-            # if log[chaves_logs['3']] == 'dhcp,info':
-            #
-            #     if 'defconf assigned' in log[chaves_logs['4']]:
-            #         mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
-            #         self.lista_atribuicao_ip.append(mac)
-            #
-            #     elif 'defconf deassigned' in log[chaves_logs['4']]:
-            #         mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
-            #         self.lista_desatribuicao_ip.append(mac)
-
-        # for item in self.lista_atribuicao_ip:
-        #     print(item)
 
         for item in self.lista_desatribuicao_ip:
             print(item)
