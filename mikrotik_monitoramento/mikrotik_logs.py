@@ -43,8 +43,8 @@ class BuscandoLogsMikrotik:
                 '3': 'topics',
                 '4': 'message',
             }
+
             data_log = log[chaves_logs['2']]
             verificado_data = calculo_hora.CalculaHora()
-            verificado_data._converter_hora_atual_stamp()
-
-            print(verificado_data._comparacao_data_atual_x_log())
+            verificado_data.converter_hora_log_stamp(data_log)
+            print(verificado_data.comparacao_data_atual_x_log())
