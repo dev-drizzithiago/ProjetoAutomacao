@@ -45,6 +45,7 @@ class BuscandoLogsMikrotik:
             }
 
             data_log = log[chaves_logs['2']]
+
             verificado_data = calculo_hora.CalculaHora()
             verificado_data.converter_hora_log_stamp(data_log)
             print(verificado_data.comparacao_data_atual_x_log())
