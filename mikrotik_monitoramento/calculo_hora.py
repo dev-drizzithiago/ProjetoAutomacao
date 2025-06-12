@@ -27,12 +27,18 @@ class CalculaHora:
         # Transformo a data e hora em stamp, data formatada do UNIX.
         self.DATA_HORA_STAMP = datetime.timestamp(format_data_hora)
 
-        # print para analisar o resultado. 
+        # print para analisar o resultado.
         print(self.DATA_HORA_STAMP)
 
     def converter_hora_atual_stamp(self):
+
+        # chama o metodo para solicitar a data e horario de início de trabalho.
         self.horario_inicio_trabalho_()
+
+        # Subtrai o valor stamp da hora atual com a hora de inicio do trabalho, pegando a sobra.
         SOBRA_CALCULO = int(self.date_now.timestamp()) - int(self.DATA_HORA_STAMP)
+
+
         self.UNIX_DATA_DIA =  int(self.date_now.timestamp()) - SOBRA_CALCULO# resultado não bate, verificar
         print(self.UNIX_DATA_DIA)
 
