@@ -26,10 +26,9 @@ class ManipulacaoIcmpHosts:
             self.LISTA_PING_OFF.append(endereco_ip)
 
     def buscando_host(self, endereco_ip):
-        print('Processando hostname...')
         try:
             host_name = socket.gethostbyaddr(endereco_ip)
-            self.LISTA_HOSTNAME.append(host_name)
+            self.LISTA_HOSTNAME.append(host_name[0])
         except socket.herror:
             ...
             # print(f'Não foi encontrado o hostname dessa do endereço de ip {endereco_ip}')
