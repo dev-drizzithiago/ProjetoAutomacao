@@ -24,6 +24,7 @@ class CalculaHora:
         self.horario_inicio_trabalho_()
 
         self.UNIX_DATA_NOW = int(self.date_now.timestamp()) - int(self.DATA_HORA_STAMP) # resultado não bate, verificar
+        print(self.UNIX_DATA_NOW)
         self.DATA_HORA_INICIO_FORMAT = datetime.fromtimestamp(self.UNIX_DATA_NOW) # hora formatada para views
         print(self.DATA_HORA_INICIO_FORMAT)
 
