@@ -36,6 +36,7 @@ class BuscandoLogsMikrotik:
 
     def analise_de_logs(self):
         logs = self._logs
+        contador = 0
         for log in logs:
             chaves_logs = {
                 '1': '.id',
@@ -51,4 +52,7 @@ class BuscandoLogsMikrotik:
             condicao_hora = verificado_data.comparacao_data_atual_x_log()
 
             if condicao_hora:
-                print(log[chaves_logs['4']])
+                if 'defconf assigned' in log[chaves_logs['4']]:
+                    print(contador, log[chaves_logs['4']])
+
+            contador += 1
