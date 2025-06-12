@@ -8,7 +8,12 @@ class ManipulacaoIcmpHosts:
         ...
 
     def ping_icmp_redeLocal(self, endereco_ip):
-        ping_result = subprocess.run('ping ' + f'192.168.0.{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True)
+        print(f'Processando icmp com o endereço ip 192.168.0.{endereco_ip}')
+
+        ping_result = subprocess.run(
+            'ping ' + f'{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True
+        )
+
         if ping_result.returncode == 0:
             self.buscando_host(endereco_ip)
 
