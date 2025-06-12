@@ -13,7 +13,6 @@ class CalculaHora:
     def converter_hora_atual_stamp(self):
         self.UNIX_DATA_NOW = int(self.date_now.timestamp()) - 600
         self.DATA_10_MIN_ATRAS = datetime.fromtimestamp(self.UNIX_DATA_NOW) # hora formatada
-        print(self.DATA_10_MIN_ATRAS)
 
     def converter_hora_log_stamp(self, entrada_hora_log):
         self.converter_hora_atual_stamp()
@@ -29,4 +28,4 @@ class CalculaHora:
 if __name__ == "__main__":
     obj_inicio = CalculaHora()
     obj_inicio.converter_hora_log_stamp('2025-06-12 11:35:56')
-    obj_inicio.comparacao_data_atual_x_log()
+    print(obj_inicio.comparacao_data_atual_x_log())
