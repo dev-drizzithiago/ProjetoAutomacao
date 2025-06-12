@@ -14,6 +14,7 @@ class CalculaHora:
         print(self.DATA_10_MIN_ATRAS)
 
     def _converter_hora_log_stamp(self, entrada_hora_log):
+        self._converter_hora_atual_stamp()
         print('- Convertendo horário log para UNIX...')
         self.horario_log = entrada_hora_log
         CONVERSAO_DATA = datetime.strptime(self.horario_log, '%Y-%m-%d %H:%M:%S')
@@ -21,8 +22,10 @@ class CalculaHora:
 
     def _comparacao_data_atual_x_log(self):
         print('- Comparando horário ATUAL com o horário de LOG...')
+
         if self.UNIX_DATE_FW > self.UNIX_DATA_NOW:
-            return True
+            print("Data LOG no intervalo de busca")
+            return self.UNIX_DATE_FW
         else:
             print('Não pegamos logs abaixo de 10 minutos do horário atual. ')
 
@@ -30,6 +33,5 @@ class CalculaHora:
 
 if __name__ == "__main__":
     obj_inicio = CalculaHora()
-    obj_inicio._converter_hora_atual_stamp()
-    obj_inicio._converter_hora_log_stamp('2025-06-12 10:50:56')
+    obj_inicio._converter_hora_log_stamp('2025-06-12 11:35:56')
     obj_inicio._comparacao_data_atual_x_log()
