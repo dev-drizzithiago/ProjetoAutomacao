@@ -12,6 +12,11 @@ class CalculaHora:
         self.DATA_HORA_STAMP = None
 
     def converter_para_stamp(self, data_entrada):
+        """
+        Converte qualquer data para o formata de strstamp, data UNIX.
+        :param data_entrada: valor de entrar no formato: ('2025-06-12 07:00:00')
+        :return: Retorno o valor com o formato: ("1749722400.0 segundos")
+        """
         return datetime.strptime(data_entrada, '%Y-%m-%d %H:%M:%S')
 
     def horario_inicio_trabalho_(self):
