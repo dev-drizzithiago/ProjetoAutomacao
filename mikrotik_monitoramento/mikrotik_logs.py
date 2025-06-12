@@ -52,7 +52,7 @@ class BuscandoLogsMikrotik:
             condicao_hora = verificado_data.comparacao_data_atual_x_log()
 
             if condicao_hora:
+                hora_do_log = str(log[chaves_logs['2']]).split(' ')[-1]
                 if 'defconf assigned' in log[chaves_logs['4']]:
-                    print(contador, log[chaves_logs['4']])
-
-            contador += 1
+                    print(contador, hora_do_log, log[chaves_logs['4']])
+                contador += 1
