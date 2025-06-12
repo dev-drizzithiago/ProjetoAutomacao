@@ -11,6 +11,9 @@ class CalculaHora:
         self.DATA_HORA_INICIO_FORMAT = None
         self.DATA_HORA_STAMP = None
 
+    def converter_para_stamp(self, data_entrada):
+        return datetime.strptime(data_entrada, '%Y-%m-%d %H:%M:%S')
+
     def horario_inicio_trabalho_(self):
         # Pega apenas a data, sem o horário
         data_atual = datetime.now().strftime('%Y-%m-%d')
@@ -22,7 +25,7 @@ class CalculaHora:
         data_hora_inicio = f'{data_atual} {horario_inicio}'
 
         # Formatado a data e hora para ficar com o padrão do datetime
-        format_data_hora = datetime.strptime(data_hora_inicio, '%Y-%m-%d %H:%M:%S')
+        format_data_hora = self.converter_para_stamp(data_hora_inicio)
 
         # Transformo a data e hora em stamp, data formatada do UNIX.
         self.DATA_HORA_STAMP = datetime.timestamp(format_data_hora)
@@ -48,9 +51,11 @@ class CalculaHora:
         print('Formatação decimal inicio trabalho: ', self.DATA_HORA_INICIO_FORMAT)
 
     def converter_hora_log_stamp(self, entrada_hora_log):
+
+        # Chama o metodo para formatar a data em stamp.
         self.converter_hora_atual_stamp()
         self.horario_log = entrada_hora_log
-        CONVERSAO_DATA = datetime.strptime(self.horario_log, '%Y-%m-%d %H:%M:%S')
+        CONVERSAO_DATA = self.converter_para_stamp(self.horario_log)
         self.UNIX_DATE_FW = datetime.timestamp(CONVERSAO_DATA)
 
     def comparacao_data_atual_x_log(self):
