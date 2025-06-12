@@ -45,6 +45,6 @@ if __name__ == '__main__':
         obj_logs.log_dhcp()
         obj_logs.analise_de_logs()
 
-        obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
-        quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
-        print(quantidade_clientes_dhcp)
+        # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
+        # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
+        # print(quantidade_clientes_dhcp)
