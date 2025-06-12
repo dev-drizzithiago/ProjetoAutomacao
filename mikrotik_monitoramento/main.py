@@ -1,5 +1,6 @@
 from librouteros import connect
 from dotenv import load_dotenv
+from time import sleep
 import mikrotik_logs
 import mikrotik_ips
 import os
@@ -37,10 +38,13 @@ if __name__ == '__main__':
     iniciando_obj_mikrotik = ConexaoFirewall()
     conexao_fw = iniciando_obj_mikrotik.conexao_fw()
 
-    obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
-    obj_logs.log_dhcp()
-    obj_logs.analise_de_logs()
+    while True:
+        print('Processando...')
+        sleep(10)
+        obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
+        obj_logs.log_dhcp()
+        obj_logs.analise_de_logs()
 
-    obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
-    quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
-    print(quantidade_clientes_dhcp)
+        obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
+        quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
+        print(quantidade_clientes_dhcp)
