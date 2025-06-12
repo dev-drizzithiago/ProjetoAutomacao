@@ -28,23 +28,24 @@ class CalculaHora:
         self.DATA_HORA_STAMP = datetime.timestamp(format_data_hora)
 
         # print para analisar o resultado.
-        print(self.DATA_HORA_STAMP)
+        print('Formatação stamp inicio trabalho: ', self.DATA_HORA_STAMP)
 
     def converter_hora_atual_stamp(self):
 
         # chama o metodo para solicitar a data e horario de início de trabalho.
         self.horario_inicio_trabalho_()
 
-        # Subtrai o valor stamp da hora atual com a hora de inicio do trabalho, pegando a sobra.
+        # Subtrai o valor stamp da hora atual com a hora de início do trabalho, pegando a sobra.
         SOBRA_CALCULO = int(self.date_now.timestamp()) - int(self.DATA_HORA_STAMP)
 
+        # Com a sobra da subtração, é subtraido mais uma vez, mas apenas com a data do dia. Ai fica com a data do dia
+        # e o horario das 07:00:00
+        self.UNIX_DATA_DIA =  int(self.date_now.timestamp()) - SOBRA_CALCULO
 
-        self.UNIX_DATA_DIA =  int(self.date_now.timestamp()) - SOBRA_CALCULO# resultado não bate, verificar
-        print(self.UNIX_DATA_DIA)
+        # Para saber se esta tudo cereto, eu transformei o stamp no formata de horario padrão
+        self.DATA_HORA_INICIO_FORMAT = datetime.fromtimestamp(self.UNIX_DATA_DIA)
 
-        self.DATA_HORA_INICIO_FORMAT = datetime.fromtimestamp(self.UNIX_DATA_DIA) # hora formatada para views
-
-        print(self.DATA_HORA_INICIO_FORMAT)
+        print('Formatação decimal inicio trabalho: ', self.DATA_HORA_INICIO_FORMAT)
 
     def converter_hora_log_stamp(self, entrada_hora_log):
         self.converter_hora_atual_stamp()
@@ -59,6 +60,5 @@ class CalculaHora:
 
 if __name__ == "__main__":
     obj_inicio = CalculaHora()
-    obj_inicio.horario_inicio_trabalho_()
     obj_inicio.converter_hora_log_stamp('2025-06-12 07:00:00')
     print(obj_inicio.comparacao_data_atual_x_log())
