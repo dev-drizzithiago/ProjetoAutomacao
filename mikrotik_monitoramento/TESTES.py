@@ -3,6 +3,15 @@
 from datetime import datetime
 
 date_now = datetime.now()
+
+data_format_ano = date_now.strftime('%Y-%m-%d %H:%M').split(' ')[0]
+data_format_hora = date_now.strftime('%Y-%m-%d %H:%M').split(' ')[-1]
+data_format_minu = int(data_format_hora.split(':')[-1]) - 10
+
+data_atualizada = f'{''}'
+
+print(data_format_ano)
+
 UNIX_DATA_NOW = date_now.timestamp()
 
 DATA =  '2025-06-12 09:18:17'
