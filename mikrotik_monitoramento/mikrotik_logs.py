@@ -42,25 +42,20 @@ class BuscandoLogsMikrotik:
                 '3': 'topics',
                 '4': 'message',
             }
+            print(log[chaves_logs['2']])
 
-            if log[chaves_logs['3']] == 'dhcp,info':
+            # if log[chaves_logs['3']] == 'dhcp,info':
+            #
+            #     if 'defconf assigned' in log[chaves_logs['4']]:
+            #         mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
+            #         self.lista_atribuicao_ip.append(mac)
+            #
+            #     elif 'defconf deassigned' in log[chaves_logs['4']]:
+            #         mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
+            #         self.lista_desatribuicao_ip.append(mac)
 
-                if 'defconf assigned' in log[chaves_logs['4']]:
-                    mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
-                    divisao_itens = mac.split(' ')
+        # for item in self.lista_atribuicao_ip:
+        #     print(item)
 
-                    horario_timestamp = self.conversao_data_timestamp(log[chaves_logs['2']])
-
-                    if len(divisao_itens) == 2:
-                        host_name = divisao_itens[-1]
-
-                        if 'note' in host_name:
-                            if host_name not in self.lista_atribuicao_ip:
-                                self.lista_atribuicao_ip.append(host_name)
-
-                elif 'defconf deassigned' in log[chaves_logs['4']]:
-                    mac = str(log[chaves_logs['4']]).split('for')[-1].strip()
-                    self.lista_desatribuicao_ip.append(mac)
-
-        for item in self.lista_atribuicao_ip:
+        for item in self.lista_desatribuicao_ip:
             print(item)
