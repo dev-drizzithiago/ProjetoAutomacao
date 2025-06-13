@@ -37,7 +37,6 @@ class BuscandoLogsMikrotik:
 
     def analise_de_logs(self):
         logs = self._logs
-        contador = 0
         for log in logs:
             chaves_logs = {
                 '1': '.id',
@@ -54,22 +53,22 @@ class BuscandoLogsMikrotik:
 
             if condicao_hora:
                 hora_do_log = str(log[chaves_logs['2']]).split(' ')[-1]
+                host_assigned = str(log[chaves_logs['4']]).split('for')[-1].strip()
 
                 if 'defconf assigned' in log[chaves_logs['4']]:
-
-                    info_log_on = f'{hora_do_log} - {log[chaves_logs['4']]}'
-                    
+                    info_log_on = f'{host_assigned}'
                     if info_log_on not in self.lista_atribuicao_ip:
                         self.lista_atribuicao_ip.append(info_log_on)
 
                 if 'defconf deassigned' in log[chaves_logs['4']]:
-                    info_log_off = f'{hora_do_log} - {log[chaves_logs['4']]}'
+                    info_log_off = f'{host_assigned}'
                     if info_log_off not in self.lista_desatribuicao_ip:
                         self.lista_desatribuicao_ip.append(info_log_off)
 
-            print(self.lista_atribuicao_ip)
-            # print(self.lista_desatribuicao_ip)
 
-            # for item in self.lista_atribuicao_ip:
-            #     if item not in self.lista_desatribuicao_ip:
-            #         self.lista_ip_on.append(item)
+        for item in self.lista_atribuicao_ip:
+            if item not in self.lista_desatribuicao_ip:
+                self.lista_ip_on.append(item)
+
+        for item in self.lista_ip_on:
+            print(item)
