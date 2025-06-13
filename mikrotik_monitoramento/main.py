@@ -1,3 +1,5 @@
+from wsgiref.util import request_uri
+
 from librouteros import connect
 from dotenv import load_dotenv
 from time import sleep
@@ -38,7 +40,7 @@ if __name__ == '__main__':
 
     MSG_END_IP_ESGOTADO = "defconf: failed to give out IP address: pool <dhcp> is empty"
     iniciando_obj_mikrotik = ConexaoFirewall()
-    conexao_fw = iniciando_obj_mikrotik.conexao_fw()
+    # conexao_fw = iniciando_obj_mikrotik.conexao_fw()
 
     # while True:
     # print('Processando...')
@@ -52,4 +54,8 @@ if __name__ == '__main__':
     # print(quantidade_clientes_dhcp)
 
     obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
-    obj_icmp.ping_icmp_redeLocal('192.168.0.0')
+    result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
+
+    for host in result['LISTA_HOSTNAME']:
+        print(host)
+
