@@ -21,10 +21,11 @@ class ManipulacaoIcmpHosts:
         if verificando_host_rede > 0:
             print('Rede invalida.')
             return
-
+        print('Processando...')
         while True:
 
             endereco_ip = f'{prefixo_rede_[0]}.{prefixo_rede_[1]}.{prefixo_rede_[2]}.{self.HOST}'
+
             ping_result = subprocess.run(
                 'ping ' + f'{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True
             )
@@ -34,7 +35,7 @@ class ManipulacaoIcmpHosts:
                 self.buscando_host(endereco_ip)
             else:
                 self.LISTA_PING_OFF.append(endereco_ip)
-
+            self.HOST += 1
             if self.HOST == 254:
                 break
 
