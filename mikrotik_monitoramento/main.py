@@ -49,13 +49,13 @@ if __name__ == '__main__':
     obj_logs.log_dhcp()
     obj_logs.analise_de_logs()
 
-    obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
-    quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
-    print(quantidade_clientes_dhcp)
+    # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
+    # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
+    # print(quantidade_clientes_dhcp)
+    #
+    # obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+    # result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
 
-    obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
-    result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
-
-    for host in result['LISTA_HOSTNAME']:
-        print(host)
+    # for host in result['LISTA_HOSTNAME']:
+    #     print(host)
 
