@@ -20,11 +20,9 @@ class ManipulacaoIcmpHosts:
 
         if verificando_host_rede > 0:
             print('Rede invalida.')
+            return 
         else:
-            for item in prefixo_rede_:
-                endereco_ip = '.'.join(item)
-
-            print(endereco_rede)
+            endereco_ip = f'{prefixo_rede_[0]}.{prefixo_rede_[1]}.{prefixo_rede_[2]}.{self.HOST}'
 
         # while True:
         #     ping_result = subprocess.run(
