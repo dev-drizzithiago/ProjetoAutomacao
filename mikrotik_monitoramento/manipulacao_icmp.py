@@ -35,7 +35,7 @@ class ManipulacaoIcmpHosts:
             else:
                 self.LISTA_PING_OFF.append(endereco_ip)
 
-            if host == 254:
+            if self.HOST == 254:
                 break
 
         return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME,'LISTA_PING_ON': self.LISTA_PING_ON,}
@@ -55,6 +55,6 @@ if __name__ == '__main__':
     while True:
         entrada_rede_base = input('Digital uma rede base (192.168.0.0): ')
         result = obj_ping.ping_icmp_redeLocal(entrada_rede_base)
-        
+
         if not result:
             print('Digital uma rede Base...!')
