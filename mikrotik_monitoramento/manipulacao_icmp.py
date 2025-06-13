@@ -1,6 +1,7 @@
 
 import subprocess
 import socket
+import os
 
 class ManipulacaoIcmpHosts:
 
@@ -15,13 +16,15 @@ class ManipulacaoIcmpHosts:
 
     def ping_icmp_redeLocal(self, endereco_rede):
         verificando_host_rede = int(endereco_rede.split('.')[-1])
+        prefixo_rede_ = endereco_rede.split('.')[:-1]
 
         if verificando_host_rede > 0:
             print('Rede invalida.')
         else:
-            endereco_ip = endereco_rede
+            for item in prefixo_rede_:
+                endereco_ip = '.'.join(item)
 
-        print(verificando_rede)
+            print(endereco_rede)
 
         # while True:
         #     ping_result = subprocess.run(
