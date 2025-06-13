@@ -13,6 +13,7 @@ class BuscandoLogsMikrotik:
 
         self.lista_atribuicao_ip = list()
         self.lista_desatribuicao_ip = list()
+        self.lista_ip_on = list()
 
         self._logs = None
         self.__data_stamp = None
@@ -54,5 +55,11 @@ class BuscandoLogsMikrotik:
             if condicao_hora:
                 hora_do_log = str(log[chaves_logs['2']]).split(' ')[-1]
                 if 'defconf assigned' in log[chaves_logs['4']]:
-                    print(contador, hora_do_log, log[chaves_logs['4']])
+                    info_log_on = f'{hora_do_log} - {log[chaves_logs['4']]}'
+                    self.lista_atribuicao_ip.append(info_log_on)
+                    print()
                 contador += 1
+
+                if 'defconf deassigned' in log[chaves_logs['4']]:
+                    info_log_off = f'{hora_do_log} - {log[chaves_logs['4']]}'
+                    self.lista_desatribuicao_ip.append(info_log_off)
