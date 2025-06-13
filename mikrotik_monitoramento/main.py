@@ -34,6 +34,7 @@ class ConexaoFirewall:
 
         except Exception as error:
             print(f'Erro ao conectar no mikrotik: {error}')
+            return None
 
 
 if __name__ == '__main__':
@@ -41,21 +42,23 @@ if __name__ == '__main__':
     MSG_END_IP_ESGOTADO = "defconf: failed to give out IP address: pool <dhcp> is empty"
     iniciando_obj_mikrotik = ConexaoFirewall()
     conexao_fw = iniciando_obj_mikrotik.conexao_fw()
+    if conexao_fw is None:
+        print()
+    else:
+        while True:
+            print('Processando...')
+            obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
+            obj_logs.log_dhcp()
+            obj_logs.analise_de_logs()
 
-    while True:
-        print('Processando...')
-        obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
-        obj_logs.log_dhcp()
-        obj_logs.analise_de_logs()
+            # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
+            # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
+            # print(quantidade_clientes_dhcp)
+            #
+            # obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+            # result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
 
-        # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
-        # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
-        # print(quantidade_clientes_dhcp)
-        #
-        # obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
-        # result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
-
-        # for host in result['LISTA_HOSTNAME']:
-        #     print(host)
-        sleep(600)
+            # for host in result['LISTA_HOSTNAME']:
+            #     print(host)
+            sleep(600)
 
