@@ -42,20 +42,20 @@ if __name__ == '__main__':
     iniciando_obj_mikrotik = ConexaoFirewall()
     conexao_fw = iniciando_obj_mikrotik.conexao_fw()
 
-    # while True:
-    print('Processando...')
-    sleep(5)
-    obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
-    obj_logs.log_dhcp()
-    obj_logs.analise_de_logs()
+    while True:
+        print('Processando...')
+        sleep(600)
+        obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
+        obj_logs.log_dhcp()
+        obj_logs.analise_de_logs()
 
-    # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
-    # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
-    # print(quantidade_clientes_dhcp)
-    #
-    # obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
-    # result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
+        # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
+        # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
+        # print(quantidade_clientes_dhcp)
+        #
+        # obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+        # result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
 
-    # for host in result['LISTA_HOSTNAME']:
-    #     print(host)
+        # for host in result['LISTA_HOSTNAME']:
+        #     print(host)
 
