@@ -36,15 +36,16 @@ class ManipulacaoIcmpHosts:
 
 obj_ping = ManipulacaoIcmpHosts()
 
-range_end_ip = 1
-while True:
-    obj_ping.ping_icmp_redeLocal(f'192.168.0.{range_end_ip}')
-    range_end_ip += 1
-    if range_end_ip == 254:
-        break
+if __name__ == '__main__':
+    range_end_ip = 1
+    while True:
+        obj_ping.ping_icmp_redeLocal(f'192.168.0.{range_end_ip}')
+        range_end_ip += 1
+        if range_end_ip == 254:
+            break
 
-for item in obj_ping.LISTA_PING_ON:
-    print(f'Lista de IPs Ativos: {item}')
+    for item in obj_ping.LISTA_PING_ON:
+        print(f'Lista de IPs Ativos: {item}')
 
-for item in obj_ping.LISTA_HOSTNAME:
-    print(f'Lista de HostNames: {item}')
+    for item in obj_ping.LISTA_HOSTNAME:
+        print(f'Lista de HostNames: {item}')
