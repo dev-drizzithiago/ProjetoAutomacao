@@ -63,10 +63,11 @@ class BuscandoLogsMikrotik:
                     info_log_off = f'{hora_do_log} - {log[chaves_logs['4']]}'
                     self.lista_desatribuicao_ip.append(info_log_off)
 
+            print(self.lista_atribuicao_ip)
+            print(self.lista_desatribuicao_ip)
 
-            for item in self.lista_atribuicao_ip:
-                if item not in self.lista_desatribuicao_ip:
-                    self.lista_ip_on.append(item)
-
+            # for item in self.lista_atribuicao_ip:
+            #     if item not in self.lista_desatribuicao_ip:
+            #         self.lista_ip_on.append(item)
 
             print(self.lista_ip_on)
