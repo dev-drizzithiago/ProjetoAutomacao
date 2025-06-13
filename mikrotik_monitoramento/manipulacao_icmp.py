@@ -20,25 +20,25 @@ class ManipulacaoIcmpHosts:
 
         if verificando_host_rede > 0:
             print('Rede invalida.')
-            return 
-        else:
-            endereco_ip = f'{prefixo_rede_[0]}.{prefixo_rede_[1]}.{prefixo_rede_[2]}.{self.HOST}'
+            return
 
-        # while True:
-        #     ping_result = subprocess.run(
-        #         'ping ' + f'{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True
-        #     )
-        #
-        #     if ping_result.returncode == 0:
-        #         self.LISTA_PING_ON.append(endereco_ip)
-        #         self.buscando_host(endereco_ip)
-        #     else:
-        #         self.LISTA_PING_OFF.append(endereco_ip)
-        #
-        #     if host == 254:
-        #         break
-        #
-        # return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME,'LISTA_PING_ON': self.LISTA_PING_ON,}
+        while True:
+
+            endereco_ip = f'{prefixo_rede_[0]}.{prefixo_rede_[1]}.{prefixo_rede_[2]}.{self.HOST}'
+            ping_result = subprocess.run(
+                'ping ' + f'{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True
+            )
+
+            if ping_result.returncode == 0:
+                self.LISTA_PING_ON.append(endereco_ip)
+                self.buscando_host(endereco_ip)
+            else:
+                self.LISTA_PING_OFF.append(endereco_ip)
+
+            if host == 254:
+                break
+
+        return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME,'LISTA_PING_ON': self.LISTA_PING_ON,}
 
     def buscando_host(self, endereco_ip):
         try:
@@ -52,6 +52,9 @@ class ManipulacaoIcmpHosts:
 obj_ping = ManipulacaoIcmpHosts()
 
 if __name__ == '__main__':
-
-    rede_local = '192.168.0.0'
-    obj_ping.ping_icmp_redeLocal(rede_local)
+    while True:
+        entrada_rede_base = input('Digital uma rede base (192.168.0.0): ')
+        result = obj_ping.ping_icmp_redeLocal(entrada_rede_base)
+        
+        if not result:
+            print('Digital uma rede Base...!')
