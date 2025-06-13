@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from time import sleep
 import mikrotik_logs
 import mikrotik_ips
+import manipulacao_icmp
 import os
 
 load_dotenv()
@@ -40,12 +41,15 @@ if __name__ == '__main__':
     conexao_fw = iniciando_obj_mikrotik.conexao_fw()
 
     # while True:
-    print('Processando...')
-    sleep(5)
-    obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
-    obj_logs.log_dhcp()
-    obj_logs.analise_de_logs()
+    # print('Processando...')
+    # sleep(5)
+    # obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
+    # obj_logs.log_dhcp()
+    # obj_logs.analise_de_logs()
 
     # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
     # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
     # print(quantidade_clientes_dhcp)
+
+    obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+    obj_icmp.ping_icmp_redeLocal('192.168.0.0')
