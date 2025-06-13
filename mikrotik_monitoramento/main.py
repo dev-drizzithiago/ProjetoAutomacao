@@ -44,7 +44,6 @@ if __name__ == '__main__':
 
     while True:
         print('Processando...')
-        sleep(600)
         obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
         obj_logs.log_dhcp()
         obj_logs.analise_de_logs()
@@ -58,4 +57,5 @@ if __name__ == '__main__':
 
         # for host in result['LISTA_HOSTNAME']:
         #     print(host)
+        sleep(600)
 
