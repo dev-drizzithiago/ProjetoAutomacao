@@ -7,23 +7,34 @@ class ManipulacaoIcmpHosts:
     LISTA_PING_ON = list()
     LISTA_PING_OFF = list()
     LISTA_HOSTNAME = list()
-
+    HOST = 1
 
     def __init__(self):
         self.ip_address = None
         ...
 
-    def ping_icmp_redeLocal(self, endereco_ip):
-
-        ping_result = subprocess.run(
-            'ping ' + f'{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True
-        )
-
-        if ping_result.returncode == 0:
-            self.LISTA_PING_ON.append(endereco_ip)
-            self.buscando_host(endereco_ip)
+    def ping_icmp_redeLocal(self, endereco_rede):
+        verificando_rede = int(endereco_rede.split('.')[-1])
+        if verificando_rede > 0:
+            print('Rede invalida.')
         else:
-            self.LISTA_PING_OFF.append(endereco_ip)
+            endereco_ip = endereco_rede
+            
+        while True:
+            ping_result = subprocess.run(
+                'ping ' + f'{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True
+            )
+
+            if ping_result.returncode == 0:
+                self.LISTA_PING_ON.append(endereco_ip)
+                self.buscando_host(endereco_ip)
+            else:
+                self.LISTA_PING_OFF.append(endereco_ip)
+
+            if host == 254:
+                break
+
+        return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME,'LISTA_PING_ON': self.LISTA_PING_ON,}
 
     def buscando_host(self, endereco_ip):
         try:
@@ -37,15 +48,7 @@ class ManipulacaoIcmpHosts:
 obj_ping = ManipulacaoIcmpHosts()
 
 if __name__ == '__main__':
-    range_end_ip = 1
-    while True:
-        obj_ping.ping_icmp_redeLocal(f'192.168.0.{range_end_ip}')
-        range_end_ip += 1
-        if range_end_ip == 254:
-            break
 
-    for item in obj_ping.LISTA_PING_ON:
-        print(f'Lista de IPs Ativos: {item}')
-
-    for item in obj_ping.LISTA_HOSTNAME:
-        print(f'Lista de HostNames: {item}')
+    rede_local = '192.168.0.0'
+    obj_ping.ping_icmp_redeLocal(rede_local)
+    range_end_ip += 1
