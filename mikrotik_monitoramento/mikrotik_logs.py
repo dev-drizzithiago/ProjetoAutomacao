@@ -65,7 +65,9 @@ class BuscandoLogsMikrotik:
                     if info_log_off not in self.lista_desatribuicao_ip:
                         self.lista_desatribuicao_ip.append(info_log_off)
 
-
+        print()
+        print(datetime.now())
+        print('---' * 30)
         for item in self.lista_atribuicao_ip:
             if item not in self.lista_desatribuicao_ip:
                 self.lista_ip_on.append(item)
