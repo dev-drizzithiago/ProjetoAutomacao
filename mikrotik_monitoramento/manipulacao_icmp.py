@@ -16,6 +16,7 @@ class ManipulacaoIcmpHosts:
 
         print('Processando icmp...')
         for ip_host_ in list_ip_hosts:
+            print(f'disparando para o ip: {ip_host_}')
 
             ping_result = subprocess.run(
                 'ping ' + f'{ip_host_} ' + '-n 2 -w 1 ', stdout=subprocess.PIPE, text=True
