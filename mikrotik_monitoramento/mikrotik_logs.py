@@ -441,7 +441,15 @@ if __name__ == '__main__':
     result_ip = obj_logs.analise_de_logs()
 
     obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
-    obj_icmp.ping_icmp_redeLocal(result_ip)
+    informacoes_icmp = obj_icmp.ping_icmp_redeLocal(result_ip)
 
-    print(result_ip)
+    print()
+    for chave, valor in informacoes_icmp.items():
+        print(f'{chave}:')
+        print('---' * 30)
+        for item in valor:
+            print(item)
+        print()
+        print()
+
     # print('Quantidades de ip: ', len(result_ip))
