@@ -14,6 +14,7 @@ class BuscandoLogsMikrotik:
         self.lista_atribuicao_ip = list()
         self.lista_desatribuicao_ip = list()
         self.lista_ip_on = list()
+        self.lista_ip_logs = list()
 
         self._logs = None
         self.__data_stamp = None
@@ -56,24 +57,23 @@ class BuscandoLogsMikrotik:
                 host_assigned = str(log[chaves_logs['4']]).split('for')[-1].strip()
                 end_ip = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
 
-                print(end_ip)
+                if 'defconf assigned' in log[chaves_logs['4']]:
+                    self.lista_ip_logs.append(end_ip)
+                    info_log_on = f'{host_assigned}'
+                    if info_log_on not in self.lista_atribuicao_ip:
+                        self.lista_atribuicao_ip.append(info_log_on)
 
-        #         if 'defconf assigned' in log[chaves_logs['4']]:
-        #             info_log_on = f'{host_assigned}'
-        #             if info_log_on not in self.lista_atribuicao_ip:
-        #                 self.lista_atribuicao_ip.append(info_log_on)
-        #
-        #         if 'defconf deassigned' in log[chaves_logs['4']]:
-        #             info_log_off = f'{host_assigned}'
-        #             if info_log_off not in self.lista_desatribuicao_ip:
-        #                 self.lista_desatribuicao_ip.append(info_log_off)
-        #
-        # print()
-        # print(datetime.now())
-        # print('---' * 30)
-        # for item in self.lista_atribuicao_ip:
-        #     if item not in self.lista_desatribuicao_ip:
-        #         self.lista_ip_on.append(item)
-        #
-        # for item in self.lista_ip_on:
-        #     print(item)
+                if 'defconf deassigned' in log[chaves_logs['4']]:
+                    info_log_off = f'{host_assigned}'
+                    if info_log_off not in self.lista_desatribuicao_ip:
+                        self.lista_desatribuicao_ip.append(info_log_off)
+
+        print()
+        print(datetime.now())
+        print('---' * 30)
+        for item in self.lista_atribuicao_ip:
+            if item not in self.lista_desatribuicao_ip:
+                self.lista_ip_on.append(item)
+
+        for item in self.lista_ip_on:
+            print(item)
