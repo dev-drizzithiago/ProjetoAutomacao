@@ -50,8 +50,8 @@ if __name__ == '__main__':
             obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
             obj_logs.log_dhcp(None)
             result_ip = obj_logs.analise_de_logs()
-            print(result_ip)
-            print('Quantidades de ip: ', len(result_ip))
+            # print(result_ip)
+            # print('Quantidades de ip: ', len(result_ip))
 
 
             obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
