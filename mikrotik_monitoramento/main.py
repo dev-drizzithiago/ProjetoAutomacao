@@ -49,7 +49,10 @@ if __name__ == '__main__':
             print('Processando...')
             obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
             obj_logs.log_dhcp()
-            obj_logs.analise_de_logs()
+            result_ip = obj_logs.analise_de_logs()
+
+            for item in result_ip:
+                print(item)
 
             # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
             # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
