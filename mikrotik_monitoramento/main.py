@@ -60,5 +60,6 @@ if __name__ == '__main__':
 
             # for host in result['LISTA_HOSTNAME']:
             #     print(host)
+
             sleep(600)
 
