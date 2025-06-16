@@ -55,12 +55,7 @@ class BuscandoLogsMikrotik:
             if condicao_hora:
 
                 host_assigned = str(log[chaves_logs['4']]).split('for')[-1].strip()
-                end_ip = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
-
                 if 'defconf assigned' in log[chaves_logs['4']]:
-
-                    if end_ip not in self.lista_ip_logs:
-                        self.lista_ip_logs.append(end_ip)
 
                     info_log_on = f'{host_assigned}'
 
@@ -70,6 +65,11 @@ class BuscandoLogsMikrotik:
                 if 'defconf deassigned' in log[chaves_logs['4']]:
                     info_log_off = f'{host_assigned}'
                     if info_log_off not in self.lista_desatribuicao_ip:
+
+                        end_ip = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
+                        if end_ip not in self.lista_ip_logs:
+                            self.lista_ip_logs.append(end_ip)
+
                         self.lista_desatribuicao_ip.append(info_log_off)
 
         print()
