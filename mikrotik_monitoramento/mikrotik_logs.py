@@ -444,6 +444,10 @@ if __name__ == '__main__':
     informacoes_icmp = obj_icmp.ping_icmp_redeLocal(result_ip)
 
     print()
+
+    print(f'Quantidade IP: {informacoes_icmp['LISTA_PING_ON']}')
+    print(f'Quantidade HostName: {informacoes_icmp['LISTA_HOSTNAME']}')
+
     for chave, valor in informacoes_icmp.items():
         print(f'{chave}:')
         print('---' * 30)
