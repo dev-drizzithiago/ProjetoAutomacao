@@ -6,7 +6,6 @@ import os
 class ManipulacaoIcmpHosts:
 
     LISTA_PING_ON = list()
-    LISTA_PING_OFF = list()
     LISTA_HOSTNAME = list()
 
     def __init__(self):
@@ -15,7 +14,7 @@ class ManipulacaoIcmpHosts:
 
     def ping_icmp_redeLocal(self, list_ip_hosts):
 
-        print('Processando...')
+        print('Processando icmp...')
         for ip_host_ in list_ip_hosts:
 
             ping_result = subprocess.run(
@@ -25,8 +24,6 @@ class ManipulacaoIcmpHosts:
             if ping_result.returncode == 0:
                 self.LISTA_PING_ON.append(ip_host_)
                 self.buscando_host(ip_host_)
-            else:
-                self.LISTA_PING_OFF.append(ip_host_)
 
         return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME,'LISTA_PING_ON': self.LISTA_PING_ON,}
 
