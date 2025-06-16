@@ -71,9 +71,13 @@ class BuscandoLogsMikrotik:
         print()
         print(datetime.now())
         print('---' * 30)
-        for item in self.lista_atribuicao_ip:
-            if item not in self.lista_desatribuicao_ip:
-                self.lista_ip_on.append(item)
 
-        for item in self.lista_ip_on:
+        for item in self.lista_ip_logs:
             print(item)
+
+        # for item in self.lista_atribuicao_ip:
+        #     if item not in self.lista_desatribuicao_ip:
+        #         self.lista_ip_on.append(item)
+        #
+        # for item in self.lista_ip_on:
+        #     print(item)
