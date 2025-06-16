@@ -38,7 +38,7 @@ obj_ping = ManipulacaoIcmpHosts()
 
 
 if __name__ == '__main__':
-    lista_end_hosts = '192.168.0.250', '192.168.0.10'
+    lista_end_hosts = '192.168.0.250', '192.168.0.25'
     result = obj_ping.ping_icmp_redeLocal(lista_end_hosts)
 
     print()
