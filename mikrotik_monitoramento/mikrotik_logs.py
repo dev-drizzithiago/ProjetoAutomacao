@@ -58,8 +58,12 @@ class BuscandoLogsMikrotik:
                 end_ip = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
 
                 if 'defconf assigned' in log[chaves_logs['4']]:
-                    self.lista_ip_logs.append(end_ip)
+
+                    if end_ip not in self.lista_ip_logs:
+                        self.lista_ip_logs.append(end_ip)
+
                     info_log_on = f'{host_assigned}'
+
                     if info_log_on not in self.lista_atribuicao_ip:
                         self.lista_atribuicao_ip.append(info_log_on)
 
@@ -72,14 +76,6 @@ class BuscandoLogsMikrotik:
         print(datetime.now().strftime('%d/%m/%Y - %H:%M'))
         print('---' * 30)
 
-        # for item in self.lista_ip_logs:
-        #     print(item)
-
-        return self.lista_ip_logs
-
-        # for item in self.lista_atribuicao_ip:
-        #     if item not in self.lista_desatribuicao_ip:
-        #         self.lista_ip_on.append(item)
-        #
-        # for item in self.lista_ip_on:
-        #     print(item)
+        for item in self.lista_atribuicao_ip:
+            if item not in self.lista_desatribuicao_ip:
+                self.lista_ip_on.append(item)
