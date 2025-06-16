@@ -51,7 +51,8 @@ if __name__ == '__main__':
             obj_logs.log_dhcp()
             result_ip = obj_logs.analise_de_logs()
 
-            print(len(result_ip))
+            print('Quantidades de ip: ', len(result_ip))
+
             for item in result_ip:
                 print(item)
 
