@@ -2,7 +2,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import calculo_hora
 
-
+from time import sleep
 
 class BuscandoLogsMikrotik:
     date_time = datetime.now()
@@ -13,6 +13,7 @@ class BuscandoLogsMikrotik:
 
         self.lista_atribuicao_ip = list()
         self.lista_desatribuicao_ip = list()
+
         self.lista_ip_on = list()
         self.lista_ip_logs = list()
 
@@ -39,6 +40,7 @@ class BuscandoLogsMikrotik:
     def analise_de_logs(self):
         logs = self._logs
         for log in logs:
+
             chaves_logs = {
                 '1': '.id',
                 '2': 'time',
@@ -54,23 +56,25 @@ class BuscandoLogsMikrotik:
 
             if condicao_hora:
 
-                host_assigned = str(log[chaves_logs['4']]).split('for')[-1].strip()
-                if 'defconf assigned' in log[chaves_logs['4']]:
+                namehost_assigned = str(log[chaves_logs['4']]).split('for')[-1].strip()
+                end_ip_assigned_ = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
 
-                    info_log_on = f'{host_assigned}'
+                print(end_ip_assigned_, namehost_assigned)
+
+                if 'defconf assigned' in log[chaves_logs['4']]:
+                    info_log_on = f'{namehost_assigned}'
 
                     if info_log_on not in self.lista_atribuicao_ip:
-                        self.lista_atribuicao_ip.append(info_log_on)
+                        print(f'add a lista: {info_log_on}')
+                        sleep(3)
+                        self.lista_atribuicao_ip.append(end_ip_assigned_)
 
                 if 'defconf deassigned' in log[chaves_logs['4']]:
-                    info_log_off = f'{host_assigned}'
+
+                    info_log_off = f'{namehost_assigned}'
+
                     if info_log_off not in self.lista_desatribuicao_ip:
-
-                        end_ip = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
-                        if end_ip not in self.lista_ip_logs:
-                            self.lista_ip_logs.append(end_ip)
-
-                        self.lista_desatribuicao_ip.append(info_log_off)
+                        self.lista_desatribuicao_ip.append(end_ip_assigned_)
 
         print()
         print(datetime.now().strftime('%d/%m/%Y - %H:%M'))
@@ -81,3 +85,7 @@ class BuscandoLogsMikrotik:
                 self.lista_ip_on.append(item)
 
         return self.lista_ip_logs
+
+
+if __name__ == '__main__':
+    ...
