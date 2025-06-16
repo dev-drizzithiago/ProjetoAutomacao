@@ -68,13 +68,13 @@ class BuscandoLogsMikrotik:
                 if 'defconf assigned' in log[chaves_logs['4']]:
                     info_log_on = f'{namehost_assigned}'
                     if info_log_on not in self.lista_atribuicao_ip:
-                        # print(f'add a lista assigned: {log[chaves_logs['2']],end_ip_assigned_, info_log_on}')
+                        print(f'add a lista assigned: {log[chaves_logs['2']],end_ip_assigned_, info_log_on}')
                         self.lista_atribuicao_ip.append(end_ip_assigned_)
 
                 if 'defconf deassigned' in log[chaves_logs['4']]:
                     info_log_off = f'{namehost_assigned}'
                     if info_log_off not in self.lista_desatribuicao_ip:
-                        # print(f'add a lista deassigned: {log[chaves_logs['2']], end_ip_assigned_, info_log_off}')
+                        print(f'add a lista deassigned: {log[chaves_logs['2']], end_ip_assigned_, info_log_off}')
                         self.lista_desatribuicao_ip.append(end_ip_assigned_)
 
         print()
@@ -446,5 +446,5 @@ if __name__ == '__main__':
     obj_logs = BuscandoLogsMikrotik(None)
     obj_logs.log_dhcp(lista_teste_logs)
     result_ip = obj_logs.analise_de_logs()
-    print(result_ip)
+    # print(result_ip)
     print('Quantidades de ip: ', len(result_ip))
