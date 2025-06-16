@@ -8,13 +8,12 @@ class ManipulacaoIcmpHosts:
     LISTA_PING_ON = list()
     LISTA_PING_OFF = list()
     LISTA_HOSTNAME = list()
-    HOST = 1
 
     def __init__(self):
         self.ip_address = None
         ...
 
-    def ping_icmp_redeLocal(self, endereco_rede):
+    def ping_icmp_redeLocal(self, list_ip_hosts):
         verificando_host_rede = int(endereco_rede.split('.')[-1])
         prefixo_rede_ = endereco_rede.split('.')[:-1]
 
@@ -23,12 +22,10 @@ class ManipulacaoIcmpHosts:
             return
 
         print('Processando...')
-        while True:
-
-            endereco_ip = f'{prefixo_rede_[0]}.{prefixo_rede_[1]}.{prefixo_rede_[2]}.{self.HOST}'
+        for ip_host_ in list_ip_hosts:
 
             ping_result = subprocess.run(
-                'ping ' + f'{endereco_ip} ' + '-n 1 -w 1 ', stdout=subprocess.PIPE, text=True
+                'ping ' + f'{ip_host_} ' + '-n 2 -w 1 ', stdout=subprocess.PIPE, text=True
             )
 
             if ping_result.returncode == 0:
