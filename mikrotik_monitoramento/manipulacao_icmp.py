@@ -25,7 +25,7 @@ class ManipulacaoIcmpHosts:
                 self.LISTA_PING_ON.append(ip_host_)
                 self.buscando_host(ip_host_)
 
-        return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME,'LISTA_PING_ON': self.LISTA_PING_ON,}
+        return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME, 'LISTA_PING_ON': self.LISTA_PING_ON,}
 
     def buscando_host(self, ip_host_):
         try:
@@ -44,11 +44,5 @@ if __name__ == '__main__':
     if not result:
         print('Digital uma rede Base...!')
 
-    nome_host = result['LISTA_HOSTNAME']
-    ip_host = result['LISTA_PING_ON']
-
-    for item in nome_host:
-        print(item)
-
-    for item in ip_host:
-        print(item)
+    for chave, valor in result.items():
+        print(chave, valor)
