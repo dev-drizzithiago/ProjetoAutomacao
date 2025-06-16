@@ -58,18 +58,20 @@ if __name__ == '__main__':
             # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
             # print(quantidade_clientes_dhcp)
 
-            # obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
-            # result = obj_icmp.ping_icmp_redeLocal(result_ip)
+            obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+            informacoes_icmp = obj_icmp.ping_icmp_redeLocal(result_ip)
 
-            # print("IP's respondendo", len(result_ip))
-            # print()
-            # for chave, valor in result.items():
-            #     print(f'{chave}:')
-            #     print('---' * 30)
-            #     for item in valor:
-            #         print(item)
-            #     print()
-            #     print()
+            print()
+            print(f'Quantidade IP: {len(informacoes_icmp['LISTA_PING_ON'])}')
+            print(f'Quantidade HostName: {len(informacoes_icmp['LISTA_HOSTNAME'])}')
+            print()
+            for chave, valor in informacoes_icmp.items():
+                print(f'{chave}:')
+                print('---' * 30)
+                for item in valor:
+                    print(item)
+                print()
+                print()
 
             sleep(600)
 
