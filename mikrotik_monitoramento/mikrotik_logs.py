@@ -79,4 +79,5 @@ class BuscandoLogsMikrotik:
         for item in self.lista_atribuicao_ip:
             if item not in self.lista_desatribuicao_ip:
                 self.lista_ip_on.append(item)
+
         return self.lista_ip_logs
