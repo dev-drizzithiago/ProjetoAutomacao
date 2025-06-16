@@ -51,7 +51,11 @@ class ManipulacaoIcmpHosts:
             # print(f'Não foi encontrado o hostname dessa do endereço de ip {endereco_ip}')
 
 
+lista_teste_ip = [
+]
+
 obj_ping = ManipulacaoIcmpHosts()
+
 
 if __name__ == '__main__':
     while True:
