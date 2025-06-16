@@ -59,21 +59,16 @@ class BuscandoLogsMikrotik:
                 namehost_assigned = str(log[chaves_logs['4']]).split('for')[-1].strip()
                 end_ip_assigned_ = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
 
-                print(end_ip_assigned_, namehost_assigned)
-
                 if 'defconf assigned' in log[chaves_logs['4']]:
                     info_log_on = f'{namehost_assigned}'
-
                     if info_log_on not in self.lista_atribuicao_ip:
-                        print(f'add a lista: {info_log_on}')
-                        sleep(3)
+                        print(f'add a lista assigned: {end_ip_assigned_, info_log_on}')
                         self.lista_atribuicao_ip.append(end_ip_assigned_)
 
                 if 'defconf deassigned' in log[chaves_logs['4']]:
-
                     info_log_off = f'{namehost_assigned}'
-
                     if info_log_off not in self.lista_desatribuicao_ip:
+                        print(f'add a lista deassigned: {end_ip_assigned_, info_log_off}')
                         self.lista_desatribuicao_ip.append(end_ip_assigned_)
 
         print()
@@ -82,9 +77,10 @@ class BuscandoLogsMikrotik:
 
         for item in self.lista_atribuicao_ip:
             if item not in self.lista_desatribuicao_ip:
+                print(f'host adicionado a lista de onlines: {item}')
                 self.lista_ip_on.append(item)
 
-        return self.lista_ip_logs
+        return self.lista_ip_on
 
 
 if __name__ == '__main__':
