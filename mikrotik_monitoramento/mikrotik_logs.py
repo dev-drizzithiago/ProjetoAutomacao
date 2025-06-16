@@ -69,11 +69,13 @@ class BuscandoLogsMikrotik:
                         self.lista_desatribuicao_ip.append(info_log_off)
 
         print()
-        print(datetime.now())
+        print(datetime.now().strftime('%d/%m/%Y - %H:%M'))
         print('---' * 30)
 
-        for item in self.lista_ip_logs:
-            print(item)
+        # for item in self.lista_ip_logs:
+        #     print(item)
+
+        return self.lista_ip_logs
 
         # for item in self.lista_atribuicao_ip:
         #     if item not in self.lista_desatribuicao_ip:
