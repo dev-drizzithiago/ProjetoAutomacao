@@ -17,7 +17,6 @@ class ManipulacaoIcmpHosts:
         print('Processando icmp...')
         for ip_host_ in list_ip_hosts:
 
-
             ping_result = subprocess.run(
                 'ping ' + f'{ip_host_} ' + '-n 2 -w 1 ', stdout=subprocess.PIPE, text=True
             )
@@ -32,6 +31,7 @@ class ManipulacaoIcmpHosts:
     def buscando_host(self, ip_host_):
         try:
             host_name = socket.gethostbyaddr(ip_host_)
+            print(host_name)
             self.LISTA_HOSTNAME.append(host_name[0])
         except socket.herror:
             ...
