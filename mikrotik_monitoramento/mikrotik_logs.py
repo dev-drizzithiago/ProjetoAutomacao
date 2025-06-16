@@ -1,6 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import calculo_hora
+import manipulacao_icmp
 
 from time import sleep
 
@@ -54,7 +55,6 @@ class BuscandoLogsMikrotik:
             }
 
             data_log = log[chaves_logs['2']]
-
             verificado_data = calculo_hora.CalculaHora()
             verificado_data.converter_hora_log_stamp(data_log)
             condicao_hora = verificado_data.comparacao_data_atual_x_log()
@@ -79,6 +79,7 @@ class BuscandoLogsMikrotik:
         print('---' * 30)
 
         print(len(self.lista_atribuicao_ip), self.lista_atribuicao_ip)
+        return self.lista_atribuicao_ip
 
 
 lista_teste_logs = [
@@ -438,5 +439,9 @@ if __name__ == '__main__':
     obj_logs = BuscandoLogsMikrotik(None)
     obj_logs.log_dhcp(lista_teste_logs)
     result_ip = obj_logs.analise_de_logs()
-    # print(result_ip)
+
+    obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+    obj_icmp.ping_icmp_redeLocal(result_ip)
+
+    print(result_ip)
     # print('Quantidades de ip: ', len(result_ip))
