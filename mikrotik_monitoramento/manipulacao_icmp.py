@@ -16,14 +16,17 @@ class ManipulacaoIcmpHosts:
 
         print('Processando icmp...')
         for ip_host_ in list_ip_hosts:
-            print(f'disparando para o ip: {ip_host_}')
+
 
             ping_result = subprocess.run(
                 'ping ' + f'{ip_host_} ' + '-n 2 -w 1 ', stdout=subprocess.PIPE, text=True
             )
 
             if ping_result.returncode == 0:
+                print(f'Resposta para ip: {ip_host_}')
                 self.LISTA_PING_ON.append(ip_host_)
+
+                print('Buscando hostname: ')
                 self.buscando_host(ip_host_)
 
         return {'LISTA_HOSTNAME': self.LISTA_HOSTNAME, 'LISTA_PING_ON': self.LISTA_PING_ON,}
