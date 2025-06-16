@@ -50,21 +50,26 @@ if __name__ == '__main__':
             obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
             obj_logs.log_dhcp()
             result_ip = obj_logs.analise_de_logs()
+            print(result_ip)
 
             print('Quantidades de ip: ', len(result_ip))
-
-            for item in result_ip:
-                print(item)
 
             # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
             # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
             # print(quantidade_clientes_dhcp)
-            #
-            # obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
-            # result = obj_icmp.ping_icmp_redeLocal('192.168.0.0')
 
-            # for host in result['LISTA_HOSTNAME']:
-            #     print(host)
+            obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+            result = obj_icmp.ping_icmp_redeLocal(result_ip)
+
+            print("IP's respondendo", len(result_ip))
+            print()
+            for chave, valor in result.items():
+                print(f'{chave}:')
+                print('---' * 30)
+                for item in valor:
+                    print(item)
+                print()
+                print()
 
             sleep(600)
 
