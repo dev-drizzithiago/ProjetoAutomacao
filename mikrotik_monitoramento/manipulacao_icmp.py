@@ -30,9 +30,12 @@ class ManipulacaoIcmpHosts:
 
     def buscando_host(self, ip_host_):
         try:
-            host_name = socket.gethostbyaddr(ip_host_)
-            print(host_name)
-            self.LISTA_HOSTNAME.append(host_name[0])
+            host_name = socket.gethostbyaddr(ip_host_)[0]
+
+            if len(host_name) == 0:
+                host_name = '<desconhecido>'
+
+            self.LISTA_HOSTNAME.append(host_name)
         except socket.herror:
             ...
 
