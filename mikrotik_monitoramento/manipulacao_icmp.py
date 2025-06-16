@@ -21,6 +21,7 @@ class ManipulacaoIcmpHosts:
         if verificando_host_rede > 0:
             print('Rede invalida.')
             return
+
         print('Processando...')
         while True:
 
@@ -59,3 +60,10 @@ if __name__ == '__main__':
 
         if not result:
             print('Digital uma rede Base...!')
+
+        nome_host = result['LISTA_HOSTNAME']
+        ip_host = result['LISTA_PING_ON']
+
+        for item in nome_host:
+            print(item)
+
