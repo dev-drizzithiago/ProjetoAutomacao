@@ -48,7 +48,7 @@ if __name__ == '__main__':
         while True:
             print('Processando...')
             obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
-            obj_logs.log_dhcp()
+            obj_logs.log_dhcp(None)
             result_ip = obj_logs.analise_de_logs()
             print(result_ip)
             print('Quantidades de ip: ', len(result_ip))
