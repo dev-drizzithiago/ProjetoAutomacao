@@ -67,12 +67,10 @@ class BuscandoLogsMikrotik:
                 if 'defconf assigned' in log[chaves_logs['4']]:
                     info_log_on = f'{namehost_assigned}'
                     if info_log_on not in self.lista_atribuicao_ip:
-                        print('ip adicionado', end_ip_assigned_)
                         self.lista_atribuicao_ip.append(end_ip_assigned_)
 
                 if 'defconf deassigned' in log[chaves_logs['4']]:
                     end_ip_deassigned_ = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
-                    print('ip removido',end_ip_deassigned_ )
                     if end_ip_deassigned_ in self.lista_atribuicao_ip:
                         self.lista_atribuicao_ip.remove(end_ip_deassigned_)
 
