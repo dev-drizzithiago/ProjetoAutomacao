@@ -2,11 +2,13 @@
 import subprocess
 import socket
 import os
-
-from threading import Thread
-
+from os import times_result
+from threading import Thread, Event
 from time import sleep
 
+
+# Evento para sinalizar cancelamento
+cancelar_processo = Event()
 
 class ManipulacaoIcmpHosts:
 
@@ -55,8 +57,10 @@ class ManipulacaoIcmpHosts:
             print(f'{ip_host_} [✗]')
 
 
-obj_ping = ManipulacaoIcmpHosts()
-
+def cancelar_processo():
+    opc = input('[0] para cancelar: ')
+    if opc == '0':
+        cancelar_processo.set()
 
 lista_ip_host = [
     '192.168.0.10',
@@ -65,23 +69,29 @@ lista_ip_host = [
     '192.168.0.250',
 ]
 
+# Criando obj
+obj_ping = ManipulacaoIcmpHosts()
+
 if __name__ == '__main__':
     # lista_end_hosts = '192.168.0.250', '192.168.0.25'
     # result = obj_ping.ping_icmp_redeLocal(lista_end_hosts)
-    desligar = False
-    while True:
-        for ip in lista_ip_host:
-            processo = Thread(target=obj_ping.icmp_ip_online(ip))
-            processo.start()
-        sleep(5)
-        print('---' * 30)
-        print('Continuar?')
-        opc = input('[0] para cancelar: ')
-        if opc == '0':
-            break
-        else:
-            print('Repetindo processo...')
 
+    # Inicia thread de escuta de cancelamento
+    Thread(target=cancelar_processo, daemon=True).start()
+
+    while not cancelar_processo.is_set():
+        threads = list()
+        for ip in lista_ip_host:
+            processo = Thread(target=obj_ping.icmp_ip_online, args=(ip,))
+            processo.start()
+            threads.append(processo)
+
+        for thread in threads:
+            thread.join()
+
+        print('---' * 30)
+        print('Repetindo processo...')
+        sleep(2)
 
         # print()
     # for chave, valor in result.items():
