@@ -28,7 +28,8 @@ class ConexaoFirewall:
                 host=str(self.host_fw),  # IP do seu MikroTik
                 port=str(self.port_fw),  # Porta padrão da API
             )
-
+            print()
+            print('---' * 30)
             print('Conexão com o mikrotik realizado com sucesso. ')
             return self.api_mikrotik
 
