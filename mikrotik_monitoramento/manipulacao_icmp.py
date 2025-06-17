@@ -3,7 +3,8 @@ import subprocess
 import socket
 import os
 
-from concurrent.futures import ThreadPoolExecutor
+from threading import Thread
+
 from time import sleep
 
 
@@ -44,6 +45,7 @@ class ManipulacaoIcmpHosts:
             ...
 
     def icmp_ip_online(self, ip_host_):
+
         resposta_icmp = subprocess.run(
                 'ping ' + f'{ip_host_} ' + '-n 2 -w 1 ', stdout=subprocess.PIPE, text=True
             )
@@ -66,14 +68,22 @@ lista_ip_host = [
 if __name__ == '__main__':
     # lista_end_hosts = '192.168.0.250', '192.168.0.25'
     # result = obj_ping.ping_icmp_redeLocal(lista_end_hosts)
+    desligar = False
     while True:
         for ip in lista_ip_host:
-            obj_ping.icmp_ip_online(ip)
-            sleep(2)
+            processo = Thread(target=obj_ping.icmp_ip_online(ip))
+            processo.start()
+        sleep(5)
+        print('---' * 30)
+        print('Continuar?')
+        opc = input('[0] para cancelar: ')
+        if opc == '0':
+            break
+        else:
+            print('Repetindo processo...')
 
-        os.system('cls')
 
-    # print()
+        # print()
     # for chave, valor in result.items():
     #     print(f'{chave}:')
     #     print('---' * 30)
