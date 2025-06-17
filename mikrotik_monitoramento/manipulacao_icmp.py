@@ -3,6 +3,8 @@ import subprocess
 import socket
 import os
 
+from concurrent.futures import ThreadPoolExecutor
+
 class ManipulacaoIcmpHosts:
 
     LISTA_PING_ON = list()
@@ -39,8 +41,25 @@ class ManipulacaoIcmpHosts:
         except socket.herror:
             ...
 
+    def icmp_ip_online(self, ip_host):
+        resposta_icmp = subprocess.run(
+                'ping ' + f'{ip_host_} ' + '-n 2 -w 1 ', stdout=subprocess.PIPE, text=True
+            )
+        if resposta_icmp.returncode == 0:
+            print(f'[✓]')
+        else:
+            print(f'[✗]')
+
+
 obj_ping = ManipulacaoIcmpHosts()
 
+
+lista_ip_host = [
+    '192.168.0.10',
+    '192.168.0.15',
+    '192.168.0.16',
+    '192.168.0.250',
+]
 
 if __name__ == '__main__':
     lista_end_hosts = '192.168.0.250', '192.168.0.25'
