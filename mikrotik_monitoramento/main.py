@@ -29,11 +29,11 @@ class ConexaoFirewall:
                 port=str(self.port_fw),  # Porta padrão da API
             )
 
-            print('Conexão realizado com sucesso. ')
+            print('Conexão com o mikrotik realizado com sucesso. ')
             return self.api_mikrotik
 
         except Exception as error:
-            print(f'Erro ao conectar no mikrotik: {error}')
+            print(f'Erro ao conectar ao mikrotik: {error}')
             return None
 
 
@@ -50,14 +50,6 @@ if __name__ == '__main__':
             obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
             obj_logs.log_dhcp(None)
             result_ip = obj_logs.analise_de_logs()
-
-            # print(result_ip)
-            # print('Quantidades de ip: ', len(result_ip))
-            #
-            #
-            # obj_info_ip = mikrotik_ips.InfoEndIp(conexao_fw)
-            # quantidade_clientes_dhcp = obj_info_ip.lease_ativas()
-            # print(quantidade_clientes_dhcp)
 
             obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
             informacoes_icmp = obj_icmp.ping_icmp_redeLocal(result_ip)
