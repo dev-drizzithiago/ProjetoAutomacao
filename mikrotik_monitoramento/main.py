@@ -40,20 +40,35 @@ class ConexaoFirewall:
 if __name__ == '__main__':
 
     MSG_END_IP_ESGOTADO = "defconf: failed to give out IP address: pool <dhcp> is empty"
+
+    # Iniciando o obj
     iniciando_obj_mikrotik = ConexaoFirewall()
+
+    # conectando ao mikrotik
     conexao_fw = iniciando_obj_mikrotik.conexao_fw()
+
     if conexao_fw is None:
-        print()
+        ...
     else:
         while True:
             print('Processando...')
+
+            # Buscando os logs dentro do mikrotik.
             obj_logs = mikrotik_logs.BuscandoLogsMikrotik(conexao_fw)
+
+            # Filtrando apenas os logs de DHCP
             obj_logs.log_dhcp(None)
+
+            # Após analisados e formatado as informações chegam em forma de lista.
             result_ip = obj_logs.analise_de_logs()
 
+            # Abrindo o obj para imcp.
             obj_icmp = manipulacao_icmp.ManipulacaoIcmpHosts()
+
+            # Processa a lista de ip que chegaram dos logs.
             informacoes_icmp = obj_icmp.ping_icmp_redeLocal(result_ip)
 
+            # Mostra o resultado do icmp.
             print()
             print(f'Quantidade IP: {len(informacoes_icmp['LISTA_PING_ON'])}')
             print(f'Quantidade HostName: {len(informacoes_icmp['LISTA_HOSTNAME'])}')
