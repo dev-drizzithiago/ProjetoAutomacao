@@ -73,7 +73,8 @@ class BuscandoLogsMikrotik:
                 if 'defconf deassigned' in log[chaves_logs['4']]:
                     end_ip_deassigned_ = str(log[chaves_logs['4']]).split('for')[0].strip().split(' ')[-1]
                     print('ip removido',end_ip_deassigned_ )
-                    self.lista_atribuicao_ip.remove(end_ip_deassigned_)
+                    if end_ip_deassigned_ in self.lista_atribuicao_ip:
+                        self.lista_atribuicao_ip.remove(end_ip_deassigned_)
 
         print(self.lista_atribuicao_ip)
         print()
@@ -85,7 +86,6 @@ class BuscandoLogsMikrotik:
 
 dia = '17'
 mes = '06'
-
 lista_teste_logs = [
 {'.id': '*1FD6', 'time': f'2025-{mes}-{dia} 07:25:10', 'topics': 'dhcp,info', 'message': 'defconf assigned 192.168.0.121 for 5C:CD:5B:D3:0F:E0 note-giselle'},
 {'.id': '*1FD7', 'time': f'2025-{mes}-{dia} 07:31:02', 'topics': 'dhcp,info', 'message': 'defconf assigned 192.168.0.59 for 06:9F:7B:7E:5E:3E Galaxy-M30'},
@@ -427,15 +427,9 @@ lista_teste_logs = [
 {'.id': '*2127', 'time': f'2025-{mes}-{dia} 16:57:33', 'topics': 'dhcp,info', 'message': 'defconf deassigned 192.168.0.105 for 16:62:5E:0F:EA:FB iPhone'},
 {'.id': '*2128', 'time': f'2025-{mes}-{dia} 16:57:34', 'topics': 'dhcp,info', 'message': 'defconf assigned 192.168.0.105 for 16:62:5E:0F:EA:FB iPhone'},
 {'.id': '*2129', 'time': f'2025-{mes}-{dia} 17:03:25', 'topics': 'dhcp,info', 'message': 'defconf deassigned 192.168.0.42 for 9A:5C:CC:AB:86:9C iPhone'},
-{'.id': '*212A', 'time': f'2025-{mes}-{dia} 17:04:35', 'topics': 'dhcp,info', 'message': 'defconf deassigned 192.168.0.38 for 02:8C:AE:2F:50:51 iPhone'},
+{'.id': '*212A', 'time': f'2025-{mes}-{dia} 17:04:35', 'topics': 'dhcp,info', 'message': 'defconf deassigned 192.168.0.76 for 02:8C:AE:2F:50:51 iPhone'},
 {'.id': '*212B', 'time': f'2025-{mes}-{dia} 17:04:50', 'topics': 'dhcp,info', 'message': 'defconf assigned 192.168.0.42 for 9A:5C:CC:AB:86:9C iPhone'},
-{'.id': '*212C', 'time': f'2025-{mes}-{dia} 17:07:58', 'topics': 'system,info,account', 'message': 'user admin logged in from 192.168.0.250 via api'},
-{'.id': '*212D', 'time': f'2025-{mes}-{dia} 17:08:07', 'topics': 'system,info,account', 'message': 'user admin logged out from 192.168.0.250 via api'},
-{'.id': '*212E', 'time': f'2025-{mes}-{dia} 17:08:22', 'topics': 'system,info,account', 'message': 'user admin logged in from 192.168.0.250 via api'},
-{'.id': '*212F', 'time': f'2025-{mes}-{dia} 17:08:34', 'topics': 'system,info,account', 'message': 'user admin logged out from 192.168.0.250 via api'},
-{'.id': '*2130', 'time': f'2025-{mes}-{dia} 17:08:36', 'topics': 'system,info,account', 'message': 'user admin logged in from 192.168.0.250 via api'},
-{'.id': '*2131', 'time': f'2025-{mes}-{dia} 17:09:24', 'topics': 'system,info,account', 'message': 'user admin logged out from 192.168.0.250 via api'},
-{'.id': '*2132', 'time': f'2025-{mes}-{dia} 17:09:26', 'topics': 'system,info,account', 'message': 'user admin logged in from 192.168.0.250 via api'},
+
 ]
 
 if __name__ == '__main__':
