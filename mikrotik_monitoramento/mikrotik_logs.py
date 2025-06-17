@@ -67,13 +67,16 @@ class BuscandoLogsMikrotik:
                 if 'defconf assigned' in log[chaves_logs['4']]:
                     info_log_on = f'{namehost_assigned}'
                     if info_log_on not in self.lista_atribuicao_ip:
+                        print('ip adicionado', end_ip_assigned_)
                         self.lista_atribuicao_ip.append(end_ip_assigned_)
 
                 if 'defconf deassigned' in log[chaves_logs['4']]:
                     info_log_off = f'{namehost_assigned}'
                     if info_log_off not in self.lista_desatribuicao_ip:
+                        print('ip removido',end_ip_assigned_ )
                         self.lista_atribuicao_ip.remove(end_ip_assigned_)
 
+        print(self.lista_atribuicao_ip)
         print()
         print(datetime.now().strftime('%d/%m/%Y - %H:%M'))
         print('---' * 30)
