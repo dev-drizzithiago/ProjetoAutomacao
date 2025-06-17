@@ -5,6 +5,8 @@ import manipulacao_icmp
 
 from time import sleep
 
+DATA_ATUAL = datetime.now().strftime('%d/%m/%Y - %H:%M')
+
 class BuscandoLogsMikrotik:
     date_time = datetime.now()
     DATA_ATUAL = date_time.strftime('%Y-%m-%d %H:%M:%S')
