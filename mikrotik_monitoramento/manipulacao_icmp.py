@@ -57,7 +57,7 @@ class ManipulacaoIcmpHosts:
             print(f'{ip_host_} [✗]')
 
 
-def cancelar_processo():
+def escutar_cancelamento():
     opc = input('[0] para cancelar: ')
     if opc == '0':
         cancelar_processo.set()
@@ -76,9 +76,6 @@ if __name__ == '__main__':
     # lista_end_hosts = '192.168.0.250', '192.168.0.25'
     # result = obj_ping.ping_icmp_redeLocal(lista_end_hosts)
 
-    # Inicia thread de escuta de cancelamento
-    Thread(target=cancelar_processo, daemon=True).start()
-
     while not cancelar_processo.is_set():
         threads = list()
         for ip in lista_ip_host:
@@ -91,7 +88,10 @@ if __name__ == '__main__':
 
         print('---' * 30)
         print('Repetindo processo...')
-        sleep(2)
+        sleep(10)
+
+        # Inicia thread de escuta de cancelamento
+        Thread(target=escutar_cancelamento, daemon=True).start()
 
         # print()
     # for chave, valor in result.items():
