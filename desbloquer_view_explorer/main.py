@@ -42,13 +42,6 @@ class DesbloqueioViewWindows:
 
     ads_content = "[ZoneTransfer]\nZoneId=3"
 
-    comando_powershell_bloquear_MOTW = (
-        f'powershell -Command '
-        f'Get-ChildItem -Path "{home_usuario}" -Recurse -Include "*.pdf" | ForEach-Object {{ '
-        f'Set-Content -Path $_.PSPath -Stream Zone.Identifier -Value "[ZoneTransfer]" '
-        f'& Set-Content -Path $_.PSPath -Stream Zone.Identifier -Append -Value "ZoneId=3"}} '
-    )
-
     comando_powershell_reiniciar_explorer = ('taskkill /f /im explorer.exe; '
                                              'Start-Process explorer.exe ')
 
@@ -86,7 +79,7 @@ class DesbloqueioViewWindows:
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
             result_shell = run(
-                [self.comando_powershell_bloquear_MOTW],
+                ['powershell','-Command', self.bloquear_view_windows()],
                 capture_output=True,
                 check=True
             )
