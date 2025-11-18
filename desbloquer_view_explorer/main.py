@@ -26,13 +26,11 @@ Get-ChildItem: Lista os arquivos.
 
 Unblock-File: Remove a "Marca da Web" (MOTW) somente dos arquivos .pdf filtrados
 """
-
-from pathlib import Path
 from subprocess import run, CalledProcessError
+from pathlib import Path
 from time import sleep
 import ctypes
-
-
+import sys
 
 class DesbloqueioViewWindows:
 
@@ -103,6 +101,12 @@ if __name__ == '__main__':
             return ctypes.windll.shell32.IsUserAnAdmin()
         except:
             return False
+
+    if not is_admin():
+        try:
+            run([sys.executable] + sys.argv, shell=False, check=True, ver='RunAs')
+        except Exception as error:
+            print('Não foi possível elevar o processo; ', error)
 
     obj_desbloqueio = DesbloqueioViewWindows()
     print(
