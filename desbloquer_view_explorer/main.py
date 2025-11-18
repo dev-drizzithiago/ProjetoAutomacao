@@ -26,6 +26,7 @@ Get-ChildItem: Lista os arquivos.
 
 Unblock-File: Remove a "Marca da Web" (MOTW) somente dos arquivos .pdf filtrados
 """
+import textwrap
 from subprocess import run, CalledProcessError
 from pathlib import Path
 from time import sleep
@@ -37,18 +38,30 @@ class DesbloqueioViewWindows:
     home_usuario = Path.home()
     reg_key_local_machine = r'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments'
 
-    comando_powershell_desbloquear_MOTW = (f'Get-ChildItem -Path {home_usuario} '
-                                           f'-Recurse -Include "*.pdf" | Unblock-File ')
+    # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
+    comando_powershell_desbloquear_MOTW = textwrap.dedent(rf'''
+            Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File | Unblock-File
+        ''').strip()
 
-    ads_content = "[ZoneTransfer]\nZoneId=3"
+    # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
+    comando_powershell_bloquear_MOTW = textwrap.dedent(rf'''
+            Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File | ForEach-Object {{
+                $content = "[ZoneTransfer]`nZoneId=3"
+                Set-Content -Path $_.FullName -Stream Zone.Identifier -Value $content -Encoding ASCII
+            }}
+        ''').strip()
 
-    comando_powershell_reiniciar_explorer = ('taskkill /f /im explorer.exe; '
-                                             'Start-Process explorer.exe ')
+    comando_powershell_reiniciar_explorer = r'''
+            taskkill /f /im explorer.exe; Start-Process explorer.exe
+        '''.strip()
 
-    comando_powershell_registro_windows_desbloqueio = (f"reg add \"{reg_key_local_machine}\" "
-                                                       f"/v ScanWithAntiVirus /t REG_DWORD /d 1 /f")
-    comando_powershell_registro_windows_bloqueio = (f"reg add \"{reg_key_local_machine}\" "
-                                                       f"/v ScanWithAntiVirus /t REG_DWORD /d 1 /f ")
+    comando_powershell_registro_windows_desbloqueio = (  # ex.: permitir verificação (exemplo)
+        rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f'
+    )
+
+    comando_powershell_registro_windows_bloqueio = (  # ex.: voltar ao padrão/sugerido pela sua política
+        rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f'
+    )
 
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
@@ -128,8 +141,8 @@ class DesbloqueioViewWindows:
         sleep(5)
         run(
             ['powershell', '-Command', self.comando_powershell_reiniciar_explorer],
-            shell=True,
             capture_output=True,
+            shell=True,
             check=True
         )
         print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
