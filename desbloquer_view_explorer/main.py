@@ -63,16 +63,26 @@ class DesbloqueioViewWindows:
         rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f'
     )
 
+    ## Executa um padrão de script para o powershell
+    def _run_powershell(self, script: str):
+        """Executa um script PowerShell de forma consistente, captura stdout/stderr e retorna CompletedProcess."""
+        return run(
+            ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', script],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
-            result_shell = run(
-                ['powershell', "-Command", self.comando_powershell_desbloquear_MOTW],
-                capture_output=True,
-                check=True
-            )
+            result_shell = self._run_powershell(self.comando_powershell_registro_windows_desbloqueio)
             print("✅ desBloqueio de arquivos PDF (MOTW) concluído com sucesso.")
+            if result_shell.stdout:
+                print(result_shell.stdout)
+            if result_shell.stderr:
+                print('[PowerShell avisos]:', result_shell.stderr)
             sleep(5)
             return True
         except CalledProcessError as error:
@@ -91,19 +101,22 @@ class DesbloqueioViewWindows:
     def bloquear_view_windows(self):
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
-            result_shell = run(
-                ['powershell','-Command', self.bloquear_view_windows()],
-                capture_output=True,
-                check=True
-            )
+            result_shell = self._run_powershell(self.comando_powershell_registro_windows_desbloqueio)
             print("✅ Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
+            if result_shell.stdout:
+                print(result_shell.stdout)
+            if result_shell.stderr:
+                print('[PowerShell avisos]:', result_shell.stderr)
+
             sleep(5)
             return True
+
         except CalledProcessError as error:
             print(f'\n Erro ao executar o PowerShell: ', error)
             print('Verifique se o perfil foi executado como administrador.')
             input('Aperte [ENTER] para finalizar')
             return False
+
         except Exception as error:
             print('Ocorreu um erro inesperado:', error)
             input('Aperte [ENTER] para finalizar')
@@ -111,17 +124,19 @@ class DesbloqueioViewWindows:
 
     ## Modifica o registro do windows.
     def configurar_registro(self, valor_entrada):
-
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
-            result_shell = run(
-                ['powershell', "-Command", valor_entrada],
-                capture_output=True,
-                check=True
-            )
+
+            result_shell = self._run_powershell(self.comando_powershell_registro_windows_desbloqueio)
             print('Registro modificado.')
+            if result_shell.stdout:
+                print(result_shell.stdout)
+            if result_shell.stderr:
+                print('[PowerShell avisos]:', result_shell.stderr)
+
             sleep(5)
             return True
+
         except CalledProcessError as error:
             print(f'\n Erro ao executar o PowerShell: ', error)
             print(f'Stdout: {error.stdout} ')
@@ -129,6 +144,7 @@ class DesbloqueioViewWindows:
             print('Verifique se o perfil foi executado como administrador.')
             sleep(5)
             return False
+
         except Exception as error:
             print('Ocorreu um erro inesperado:', error)
             input('Aperte [ENTER] para finalizar')
