@@ -41,6 +41,7 @@ class DesbloqueioViewWindows:
     comando_powershell_reiniciar_explorer = 'taskkill /f /im explorer.exe; Start-Process explorer.exe'
     comando_powershell_registro_windows = f"reg add \"{reg_key_local_machine}\" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f"
 
+    ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
@@ -50,25 +51,20 @@ class DesbloqueioViewWindows:
                 capture_output=True,
                 check=True
             )
-
-            print('Reiniciando o Windows Explorer.exe para aplicar as mudanças')
-            sleep(5)
-            run(
-                ['powershell', '-Command', self.comando_powershell_reiniciar_explorer],
-                shell=True,
-                capture_output=True,
-                check=True
-            )
-            print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
-
+            return True
         except CalledProcessError as error:
             print(f'\n Erro ao executar o PowerShell: ', error)
             print(f'Stdout: {error.stdout} ')
             print(f'Stderr: {error.stderr} ')
             print('Verifique se o perfil foi executado como administrador.')
+            input('Aperte [ENTER] para finalizar')
+            return False
         except Exception as error:
             print('Ocorreu um erro inesperado:', error)
+            input('Aperte [ENTER] para finalizar')
+            return False
 
+    ## BLOQUEIA NOVAMENTE O VISUALIZADOR
     def bloquear_view_windows(self):
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
@@ -78,21 +74,28 @@ class DesbloqueioViewWindows:
                 capture_output=True,
                 check=True
             )
-            print('Reiniciando o Windows Explorer.exe para aplicar as mudanças')
-            sleep(5)
-            run(
-                ['powershell', '-Command', self.comando_powershell_reiniciar_explorer],
-                shell=True,
-                capture_output=True,
-                check=True
-            )
-            print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
-
+            return True
         except CalledProcessError as error:
             print(f'\n Erro ao executar o PowerShell: ', error)
             print('Verifique se o perfil foi executado como administrador.')
+            input('Aperte [ENTER] para finalizar')
+            return False
         except Exception as error:
             print('Ocorreu um erro inesperado:', error)
+            input('Aperte [ENTER] para finalizar')
+            return False
+
+    ## Reinicia o explorer do windows para aplicar as mudanças
+    def reiniciar_explorer(self):
+        print('Reiniciando o Windows Explorer.exe para aplicar as mudanças')
+        sleep(5)
+        run(
+            ['powershell', '-Command', self.comando_powershell_reiniciar_explorer],
+            shell=True,
+            capture_output=True,
+            check=True
+        )
+        print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
 
 if __name__ == '__main__':
 
@@ -123,6 +126,9 @@ if __name__ == '__main__':
 
     resposta = int(input("Escolha uma opção: "))
     if resposta == 1:
-        obj_desbloqueio.desbloquear_view_windows()
+        process_finalizado = obj_desbloqueio.desbloquear_view_windows()
     elif resposta == 2:
-        obj_desbloqueio.bloquear_view_windows()
+        process_finalizado = obj_desbloqueio.bloquear_view_windows()
+
+    if process_finalizado:
+        obj_desbloqueio.reiniciar_explorer()
