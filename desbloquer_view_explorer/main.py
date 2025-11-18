@@ -36,10 +36,26 @@ class DesbloqueioViewWindows:
 
     home_usuario = Path.home()
     reg_key_local_machine = r'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments'
-    comando_powershell_desbloquear_MOTW = f"Get-ChildItem -Path {home_usuario} -Recurse -Include '*.pdf' | Unblock-File"
-    comando_powershell_bloquear_MOTW = f"Get-ChildItem -Path {home_usuario} -Recurse -Include '*.pdf' | Block-File"
-    comando_powershell_reiniciar_explorer = 'taskkill /f /im explorer.exe; Start-Process explorer.exe'
-    comando_powershell_registro_windows = f"reg add \"{reg_key_local_machine}\" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f"
+
+    comando_powershell_desbloquear_MOTW = (f'Get-ChildItem -Path {home_usuario} '
+                                           f'-Recurse -Include "*.pdf" | Unblock-File ')
+
+    ads_content = "[ZoneTransfer]\nZoneId=3"
+
+    comando_powershell_bloquear_MOTW = (
+        f'powershell -Command '
+        f'Get-ChildItem -Path "{home_usuario}" -Recurse -Include "*.pdf" | ForEach-Object {{ '
+        f'Set-Content -Path $_.PSPath -Stream Zone.Identifier -Value "[ZoneTransfer]" '
+        f'& Set-Content -Path $_.PSPath -Stream Zone.Identifier -Append -Value "ZoneId=3"}} '
+    )
+
+    comando_powershell_reiniciar_explorer = ('taskkill /f /im explorer.exe; '
+                                             'Start-Process explorer.exe ')
+
+    comando_powershell_registro_windows_desbloqueio = (f"reg add \"{reg_key_local_machine}\" "
+                                                       f"/v ScanWithAntiVirus /t REG_DWORD /d 1 /f")
+    comando_powershell_registro_windows_bloqueio = (f"reg add \"{reg_key_local_machine}\" "
+                                                       f"/v ScanWithAntiVirus /t REG_DWORD /d 1 /f ")
 
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
@@ -47,10 +63,11 @@ class DesbloqueioViewWindows:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
             result_shell = run(
                 ['powershell', "-Command", self.comando_powershell_desbloquear_MOTW],
-                shell=True,
                 capture_output=True,
                 check=True
             )
+            print("✅ desBloqueio de arquivos PDF (MOTW) concluído com sucesso.")
+            sleep(5)
             return True
         except CalledProcessError as error:
             print(f'\n Erro ao executar o PowerShell: ', error)
@@ -69,11 +86,12 @@ class DesbloqueioViewWindows:
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
             result_shell = run(
-                ['powershell', "-Command", self.comando_powershell_bloquear_MOTW],
-                shell=True,
+                [self.comando_powershell_bloquear_MOTW],
                 capture_output=True,
                 check=True
             )
+            print("✅ Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
+            sleep(5)
             return True
         except CalledProcessError as error:
             print(f'\n Erro ao executar o PowerShell: ', error)
@@ -83,6 +101,32 @@ class DesbloqueioViewWindows:
         except Exception as error:
             print('Ocorreu um erro inesperado:', error)
             input('Aperte [ENTER] para finalizar')
+            return False
+
+    ## Modifica o registro do windows.
+    def configurar_registro(self, valor_entrada):
+
+        try:
+            print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
+            result_shell = run(
+                ['powershell', "-Command", valor_entrada],
+                capture_output=True,
+                check=True
+            )
+            print('Registro modificado.')
+            sleep(5)
+            return True
+        except CalledProcessError as error:
+            print(f'\n Erro ao executar o PowerShell: ', error)
+            print(f'Stdout: {error.stdout} ')
+            print(f'Stderr: {error.stderr} ')
+            print('Verifique se o perfil foi executado como administrador.')
+            sleep(5)
+            return False
+        except Exception as error:
+            print('Ocorreu um erro inesperado:', error)
+            input('Aperte [ENTER] para finalizar')
+            sleep(5)
             return False
 
     ## Reinicia o explorer do windows para aplicar as mudanças
@@ -96,6 +140,7 @@ class DesbloqueioViewWindows:
             check=True
         )
         print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
+
 
 if __name__ == '__main__':
 
@@ -124,11 +169,19 @@ if __name__ == '__main__':
         "[ 2 ] Bloquear visualização do Windows\n"
     )
 
+    comando_desbloqueio_registro = obj_desbloqueio.comando_powershell_registro_windows_desbloqueio
+    comando_bloqueio_registro = obj_desbloqueio.comando_powershell_registro_windows_bloqueio
+
     resposta = int(input("Escolha uma opção: "))
     if resposta == 1:
         process_finalizado = obj_desbloqueio.desbloquear_view_windows()
+        if process_finalizado:
+            obj_desbloqueio.configurar_registro(comando_desbloqueio_registro)
+            obj_desbloqueio.reiniciar_explorer()
     elif resposta == 2:
         process_finalizado = obj_desbloqueio.bloquear_view_windows()
+        if process_finalizado:
+            obj_desbloqueio.configurar_registro(comando_bloqueio_registro)
+            obj_desbloqueio.reiniciar_explorer()
 
-    if process_finalizado:
-        obj_desbloqueio.reiniciar_explorer()
+
