@@ -107,6 +107,7 @@ if __name__ == '__main__':
             run([sys.executable] + sys.argv, shell=False, check=True, ver='RunAs')
         except Exception as error:
             print('Não foi possível elevar o processo; ', error)
+            sys.exit(1)
 
     obj_desbloqueio = DesbloqueioViewWindows()
     print(
