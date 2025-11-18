@@ -96,27 +96,33 @@ class DesbloqueioViewWindows:
 
 if __name__ == '__main__':
 
+    ## Verifica se o app esta sendo executado com usuário elevado.
     def is_admin():
         try:
             return ctypes.windll.shell32.IsUserAnAdmin()
         except:
             return False
 
+    ## Se o app não foi elevado vai abrir a janela para solicita as credinciais de administrador.
     if not is_admin():
-        try:
-            run([sys.executable] + sys.argv, shell=False, check=True, ver='RunAs')
-        except Exception as error:
-            print('Não foi possível elevar o processo; ', error)
-            sys.exit(1)
+        ctypes.windll.shell32.ShellExecuteW(
+            None,  # handle (não usado)
+            "runas",  # O verbo que força o UAC
+            sys.executable,  # O arquivo a ser executado (o interpretador Python)
+            " ".join(sys.argv),  # Os argumentos (o nome do seu script)
+            None,  # diretório de trabalho
+            1  # mostra a janela
+        )
+        sys.exit(0)  # Sai do script original
 
     obj_desbloqueio = DesbloqueioViewWindows()
     print(
-        "[ 1 ] Desbloquear visualização do Windows"
-        "[ 2 ] Bloquear visualização do Windows"
+        "[ 1 ] Desbloquear visualização do Windows\n"
+        "[ 2 ] Bloquear visualização do Windows\n"
     )
+
     resposta = int(input("Escolha uma opção: "))
     if resposta == 1:
         obj_desbloqueio.desbloquear_view_windows()
     elif resposta == 2:
         obj_desbloqueio.bloquear_view_windows()
-
