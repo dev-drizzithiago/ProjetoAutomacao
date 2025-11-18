@@ -5,3 +5,4 @@ chromedriver-win64/chromedriver.exe
 *.csv
 teste_velocidade_v1/.~lock.data.csv\#
 *.csv#
+/desbloquer_view_explorer/build
