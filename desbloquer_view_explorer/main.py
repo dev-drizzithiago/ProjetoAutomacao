@@ -39,10 +39,10 @@ from tokenize import endpats
 home_usuario = Path.home()
 
 excluir_pastas = [
-    'AppData', 'node_modules', '.git', '.cache'
+    'AppData', 'node_modules', '.git', '.cache', '.cache',
 ]
 
-filtros = " -and ".join([f'$_.FullName -notlike "\\{pasta}\\"'for pasta in excluir_pastas])
+filtros = " -and ".join([f'$_.FullName -notlike "*\\{pasta}\\*"'for pasta in excluir_pastas])
 
 class DesbloqueioViewWindows:
 
@@ -51,24 +51,32 @@ class DesbloqueioViewWindows:
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
         rf"Get-ChildItem -Path '{home_usuario}' "
-        rf"-Recurse -Include '*.pdf' -ErrorAction SilentlyContinue | "
-        rf"Where-Object {{ {filtros} -and -not ($_.Attributes -match 'Offline')}} | "
-        rf"Unblock-File "
+        rf"-Recurse -Filter '*.pdf' -ErrorAction SilentlyContinue | "
+        
+        rf"Where-Object {{ -not ($_.Attributes -match 'ReparsePoint') -and "
+        rf"{filtros} -and -not ($_.Attributes -match 'Offline') }} | "
+        
+        'ForEach-Object {{'
+            'try {{'
+                'Unblock-File -Path $_.FullName -ErrorAction Stop'
+            '}} catch {{'
+                'Write-Warning ("Ignorado: {{0}} -> {{1}}" -f $_.FullName, $PSItem.Exception.Message)'
+           ' }}'
+       ' }}'
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = (
-        f'Get-ChildItem '
-        f'-Path "{home_usuario}" '
-        f'-Include  *.pdf '
-        f'-Recurse '
-        f'-ErrorAction SilentlyContinue'
-        f' | '
-        f'Where-Object {{ {filtros} -and -not ($_.Attributes -match "Offline") }} | '
-        f'ForEach-Object {{ Set-Content '
-        f'-Path $_.FullName '
-        f'-Stream "Zone.Identifier" '
-        f'-Value "[ZoneTransfer]`r`nZoneId=3"}}'
+        f'Get-ChildItem -Path "{home_usuario}" -Include  *.pdf -File -Recurse -ErrorAction SilentlyContinue'
+        f' | '        
+       ' ForEach-Object {{ '
+            'try {{ '
+                'Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]"r"nZoneId=3" '
+                '-ErrorAction Stop '
+           '}} catch {{'
+                'Write-Warning ("Ignorado: {{0}} -> {{1}}" -f $_.FullName, $PSItem.Exception.Message) '
+           '}} '
+        '}} '
     )
 
     comando_powershell_reiniciar_explorer = r'''
