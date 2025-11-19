@@ -51,16 +51,8 @@ class DesbloqueioViewWindows:
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
         rf"Get-ChildItem -Path '{home_usuario}' "
-        rf"-Recurse "
-        rf"-Include "
-        rf"'*.pdf' "
-        rf"-ErrorAction SilentlyContinue | "
-        rf"Where-Object {{"
-        rf"-not ($_.Attributes "
-        rf"-match 'Offline') "
-        rf"{filtros}"
-        rf'}}'
-        rf' | '
+        rf"-Recurse -Include '*.pdf' -ErrorAction SilentlyContinue | "
+        rf"Where-Object {{ {filtros} }} | "
         rf"Unblock-File "
     )
 
@@ -72,13 +64,7 @@ class DesbloqueioViewWindows:
         f'-Recurse '
         f'-ErrorAction SilentlyContinue'
         f' | '
-        f'Where-Object {{$_.FullName '
-        f'-notlike "*\AppData\*" '
-        f'-and $_.FullName '
-        f'-notlike "*\node_modules\*" '
-        f'-and $_.FullName '
-        f'-notlike "*\.git\*"}}'
-        f' | '
+        f'Where-Object {{ {filtros} }} | '
         f'ForEach-Object {{ Set-Content '
         f'-Path $_.FullName '
         f'-Stream "Zone.Identifier" '
