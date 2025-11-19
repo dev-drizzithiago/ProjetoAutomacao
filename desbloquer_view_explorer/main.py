@@ -50,31 +50,29 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-        rf"Get-ChildItem -Path '{home_usuario}' "
-        rf"-Recurse -Filter '*.pdf' -ErrorAction SilentlyContinue | "
+        rf"Get-ChildItem -Path '{home_usuario} -Filter '*.pdf' -File -Recurse -ErrorAction SilentlyContinue | "
         
         rf"Where-Object {{ -not ($_.Attributes -match 'ReparsePoint') -and "
         rf"{filtros} -and -not ($_.Attributes -match 'Offline') }} | "
         
-        'ForEach-Object {{'
-            'try {{'
-                'Unblock-File -Path $_.FullName -ErrorAction Stop'
-            '}} catch {{'
-                'Write-Warning ("Ignorado: {{0}} -> {{1}}" -f $_.FullName, $PSItem.Exception.Message)'
-           ' }}'
-       ' }}'
+        'ForEach-Object {{ '
+            'try {{ '
+                'Unblock-File -Path $_.FullName -ErrorAction Stop '
+            '}} catch {{ '
+                f'Write-Warning ("Ignorado: {0} -> {1}" -f $_.FullName, $PSItem.Exception.Message) '
+           '}} '
+       '}} '
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = (
-        f'Get-ChildItem -Path "{home_usuario}" -Include  *.pdf -File -Recurse -ErrorAction SilentlyContinue'
-        f' | '        
+        f'Get-ChildItem -Path "{home_usuario}" -Include  *.pdf -File -Recurse -ErrorAction SilentlyContinue | '        
        ' ForEach-Object {{ '
             'try {{ '
                 'Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]"r"nZoneId=3" '
                 '-ErrorAction Stop '
            '}} catch {{'
-                'Write-Warning ("Ignorado: {{0}} -> {{1}}" -f $_.FullName, $PSItem.Exception.Message) '
+                f'Write-Warning ("Ignorado: {0} -> {1}" -f $_.FullName, $PSItem.Exception.Message) '
            '}} '
         '}} '
     )
