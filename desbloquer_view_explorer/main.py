@@ -29,9 +29,12 @@ Unblock-File: Remove a "Marca da Web" (MOTW) somente dos arquivos .pdf filtrados
 
 from subprocess import run, CalledProcessError
 from pathlib import Path
+from threading import Event, Thread
 from time import sleep
+import itertools
 import ctypes
 import sys
+from tokenize import endpats
 
 home_usuario = Path.home()
 
@@ -152,6 +155,29 @@ class DesbloqueioViewWindows:
             check=True
         )
         print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
+
+    def _spinner(self, stop_event, prefix='Processando... '):
+
+        ciclo = itertools.cycle(['|', '/', '-', '\\'])
+
+        while not stop_event.is_set():
+            # \r volta o cursor para início da linha
+            print(f"\r{prefix} {next(ciclo)}", end='', flush=True)
+            sleep(0.1)
+
+        # limpa linha ao finalizar
+        print('\n' + ' ' * 60 + '\r', end='', flush=True)
+
+    def _run_spinner(self, comando_str, texto_spinner):
+        stop_event = Event()
+        _thread = Thread(target=self._spinner, args=(stop_event, texto_spinner), daemon=True)
+        _thread.start()
+        try:
+            result = self._run_spinner(comando_str)
+            return result
+        finally:
+            stop_event.set()
+            _thread.join()
 
 
 if __name__ == '__main__':
