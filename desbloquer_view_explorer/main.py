@@ -50,31 +50,32 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-        rf"Get-ChildItem -Path '{home_usuario} -Filter '*.pdf' -File -Recurse -ErrorAction SilentlyContinue | "
-        
-        rf"Where-Object {{ -not ($_.Attributes -match 'ReparsePoint') -and "
-        rf"{filtros} -and -not ($_.Attributes -match 'Offline') }} | "
-        
-        'ForEach-Object {{ '
-            'try {{ '
-                'Unblock-File -Path $_.FullName -ErrorAction Stop '
-            '}} catch {{ '
-                f'Write-Warning ("Ignorado: {0} -> {1}" -f $_.FullName, $PSItem.Exception.Message) '
-           '}} '
-       '}} '
+        f'''
+         Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue |         
+            Where-Object {{ -not ($_.Attributes -match "ReparsePoint") -and 
+            {filtros} -and -not ($_.Attributes -match "Offline") | Unblock-File}} | 
+            ForEach-Object {{ 
+                try {{
+                    Unblock-File -Path $_.FullName -ErrorAction Stop 
+                }} catch {{
+                    Write-Warning ("Ignorado: {0} -> {1}" -f $_.FullName, $PSItem.Exception.Message) 
+               }}
+           }}
+        '''
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = (
-        f'Get-ChildItem -Path "{home_usuario}" -Include  *.pdf -File -Recurse -ErrorAction SilentlyContinue | '        
-       ' ForEach-Object {{ '
-            'try {{ '
-                'Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]"r"nZoneId=3" '
-                '-ErrorAction Stop '
-           '}} catch {{'
-                f'Write-Warning ("Ignorado: {0} -> {1}" -f $_.FullName, $PSItem.Exception.Message) '
-           '}} '
-        '}} '
+        r"""
+            Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | 
+            ForEach-Object {{ 
+            try { 
+                Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop 
+            } catch { 
+                Write-Warning ("Ignorado: {0} -> {1}" -f $_.FullName, $_.Exception.Message) '
+            }
+        }
+        """
     )
 
     comando_powershell_reiniciar_explorer = r'''
@@ -91,11 +92,12 @@ class DesbloqueioViewWindows:
 
     def _run_processo_powershell(self, comando_shell):
         resultado_processo = run(
-            ['powershell', '-Command', comando_shell],
+            ["powershell", "-Command", comando_shell],
             shell=True,
             check=True,
             capture_output=True
         )
+
         return resultado_processo
 
     def _spinner(self, stop_event, prefix='Processando... '):
@@ -147,7 +149,6 @@ class DesbloqueioViewWindows:
     ## BLOQUEIA NOVAMENTE O VISUALIZADOR
     def bloquear_view_windows(self):
         try:
-            print('Iniciando bloqueio, processo pode levar alguns minutos\n')
             result_processo = self._run_spinner(
                 self.comando_powershell_bloquear_MOTW,
                 'Processo do MOTW bloqueio em andamento...'
