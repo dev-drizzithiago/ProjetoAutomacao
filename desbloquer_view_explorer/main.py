@@ -44,15 +44,41 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-        f"Get-ChildItem -Path '{home_usuario}' -Recurse -Include '*.pdf' -ErrorAction SilentlyContinue | Unblock-File "
+        rf"Get-ChildItem -Path '{home_usuario}' "
+        rf"-Recurse "
+        rf"-Include "
+        rf"'*.pdf' "
+        rf"-ErrorAction SilentlyContinue | "
+        rf"Where-Object {{"
+        rf"-not ($_.Attributes "
+        rf"-match 'Offline') "
+        rf'$_.FullName -notlike "*\AppData\*" -and '
+        rf'$_.FullName -notlike "*\node_modules\*" -and '
+        rf'$_.FullName -notlike "*\.git\*"}}'
+        rf' | '
+        rf"Unblock-File "
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
-    comando_powershell_bloquear_MOTW = rf'''
-        Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File -ErrorAction SilentlyContinue | \
-        ForEach-Object {{ Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]`r`nZoneId=3 "
-        }}
-    '''
+    comando_powershell_bloquear_MOTW = (
+        f'Get-ChildItem '
+        f'-Path "{home_usuario}" '
+        f'-Include  *.pdf '
+        f'-Recurse '
+        f'-ErrorAction SilentlyContinue'
+        f' | '
+        f'Where-Object {{$_.FullName '
+        f'-notlike "*\AppData\*" '
+        f'-and $_.FullName '
+        f'-notlike "*\node_modules\*" '
+        f'-and $_.FullName '
+        f'-notlike "*\.git\*"}}'
+        f' | '
+        f'ForEach-Object {{ Set-Content '
+        f'-Path $_.FullName '
+        f'-Stream "Zone.Identifier" '
+        f'-Value "[ZoneTransfer]`r`nZoneId=3"}}'
+    )
 
     comando_powershell_reiniciar_explorer = r'''
             taskkill /f /im explorer.exe; Start-Process explorer.exe
@@ -124,7 +150,7 @@ class DesbloqueioViewWindows:
     ## BLOQUEIA NOVAMENTE O VISUALIZADOR
     def bloquear_view_windows(self):
         try:
-            print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
+            print('Iniciando bloqueio, processo pode levar alguns minutos\n')
             result_processo = self._run_spinner(
                 self.comando_powershell_bloquear_MOTW,
                 'Processo do MOTW bloqueio em andamento...'
@@ -220,12 +246,14 @@ if __name__ == '__main__':
     if resposta == 1:
 
         process_finalizado = obj_desbloqueio.desbloquear_view_windows()
+        print(process_finalizado)
         if process_finalizado:
             obj_desbloqueio.configurar_registro(comando_desbloqueio_registro)
             obj_desbloqueio.reiniciar_explorer()
 
     elif resposta == 2:
         process_finalizado = obj_desbloqueio.bloquear_view_windows()
+        print(process_finalizado)
         if process_finalizado:
             obj_desbloqueio.configurar_registro(comando_bloqueio_registro)
             obj_desbloqueio.reiniciar_explorer()
