@@ -40,16 +40,13 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-            f"Get-ChildItem -Path '{home_usuario}' -Recurse -Include '*.pdf' | Unblock-File"
-        )
+        f"Get-ChildItem -Path '{home_usuario}' -Recurse -Include '*.pdf' | Unblock-File"
+    )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
-    comando_powershell_bloquear_MOTW = (rf'''
-            Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File | ForEach-Object {{
-                $content = "[ZoneTransfer]`nZoneId=3"
-                Set-Content -Path $_.FullName -Stream Zone.Identifier -Value $content -Encoding ASCII
-            }}
-        ''')
+    comando_powershell_bloquear_MOTW = (
+        f'Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File | Block-File'
+    )
 
     comando_powershell_reiniciar_explorer = r'''
             taskkill /f /im explorer.exe; Start-Process explorer.exe
@@ -91,13 +88,12 @@ class DesbloqueioViewWindows:
     def bloquear_view_windows(self):
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
-            result_shell = self._run_powershell(self.comando_powershell_registro_windows_desbloqueio)
+            run(['powershell', '-Command', self.comando_powershell_bloquear_MOTW],
+                shell=True,
+                check=True,
+                capture_output=True
+                )
             print("✅ Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
-            if result_shell.stdout:
-                print(result_shell.stdout)
-            if result_shell.stderr:
-                print('[PowerShell avisos]:', result_shell.stderr)
-
             sleep(5)
             return True
 
