@@ -33,9 +33,10 @@ from time import sleep
 import ctypes
 import sys
 
+home_usuario = Path.home()
+
 class DesbloqueioViewWindows:
 
-    home_usuario = Path.home()
     reg_key_local_machine = r'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments'
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
@@ -43,20 +44,12 @@ class DesbloqueioViewWindows:
         f"Get-ChildItem -Path '{home_usuario}' -Recurse -Include '*.pdf' | Unblock-File "
     )
 
-    # comando_powershell_desbloquear_MOTW = (
-    #     f'''
-    #     Get-ChildItem -Path "$HOME" -Filter *.pdf -Recurse -File | ForEach-Object {{
-    #     Remove-Item -Path $_.FullName -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
-    #     }}'''
-    # ).strip()
-
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = rf'''
         Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File | ForEach-Object {{
             Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]`r`nZoneId=3 "
         }}
     '''
-
 
     comando_powershell_reiniciar_explorer = r'''
             taskkill /f /im explorer.exe; Start-Process explorer.exe
@@ -73,6 +66,7 @@ class DesbloqueioViewWindows:
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
         try:
+            print(f'Pasta do usuário: { home_usuario }')
             print('Processo do desbloqueio em andamento...')
             run(['powershell', '-Command', self.comando_powershell_desbloquear_MOTW],
                 shell=True,
@@ -192,10 +186,12 @@ if __name__ == '__main__':
 
     resposta = int(input("Escolha uma opção: "))
     if resposta == 1:
+
         process_finalizado = obj_desbloqueio.desbloquear_view_windows()
         if process_finalizado:
             obj_desbloqueio.configurar_registro(comando_desbloqueio_registro)
             obj_desbloqueio.reiniciar_explorer()
+
     elif resposta == 2:
         process_finalizado = obj_desbloqueio.bloquear_view_windows()
         if process_finalizado:
