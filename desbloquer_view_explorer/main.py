@@ -171,9 +171,8 @@ class DesbloqueioViewWindows:
     ## Modifica o registro do windows.
     def configurar_registro(self, valor_entrada):
         try:
-            print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
-
-            result_shell = self._run_powershell(self.comando_powershell_registro_windows_desbloqueio)
+            result_shell = self._run_spinner(
+                self.comando_powershell_registro_windows_desbloqueio, 'Configurado o registro')
             print('Registro modificado.')
             if result_shell.stdout:
                 print(result_shell.stdout)
