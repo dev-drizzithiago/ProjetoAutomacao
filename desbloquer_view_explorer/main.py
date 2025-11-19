@@ -63,19 +63,49 @@ class DesbloqueioViewWindows:
     )
 
     comando_powershell_registro_windows_bloqueio = (  # ex.: voltar ao padrão/sugerido pela sua política
-        rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f '
+        rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 2 /f '
     )
+
+    def _run_processo_powershell(self, comando_shell):
+        resultado_processo = run(
+            ['powershell', '-Command', comando_shell],
+            shell=True,
+            check=True,
+            capture_output=True
+        )
+        return resultado_processo
+
+    def _spinner(self, stop_event, prefix='Processando... '):
+
+        ciclo = itertools.cycle(['|', '/', '-', '\\'])
+
+        while not stop_event.is_set():
+            # \r volta o cursor para início da linha
+            print(f"\r{prefix} {next(ciclo)}", end='', flush=True)
+            sleep(0.1)
+
+        # limpa linha ao finalizar
+        print('\n' + ' ' * 60 + '\r', end='', flush=True)
+
+    def _run_spinner(self, comando_str, texto_spinner):
+        stop_event = Event()
+        _thread = Thread(target=self._spinner, args=(stop_event, texto_spinner), daemon=True)
+        _thread.start()
+        try:
+            result = self._run_processo_powershell(comando_str)
+            return result
+        finally:
+            stop_event.set()
+            _thread.join()
 
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
         try:
             print(f'Pasta do usuário: { home_usuario }')
-            print('Processo do desbloqueio em andamento...')
-            run(['powershell', '-Command', self.comando_powershell_desbloquear_MOTW],
-                shell=True,
-                check=True,
-                capture_output=True
-                )
+            result_processo = self._run_spinner(
+                self.comando_powershell_desbloquear_MOTW,
+                'Processo do desbloqueio em andamento...'
+            )
             print("✅ Desbloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
@@ -95,11 +125,10 @@ class DesbloqueioViewWindows:
     def bloquear_view_windows(self):
         try:
             print('Iniciando desbloqueio, processo pode levar alguns minutos\n')
-            run(['powershell', '-Command', self.comando_powershell_bloquear_MOTW],
-                shell=True,
-                check=True,
-                capture_output=True
-                )
+            result_processo = self._run_spinner(
+                self.comando_powershell_bloquear_MOTW,
+                'Processo do MOTW bloqueio em andamento...'
+            )
             print("✅ Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
@@ -155,29 +184,6 @@ class DesbloqueioViewWindows:
             check=True
         )
         print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
-
-    def _spinner(self, stop_event, prefix='Processando... '):
-
-        ciclo = itertools.cycle(['|', '/', '-', '\\'])
-
-        while not stop_event.is_set():
-            # \r volta o cursor para início da linha
-            print(f"\r{prefix} {next(ciclo)}", end='', flush=True)
-            sleep(0.1)
-
-        # limpa linha ao finalizar
-        print('\n' + ' ' * 60 + '\r', end='', flush=True)
-
-    def _run_spinner(self, comando_str, texto_spinner):
-        stop_event = Event()
-        _thread = Thread(target=self._spinner, args=(stop_event, texto_spinner), daemon=True)
-        _thread.start()
-        try:
-            result = self._run_spinner(comando_str)
-            return result
-        finally:
-            stop_event.set()
-            _thread.join()
 
 
 if __name__ == '__main__':
