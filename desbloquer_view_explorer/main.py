@@ -40,7 +40,7 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = textwrap.dedent(rf'''
-            Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File | Unblock-File
+            Get-ChildItem -Path "{home_usuario}" -Recurse -Include '*.pdf' | Unblock-File
         ''').strip()
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
@@ -67,7 +67,7 @@ class DesbloqueioViewWindows:
     def _run_powershell(self, script: str):
         """Executa um script PowerShell de forma consistente, captura stdout/stderr e retorna CompletedProcess."""
         return run(
-            ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', script],
+            ['powershell', '-Command', script],
             capture_output=True,
             text=True,
             check=True
