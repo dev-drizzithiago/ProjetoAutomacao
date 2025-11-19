@@ -39,9 +39,9 @@ class DesbloqueioViewWindows:
     reg_key_local_machine = r'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments'
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
-    comando_powershell_desbloquear_MOTW = (rf'''
-            Get-ChildItem -Path "{home_usuario}" -Recurse -Include '*.pdf' | Unblock-File
-        ''').strip()
+    comando_powershell_desbloquear_MOTW = (
+            f"Get-ChildItem -Path '{home_usuario}' -Recurse -Include '*.pdf' | Unblock-File"
+        )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = (rf'''
@@ -49,11 +49,11 @@ class DesbloqueioViewWindows:
                 $content = "[ZoneTransfer]`nZoneId=3"
                 Set-Content -Path $_.FullName -Stream Zone.Identifier -Value $content -Encoding ASCII
             }}
-        ''').strip()
+        ''')
 
     comando_powershell_reiniciar_explorer = r'''
             taskkill /f /im explorer.exe; Start-Process explorer.exe
-        '''.strip()
+        '''
 
     comando_powershell_registro_windows_desbloqueio = (  # ex.: permitir verificação (exemplo)
         rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f'
@@ -63,22 +63,13 @@ class DesbloqueioViewWindows:
         rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f'
     )
 
-    ## Executa um padrão de script para o powershell
-    def _run_powershell(self, script: str):
-        """Executa um script PowerShell de forma consistente, captura stdout/stderr e retorna CompletedProcess."""
-        return run(
-            ['powershell', '-Command', script],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
         try:
             run(['powershell', '-Command', self.comando_powershell_desbloquear_MOTW],
                 shell=True,
-                check=True
+                check=True,
+                capture_output=True
                 )
             sleep(5)
             return True
