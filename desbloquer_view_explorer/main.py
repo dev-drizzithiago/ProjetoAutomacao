@@ -52,7 +52,7 @@ class DesbloqueioViewWindows:
     comando_powershell_desbloquear_MOTW = (
         rf"Get-ChildItem -Path '{home_usuario}' "
         rf"-Recurse -Include '*.pdf' -ErrorAction SilentlyContinue | "
-        rf"Where-Object {{ {filtros} }} | "
+        rf"Where-Object {{ {filtros} -and -not ($_.Attributes -match 'Offline')}} | "
         rf"Unblock-File "
     )
 
@@ -64,7 +64,7 @@ class DesbloqueioViewWindows:
         f'-Recurse '
         f'-ErrorAction SilentlyContinue'
         f' | '
-        f'Where-Object {{ {filtros} }} | '
+        f'Where-Object {{ {filtros} -and -not ($_.Attributes -match "Offline") }} | '
         f'ForEach-Object {{ Set-Content '
         f'-Path $_.FullName '
         f'-Stream "Zone.Identifier" '
