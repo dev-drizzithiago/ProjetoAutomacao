@@ -38,6 +38,12 @@ from tokenize import endpats
 
 home_usuario = Path.home()
 
+excluir_pastas = [
+    'AppData', 'node_modules', '.git', '.cache'
+]
+
+filtros = " -and ".join([f'$_.FullName -notlike "\\{pasta}\\"'for pasta in excluir_pastas])
+
 class DesbloqueioViewWindows:
 
     reg_key_local_machine = r'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments'
@@ -52,9 +58,8 @@ class DesbloqueioViewWindows:
         rf"Where-Object {{"
         rf"-not ($_.Attributes "
         rf"-match 'Offline') "
-        rf'$_.FullName -notlike "*\AppData\*" -and '
-        rf'$_.FullName -notlike "*\node_modules\*" -and '
-        rf'$_.FullName -notlike "*\.git\*"}}'
+        rf"{filtros}"
+        rf'}}'
         rf' | '
         rf"Unblock-File "
     )
