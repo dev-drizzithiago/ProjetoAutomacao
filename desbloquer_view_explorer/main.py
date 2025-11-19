@@ -44,13 +44,13 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-        f"Get-ChildItem -Path '{home_usuario}' -Recurse -Include '*.pdf' | Unblock-File "
+        f"Get-ChildItem -Path '{home_usuario}' -Recurse -Include '*.pdf' -ErrorAction SilentlyContinue | Unblock-File "
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = rf'''
-        Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File | ForEach-Object {{
-            Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]`r`nZoneId=3 "
+        Get-ChildItem -Path "{home_usuario}" -Filter *.pdf -Recurse -File -ErrorAction SilentlyContinue | \
+        ForEach-Object {{ Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]`r`nZoneId=3 "
         }}
     '''
 
