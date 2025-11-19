@@ -66,11 +66,13 @@ class DesbloqueioViewWindows:
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
         try:
+            print('Processo do desbloqueio em andamento...')
             run(['powershell', '-Command', self.comando_powershell_desbloquear_MOTW],
                 shell=True,
                 check=True,
                 capture_output=True
                 )
+            print("✅ Desbloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
         except CalledProcessError as error:
