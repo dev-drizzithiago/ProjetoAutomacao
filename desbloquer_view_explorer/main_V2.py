@@ -25,6 +25,11 @@ Get-ChildItem: Lista os arquivos.
 -Include '*.pdf': Este é o filtro. Ele garante que, dos arquivos encontrados recursivamente, apenas aqueles com a extensão .pdf sejam passados para a próxima etapa.
 
 Unblock-File: Remove a "Marca da Web" (MOTW) somente dos arquivos .pdf filtrados
+
+✔ Use -ErrorAction SilentlyContinue para ignorar erros no PowerShell.
+✔ Adicione ; exit 0 no final para evitar que o Python/Django quebre.
+✔ Capture stdout e stderr para logar se quiser.
+ exit 0 Sempre retorna o valor 0, mesmo que o powershell tenha erros
 """
 
 from subprocess import run, CalledProcessError
@@ -109,15 +114,12 @@ class DesbloqueioViewWindows:
     ## DESBLOQUEIA NOVAMENTE O VISUALIZADOR
     def desbloquear_view_windows(self):
         try:
-            print(self.comando_powershell_desbloquear_MOTW)
-            input('Continuar...')
             result_processo = self._run_spinner(
                 self.comando_powershell_desbloquear_MOTW,
                 'Processo do desbloqueio em andamento...'
             )
 
             print(result_processo.returncode)
-
             print("Desbloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
@@ -141,7 +143,7 @@ class DesbloqueioViewWindows:
                 self.comando_powershell_bloquear_MOTW,
                 'Processo do MOTW bloqueio em andamento...'
             )
-            print("✅ Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
+            print("Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
 
@@ -184,14 +186,13 @@ class DesbloqueioViewWindows:
     ## Reinicia o explorer do windows para aplicar as mudanças
     def reiniciar_explorer(self):
         print('Reiniciando o Windows Explorer.exe para aplicar as mudanças')
-        sleep(5)
+        sleep(2)
         run(
             ['powershell', '-Command', self.comando_powershell_reiniciar_explorer],
             capture_output=True,
             shell=True,
             check=True
         )
-        print("Windows Explorer reiniciado. Verifique agora o Painel de Visualização.")
 
 
 if __name__ == '__main__':
@@ -232,6 +233,8 @@ if __name__ == '__main__':
         if process_finalizado:
             obj_desbloqueio.configurar_registro(comando_desbloqueio_registro)
             obj_desbloqueio.reiniciar_explorer()
+            input('Processo finalizado, aperta Enter para fechar')
+
 
     elif resposta == 2:
         process_finalizado = obj_desbloqueio.bloquear_view_windows()
@@ -239,5 +242,6 @@ if __name__ == '__main__':
         if process_finalizado:
             obj_desbloqueio.configurar_registro(comando_bloqueio_registro)
             obj_desbloqueio.reiniciar_explorer()
+            input('Processo finalizado, aperta Enter para fechar')
 
 
