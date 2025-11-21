@@ -39,7 +39,7 @@ from tokenize import endpats
 home_usuario = Path.home()
 
 incluir_pastas = []
-excluir_pastas = ['AppData', 'node_modules', '.git', '.cache', '.cache']
+excluir_pastas = ['AppData', 'node_modules', '.git', '.cache', '.cache', 'GitHub']
 
 
 filtro_excluir = " -and ".join([f'$_.FullName -notlike "*\\{pasta}\\*"'for pasta in excluir_pastas])
@@ -50,10 +50,12 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-        f'powershell -Command '
         f'Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | '
-        f'Where-Object {{ {filtro_excluir} }} | '
-        'Unblock-File'
+        f'Where-Object {{ '
+        f'{filtro_excluir} '
+        f'-and ($_.Attributes -notmatch "Offline") '
+        f'-and ($_.Attributes -notmatch "ReparsePoint") }} | '
+        f'Unblock-File'
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
@@ -79,7 +81,7 @@ class DesbloqueioViewWindows:
 
     def _run_processo_powershell(self, comando_shell):
         resultado_processo = run(
-            [comando_shell],
+            [f'powershell', '-Command', comando_shell],
             shell=True,
             check=True,
             capture_output=True
