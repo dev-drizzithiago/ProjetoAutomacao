@@ -36,7 +36,6 @@ import ctypes
 import sys
 from tokenize import endpats
 
-home_usuario = Path.home()
 
 incluir_pastas = []
 excluir_pastas = ['AppData', 'GitHub']
@@ -50,21 +49,20 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-        f'Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | '
+        f'Get-ChildItem -Path "$HOME" -Filter "*.pdf" -Recurse -ErrorAction SilentlyContinue | '
         f'Where-Object {{'
-        f'{filtro_excluir} '
-        f'-and ($_.Attributes -notmatch "Offline") '
-        f'-and ($_.Attributes -notmatch "ReparsePoint")}} | '
-        f'Unblock-File'
+        f'$_.Attributes -notmatch "Offline") -and '
+        f'($_.Attributes -notmatch "ReparsePoint" -and '
+        f'{filtro_excluir} }} | Unblock-File'
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = (
-        f'Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | '
+        f'Get-ChildItem -Path "$HOME" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | '
         f'Where-Object {{$_.Attributes -notmatch "Offline" -and {filtro_excluir}}} | '
         f'ForEach-Object {{ '
         f'Set-Content -Path $_.FullName -Stream "Zone.Identifier" '
-        f'-Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop }} '
+        f'-Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop }}'
     )
 
     comando_powershell_reiniciar_explorer = r'''
@@ -81,9 +79,9 @@ class DesbloqueioViewWindows:
 
     def _run_processo_powershell(self, comando_shell):
         resultado_processo = run(
-            [f"powershell", "-Command", comando_shell],
+            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando_shell],
             shell=True,
-            check=True,
+            check=False,
             capture_output=True
         )
         return resultado_processo
@@ -120,8 +118,10 @@ class DesbloqueioViewWindows:
                 self.comando_powershell_desbloquear_MOTW,
                 'Processo do desbloqueio em andamento...'
             )
-            print("Desbloqueio de arquivos PDF (MOTW) concluído com sucesso.")
 
+            print(result_processo.returncode)
+
+            print("Desbloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
 
@@ -145,7 +145,7 @@ class DesbloqueioViewWindows:
                 self.comando_powershell_bloquear_MOTW,
                 'Processo do MOTW bloqueio em andamento...'
             )
-            print("✅ Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
+            print("Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
 
@@ -233,7 +233,6 @@ if __name__ == '__main__':
 
     resposta = int(input("Escolha uma opção: "))
     if resposta == 1:
-
         process_finalizado = obj_desbloqueio.desbloquear_view_windows()
         print(process_finalizado)
         if process_finalizado:
