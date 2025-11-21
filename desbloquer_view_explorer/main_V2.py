@@ -39,7 +39,7 @@ from tokenize import endpats
 home_usuario = Path.home()
 
 incluir_pastas = []
-excluir_pastas = ['AppData', 'node_modules', '.git', '.cache', '.cache', 'GitHub']
+excluir_pastas = ['AppData', 'GitHub']
 
 
 filtro_excluir = " -and ".join([f'$_.FullName -notlike "*\\{pasta}\\*"'for pasta in excluir_pastas])
@@ -55,13 +55,13 @@ class DesbloqueioViewWindows:
         f'{filtro_excluir} '
         f'-and ($_.Attributes -notmatch "Offline") '
         f'-and ($_.Attributes -notmatch "ReparsePoint")}} | '
-        f'Unblock-File | Select-Object FullName, Attributes'
+        f'Unblock-File'
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = (
         f'Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | '
-        f'Where-Object {{ {filtro_excluir} -and $_.Attributes -notmatch "Offline" }} | '
+        f'Where-Object {{$_.Attributes -notmatch "Offline" -and {filtro_excluir}}} | '
         f'ForEach-Object {{ '
         f'Set-Content -Path $_.FullName -Stream "Zone.Identifier" '
         f'-Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop }} '
@@ -81,7 +81,7 @@ class DesbloqueioViewWindows:
 
     def _run_processo_powershell(self, comando_shell):
         resultado_processo = run(
-            [f'powershell', '-Command', comando_shell],
+            [f"powershell", "-Command", comando_shell],
             shell=True,
             check=True,
             capture_output=True
