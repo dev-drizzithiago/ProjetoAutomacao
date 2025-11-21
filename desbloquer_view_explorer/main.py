@@ -50,25 +50,16 @@ class DesbloqueioViewWindows:
 
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
-        f'''
-        Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue |
-        Where-Object {{ -not ($_.Attributes -match "ReparsePoint") -and {filtros} -and 
-        -not ($_.Attributes -match "Offline") }} | Unblock-File '''
-            
+        f'Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | '
+        f'Where-Object {{ {filtros} }} | Unblock-File'
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
     comando_powershell_bloquear_MOTW = (
-        r"""
-            Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | 
-            ForEach-Object {{ 
-            try { 
-                Set-Content -Path $_.FullName -Stream "Zone.Identifier" -Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop 
-            } catch { 
-                Write-Warning ("Ignorado: {0} -> {1}" -f $_.FullName, $_.Exception.Message) '
-            }
-        }
-        """
+        f'Get-ChildItem -Path "{home_usuario}" -Filter "*.pdf" -File -Recurse -ErrorAction SilentlyContinue | '
+        f'ForEach-Object {{ '
+        f'Set-Content -Path $_.FullName -Stream "Zone.Identifier" '
+        f'-Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop }} '
     )
 
     comando_powershell_reiniciar_explorer = r'''
