@@ -50,10 +50,7 @@ class DesbloqueioViewWindows:
     # Comando PowerShell para DESBLOQUEAR (remover MOTW) todos os PDFs no HOME
     comando_powershell_desbloquear_MOTW = (
         f'Get-ChildItem -Path "$HOME" -Filter "*.pdf" -Recurse -ErrorAction SilentlyContinue | '
-        f'Where-Object {{'
-        f'$_.Attributes -notmatch "Offline") -and '
-        f'($_.Attributes -notmatch "ReparsePoint" -and '
-        f'{filtro_excluir} }} | Unblock-File'
+        f'Where-Object {{ {filtro_excluir} }} | Unblock-File; exit 0'
     )
 
     # Comando PowerShell para BLOQUEAR (adicionar MOTW) todos os PDFs no HOME
@@ -62,18 +59,18 @@ class DesbloqueioViewWindows:
         f'Where-Object {{$_.Attributes -notmatch "Offline" -and {filtro_excluir}}} | '
         f'ForEach-Object {{ '
         f'Set-Content -Path $_.FullName -Stream "Zone.Identifier" '
-        f'-Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop }}'
+        f'-Value "[ZoneTransfer]`r`nZoneId=3" -ErrorAction Stop }}; exit 0'
     )
 
-    comando_powershell_reiniciar_explorer = r'''
-            taskkill /f /im explorer.exe; Start-Process explorer.exe
-        '''
+    comando_powershell_reiniciar_explorer = 'taskkill /f /im explorer.exe; Start-Process explorer.exe'
 
-    comando_powershell_registro_windows_desbloqueio = (  # ex.: permitir verificação (exemplo)
+    comando_powershell_registro_windows_desbloqueio = (
+        # ex.: permitir verificação (exemplo)
         rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 1 /f '
     )
 
-    comando_powershell_registro_windows_bloqueio = (  # ex.: voltar ao padrão/sugerido pela sua política
+    comando_powershell_registro_windows_bloqueio = (
+        # ex.: voltar ao padrão/sugerido pela sua política
         rf'reg add "{reg_key_local_machine}" /v ScanWithAntiVirus /t REG_DWORD /d 2 /f '
     )
 
@@ -129,7 +126,6 @@ class DesbloqueioViewWindows:
             print(f'\n Erro ao executar o PowerShell: ', error)
             print(f'Stdout: {error.stdout} ')
             print(f'Stderr: {error.stderr} ')
-            print('Verifique se o perfil foi executado como administrador.')
             input('Aperte [ENTER] para finalizar')
             return False
 
@@ -145,13 +141,12 @@ class DesbloqueioViewWindows:
                 self.comando_powershell_bloquear_MOTW,
                 'Processo do MOTW bloqueio em andamento...'
             )
-            print("Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
+            print("✅ Bloqueio de arquivos PDF (MOTW) concluído com sucesso.")
             sleep(5)
             return True
 
         except CalledProcessError as error:
             print(f'\n Erro ao executar o PowerShell: ', error)
-            print('Verifique se o perfil foi executado como administrador.')
             input('Aperte [ENTER] para finalizar')
             return False
 
@@ -170,7 +165,6 @@ class DesbloqueioViewWindows:
                 print(result_shell.stdout)
             if result_shell.stderr:
                 print('[PowerShell avisos]:', result_shell.stderr)
-
             sleep(5)
             return True
 
@@ -178,7 +172,6 @@ class DesbloqueioViewWindows:
             print(f'\n Erro ao executar o PowerShell: ', error)
             print(f'Stdout: {error.stdout} ')
             print(f'Stderr: {error.stderr} ')
-            print('Verifique se o perfil foi executado como administrador.')
             sleep(5)
             return False
 
@@ -233,6 +226,7 @@ if __name__ == '__main__':
 
     resposta = int(input("Escolha uma opção: "))
     if resposta == 1:
+
         process_finalizado = obj_desbloqueio.desbloquear_view_windows()
         print(process_finalizado)
         if process_finalizado:
