@@ -1,36 +1,3 @@
-"""
-Detalhamento do Comando
-Este comando combina duas ações essenciais, separadas por um ponto e vírgula (;):
-
-taskkill /f /im explorer.exe:
-
-taskkill: É o utilitário do Windows usado para encerrar processos em execução.
-
-/f: Força o encerramento do processo (fundamental para garantir que o processo seja finalizado imediatamente).
-
-/im explorer.exe: Especifica a imagem do processo a ser encerrado, que é o explorer.exe (o Explorador de Arquivos/Shell
-do Windows).
-
-Start-Process explorer.exe:
-
-Start-Process: É o cmdlet do PowerShell usado para iniciar um novo processo.
-
-explorer.exe: Inicia uma nova instância do Explorador de Arquivos.
-
-***********************************************************************************************************************
-Get-ChildItem: Lista os arquivos.
-
--Recurse: Busca em todas as subpastas.
-
--Include '*.pdf': Este é o filtro. Ele garante que, dos arquivos encontrados recursivamente, apenas aqueles com a extensão .pdf sejam passados para a próxima etapa.
-
-Unblock-File: Remove a "Marca da Web" (MOTW) somente dos arquivos .pdf filtrados
-
-✔ Use -ErrorAction SilentlyContinue para ignorar erros no PowerShell.
-✔ Adicione ; exit 0 no final para evitar que o Python/Django quebre.
-✔ Capture stdout e stderr para logar se quiser.
- exit 0 Sempre retorna o valor 0, mesmo que o powershell tenha erros
-"""
 
 from subprocess import run, CalledProcessError
 from threading import Event, Thread
@@ -188,35 +155,3 @@ class DesbloqueioViewWindows:
             shell=True,
             check=True
         )
-
-
-if __name__ == '__main__':
-
-    obj_desbloqueio = DesbloqueioViewWindows()
-    print(
-        "[ 1 ] Desbloquear visualização do Windows\n"
-        "[ 2 ] Bloquear visualização do Windows\n"
-    )
-
-    comando_desbloqueio_registro = obj_desbloqueio.comando_powershell_registro_windows_desbloqueio
-    comando_bloqueio_registro = obj_desbloqueio.comando_powershell_registro_windows_bloqueio
-
-    resposta = int(input("Escolha uma opção: "))
-    if resposta == 1:
-        process_finalizado = obj_desbloqueio.desbloquear_view_windows()
-        print(process_finalizado)
-        if process_finalizado:
-            obj_desbloqueio.configurar_registro(comando_desbloqueio_registro)
-            obj_desbloqueio.reiniciar_explorer()
-            input('Processo finalizado, aperta Enter para fechar')
-
-
-    elif resposta == 2:
-        process_finalizado = obj_desbloqueio.bloquear_view_windows()
-        print(process_finalizado)
-        if process_finalizado:
-            obj_desbloqueio.configurar_registro(comando_bloqueio_registro)
-            obj_desbloqueio.reiniciar_explorer()
-            input('Processo finalizado, aperta Enter para fechar')
-
-
