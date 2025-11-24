@@ -9,7 +9,7 @@ import subprocess
 from time import sleep
 
 # Redes que estão disponível no ambiente.
-
+# Copiar do arquivo anterior
 local_xml_pc_local = r'c:\xml_local'
 arquivo_xml = r"\perfil_wifi.xml"
 
