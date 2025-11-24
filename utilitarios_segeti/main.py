@@ -2,88 +2,63 @@ from time import sleep
 import subprocess
 import os
 
+import debloquear_MOTW
+import ctypes
+import sys
+
 class UtilitariosSegetiDigital:
-
-    ## -----------------------------------------------------------------------------------------------------------------
-    ## Bloco dos parâmetros para o method adicionar redes wifi
-    # Redes que estão disponível no ambiente.
-    redes_disponiveis = [
-        {'nome': 'Segeti-Visitantes', 'senha': '98Ps@visit34'},
-        {'nome': 'Staff-Direito', 'senha': 'Sc89#28!54'},
-        {'nome': 'Staff-Esquerdo', 'senha': 'Yt87*67Jh'},
-        {'nome': 'Sala-Descom', 'senha': '74ou@87ik'},
-        {'nome': 'Sala-Treinamento', 'senha': '67Uj$er89'},
-    ]
-    local_xml_pc_local = r'c:\xml_local'
-    arquivo_xml = r"\perfil_wifi.xml"
-
-    try:
-        os.makedirs(local_xml_pc_local)
-    except FileExistsError:
+    def __init__(self):
         ...
-    ## -----------------------------------------------------------------------------------------------------------------
 
-    def adicionar_rede_wifi(self):
-        """
-            Função responsável em adicionar as redes que estão disponivel para os funcionários da segeti.
-            :param: perfil_xml - Cria um arquivo xml para que o powershel identifique os parâmtros da rede.
-            :return:
-            """
+    def chamar_desbloquear(self):
+        obj_desbloqueio = debloquear_MOTW.DesbloqueioViewWindows()
+        print(
+            "[ 1 ] Desbloquear visualização do Windows\n"
+            "[ 2 ] Bloquear visualização do Windows\n"
+        )
 
-        # Serão adicionadas a quantidade de rede que esta na lista.
-        for rede in self.redes_disponiveis:
+        comando_desbloqueio_registro = obj_desbloqueio.comando_powershell_registro_windows_desbloqueio
+        comando_bloqueio_registro = obj_desbloqueio.comando_powershell_registro_windows_bloqueio
 
-            perfil_xml = f"""
-                <WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
-                    <name>{rede['nome']}</name>
-                    <SSIDConfig>
-                        <SSID>
-                            <name>{rede['nome']}</name>
-                        </SSID>
-                    </SSIDConfig>
-                    <connectionType>ESS</connectionType>
-                    <connectionMode>auto</connectionMode>
-                    <MSM>
-                        <security>
-                            <authEncryption>
-                                <authentication>WPA2PSK</authentication>
-                                <encryption>AES</encryption>
-                                <useOneX>false</useOneX>
-                            </authEncryption>
-                            <sharedKey>
-                                <keyType>passPhrase</keyType>
-                                <protected>false</protected>
-                                <keyMaterial>{rede['senha']}</keyMaterial>
-                            </sharedKey>
-                        </security>
-                    </MSM>
-                </WLANProfile>
-                """
+        resposta = int(input("Escolha uma opção: "))
+        if resposta == 1:
+            process_finalizado = obj_desbloqueio.desbloquear_view_windows()
+            print(process_finalizado)
+            if process_finalizado:
+                obj_desbloqueio.configurar_registro(comando_desbloqueio_registro)
+                obj_desbloqueio.reiniciar_explorer()
+                input('Processo finalizado, aperta Enter para fechar')
 
-            # Cria o arquivo completo do arquivo xml
-            caminho_completo_xml = rf'{local_xml_pc_local}\{arquivo_xml}'
 
-            # Cria o arquivo xml para o powershell conseguir ler.
-            with open(caminho_completo_xml, "w") as arquivo:
-                arquivo.write(perfil_xml)
-
-            comando_shell_add_wifi = f'netsh wlan add profile filename="{caminho_completo_xml}"'
-
-            try:
-                subprocess.run(['powershell', '-Command', comando_shell_add_wifi],
-                               capture_output=True, text=True, shell=True)
-                print(f' -Rede {rede['nome']} adicionada...')
-
-            except Exception as error:
-                print(f'Ocorreu erro na execusão do programa: {error}')
-                # Quando ocorrer algum erro, programa sera fechado.
-                return (f'Não foi possível adicionar a rede {rede['nome']} \n'
-                        f'Entre em contato com o desenvolvedor \n'
-                        f'th_grifon@hotmail.com')
-
+        elif resposta == 2:
+            process_finalizado = obj_desbloqueio.bloquear_view_windows()
+            print(process_finalizado)
+            if process_finalizado:
+                obj_desbloqueio.configurar_registro(comando_bloqueio_registro)
+                obj_desbloqueio.reiniciar_explorer()
+                input('Processo finalizado, aperta Enter para fechar')
 
 
 if __name__ == "__main__":
+
+    def is_admin():
+        try:
+            return ctypes.windll.shell32.IsUserAnAdmin()
+        except:
+            return False
+
+    ## Se o app não foi elevado vai abrir a janela para solicita as credinciais de administrador.
+    if not is_admin():
+        ctypes.windll.shell32.ShellExecuteW(
+            None,  # handle (não usado)
+            "runas",  # O verbo que força o UAC
+            sys.executable,  # O arquivo a ser executado (o interpretador Python)
+            " ".join(sys.argv),  # Os argumentos (o nome do seu script)
+            None,  # diretório de trabalho
+            1  # mostra a janela
+        )
+        sys.exit(0)  # Sai do script original
+
     while True:
         print(
             """
