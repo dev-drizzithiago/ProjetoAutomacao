@@ -85,6 +85,7 @@ if __name__ == "__main__":
                 print('---' * 30)
                 print('Saindo do programa')
                 sleep(2)
+                break
             else:
                 print('Opção não existe.')
 
