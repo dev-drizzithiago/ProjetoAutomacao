@@ -4,8 +4,8 @@
 #
 #
 
-import subprocess
 import os
+import subprocess
 from time import sleep
 
 # Redes que estão disponível no ambiente.
@@ -81,13 +81,13 @@ class RedesWifi:
 
             except Exception as error:
                 print(f'Ocorreu erro na execusão do programa: {error}')
-                # Quando ocorrer algum erro, programa sera fechado.
+                # Quando ocorrer algum erro, programa será fechado.
                 return (f'Não foi possível adicionar a rede {rede['nome']} \n'
                         f'Entre em contato com o desenvolvedor \n'
                         f'th_grifon@hotmail.com')
 
-        # A confirmação só vai retorna se todas as redes forem adicionadas com sucesso.
-        # Apos as cofigurações,
+        # A confirmação só vai retornar se todas as redes forem adicionadas com sucesso.
+        # Após as cofigurações,
 
         os.remove(caminho_completo_xml)
         sleep(1)
