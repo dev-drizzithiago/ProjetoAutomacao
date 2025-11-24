@@ -9,13 +9,7 @@ import subprocess
 from time import sleep
 
 # Redes que estão disponível no ambiente.
-redes_disponiveis = [
-    {'nome': 'Segeti-Visitantes', 'senha': '98Ps@visit34'},
-    {'nome': 'Staff-Direito', 'senha': 'Sc89#28!54'},
-    {'nome': 'Staff-Esquerdo', 'senha': 'Yt87*67Jh'},
-    {'nome': 'Sala-Descom', 'senha': '74ou@87ik'},
-    {'nome': 'Sala-Treinamento', 'senha': '67Uj$er89'},
-]
+
 local_xml_pc_local = r'c:\xml_local'
 arquivo_xml = r"\perfil_wifi.xml"
 
