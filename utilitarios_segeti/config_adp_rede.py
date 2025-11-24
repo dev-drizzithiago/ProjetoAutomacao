@@ -1,32 +1,5 @@
-"""
-SCRIPT VERSÃO 2
-- Realizado algumas correções no portugues e algumas mudanças na ordem que as funções seram executada.
 
-- O obj desse programa resolver o problema de dominio.
-- O dominio que foi atribuido na rede interna é o mesmo que o dominio publico;
-    1) Interno → segeticonsultoria.com
-    2) Externo → www.segeticonsultoria.com
-- Explicando o que ocorre.
-    * Quando a endereço dns primario esta configurado apotando para o servidor interno, todas as funcionalidades do
-    dominio funcionam perfeitamente, mas pelo fato do dominio ser identico ao site www.segeticonsultoria.com,
-    deixa todos dentro da rede interna sem acesso ao site.
-    * Quando o dns primario é apontado para o ip 8.8.8.8 e o secundário apontado para o servidor 192.168.0.10,
-    muitas das vezes ocorre problema com as políticas do AD.
-    * Quando um sitema faz solicitação para o dominio segeticonsultoria.com e o dns primário está apontado para o
-    servidor, a requisão chega no servidor, se o serviço requerido estiver conforma as políticas o sistema vai
-    encaminha a resposta correta para o solicitante. Mas quando o solicitante entrar com uma requição de site, como
-    o www.segeticonsultoria.com, como o servidor não possui o serviço de web, o solicitante recebe uma negativa
-    não conseguindo acesso o site.
-    * Ao contrário tambem ocorre, quando o dns primario esta com o endereço publico, algumas requisições são
-    encaminhadas para o servidor de web, como não possui o serviço uma negativa que o utilizador vai receber.
-    * Configurando o arquivo vai ajudar a manter o sistema sem esse problema.
-    * Como a rede precisa ter comunicação com o servidor, o unico site que apresenta o problema é o da
-    propria segeti.
-"""
-import os
-import sys
 import socket
-import ctypes
 import subprocess
 from time import sleep
 
@@ -40,7 +13,6 @@ caminha_wifi_xml = ''
 # Get-WinSystemLocale  Para descobrir o idioma do sistema
 
 class ConfigAdpRedes:
-    # Verifica se o programa foi executado com privilégios de administrator
     def add_host_entry(self):
         """
         - Função ficará responsável em adicionar duas linhas ao arquivo de hosts, que fica na pasta do system32.
@@ -262,52 +234,3 @@ class ConfigAdpRedes:
                     print(f'Foram enviados [{resultado_pacotes_enviados}], [{site_segeti}], '
                           f'[{resultado_pacotes_recebidos}] pacotes responderam com sucesso.')
                     return True
-
-    # O script só vai continuar depois for executador como administrador.
-    """
-    if is_admin():
-    
-        if func_teste_site_empresa():
-    
-            print()
-            print('------' * 20)
-            print('Site www.segeticonsultoria.com esta respondendo, não é preciso adicionar uma regra dentro do \n'
-                  'arquivo hosts. Mas vamos configurar seus adaptadores para que fique no padrão Segeti. \n'
-                  'Para a configuração funcionar corretamente é preciso executar o programa como Administrador')
-            sleep(10)
-    
-            # 1) Busca as informações sobre os adaptadores, como nome, o tipo de tecnologia que possui.
-            resultado_busca_info_adaptadores = buscando__info__adaptadores__()
-    
-            # 2) Com as informações os dados são levados para que os
-            # adaptadores sejam configurados com novos parametros.
-            configurando_adaptador_rede(resultado_busca_info_adaptadores)
-    
-        else:
-    
-            # 3) Caso o site não responde, após os adaptadores serem configurados,
-            # é adicionado a regra dentro do arquivo hosts
-            add_host_entry()
-    
-            # 4) Função vai verificar se o endereço de ip do site "www.segeticonsultoria.com" continua o mesmo,
-            # caso tenha sido alterado é add uma nova entrada. Esse processo precisa
-            # ser inserido na inicialização do win.
-    
-            if validate_ip():
-                add_host_entry()
-    
-            func_teste_site_empresa()
-    
-    else:
-    
-        print()
-        print()
-        print("A execusão requer elevação.")
-    
-    # ---------------------------------------------------------------------------------------------------------------------
-    # Finalizando o script
-    print()
-    print()
-    print('------' * 20)
-    input('Aperte "Enter" para finalizar.')
-    """
