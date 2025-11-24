@@ -76,6 +76,7 @@ class RedesWifi:
             try:
                 subprocess.run(['powershell', '-Command', comando_shell_add_wifi],
                                capture_output=True, text=True, shell=True)
+
                 print(f' -Rede {rede['nome']} adicionada...')
 
             except Exception as error:
@@ -93,5 +94,4 @@ class RedesWifi:
         os.rmdir(local_xml_pc_local)
 
         print()
-        print("----" * 20)
         return 'Redes adicionadas com sucesso \n'
