@@ -33,13 +33,9 @@ Unblock-File: Remove a "Marca da Web" (MOTW) somente dos arquivos .pdf filtrados
 """
 
 from subprocess import run, CalledProcessError
-from pathlib import Path
 from threading import Event, Thread
 from time import sleep
 import itertools
-import sys
-from tokenize import endpats
-
 
 incluir_pastas = []
 excluir_pastas = ['AppData', 'GitHub']
