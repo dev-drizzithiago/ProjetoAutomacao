@@ -3,6 +3,7 @@ import subprocess
 import os
 
 import adicionar_redes_wifi
+import config_adp_rede
 import debloquear_MOTW
 
 import ctypes
@@ -12,6 +13,10 @@ class UtilitariosSegetiDigital:
 
     def chamar_confi_wifi_segeti(self):
         adicionar_redes_wifi.RedesWifi()
+    def chamar_config_adp_rede(self):
+        obj_confi_adp_redes = config_adp_rede.ConfigAdpRedes()
+        obj_confi_adp_redes.
+
 
     def chamar_desbloquear(self):
         obj_desbloqueio = debloquear_MOTW.DesbloqueioViewWindows()
