@@ -2,13 +2,16 @@ from time import sleep
 import subprocess
 import os
 
+import adicionar_redes_wifi
 import debloquear_MOTW
+
 import ctypes
 import sys
 
 class UtilitariosSegetiDigital:
-    def __init__(self):
-        ...
+
+    def chamar_confi_wifi_segeti(self):
+        adicionar_redes_wifi.RedesWifi()
 
     def chamar_desbloquear(self):
         obj_desbloqueio = debloquear_MOTW.DesbloqueioViewWindows()
@@ -40,7 +43,7 @@ class UtilitariosSegetiDigital:
 
 
 if __name__ == "__main__":
-
+    obj_utilitario = UtilitariosSegetiDigital()
     def is_admin():
         try:
             return ctypes.windll.shell32.IsUserAnAdmin()
@@ -73,11 +76,11 @@ if __name__ == "__main__":
             opc = int(input('Escolha uma opção: '))
 
             if opc == 1:
-                ...
+                obj_utilitario.chamar_confi_wifi_segeti()
             elif opc == 2:
                 ...
             elif opc == 3:
-                ...
+                obj_utilitario.chamar_desbloquear()
             elif opc == 0:
                 print('---' * 30)
                 print('Saindo do programa')
