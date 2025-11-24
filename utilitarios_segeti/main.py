@@ -12,11 +12,27 @@ import sys
 class UtilitariosSegetiDigital:
 
     def chamar_confi_wifi_segeti(self):
-        adicionar_redes_wifi.RedesWifi()
+        obj_ad_wifi = adicionar_redes_wifi.RedesWifi()
+        obj_ad_wifi.adicionando_rede_wifi()
+
+        print('---' * 30)
+        input('Aperta ENTER para continuar...')
+
     def chamar_config_adp_rede(self):
         obj_confi_adp_redes = config_adp_rede.ConfigAdpRedes()
-        obj_confi_adp_redes.
 
+        resultado_busca_info_adaptadores = obj_confi_adp_redes.buscando__info__adaptadores__()
+        obj_confi_adp_redes.configurando_adaptador_rede(resultado_busca_info_adaptadores)
+
+        obj_confi_adp_redes.add_host_entry()
+
+        if obj_confi_adp_redes.validate_ip():
+            obj_confi_adp_redes.add_host_entry()
+
+        obj_confi_adp_redes.func_teste_site_empresa()
+
+        print('---' * 30)
+        input('Aperta ENTER para continuar...')
 
     def chamar_desbloquear(self):
         obj_desbloqueio = debloquear_MOTW.DesbloqueioViewWindows()
@@ -46,6 +62,8 @@ class UtilitariosSegetiDigital:
                 obj_desbloqueio.reiniciar_explorer()
                 input('Processo finalizado, aperta Enter para fechar')
 
+        print('---' * 30)
+        input('Aperta ENTER para continuar...')
 
 if __name__ == "__main__":
     obj_utilitario = UtilitariosSegetiDigital()
@@ -83,7 +101,7 @@ if __name__ == "__main__":
             if opc == 1:
                 obj_utilitario.chamar_confi_wifi_segeti()
             elif opc == 2:
-                ...
+                obj_utilitario.chamar_config_adp_rede()
             elif opc == 3:
                 obj_utilitario.chamar_desbloquear()
             elif opc == 0:
