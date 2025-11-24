@@ -95,24 +95,3 @@ class RedesWifi:
         print()
         print("----" * 20)
         return 'Redes adicionadas com sucesso \n'
-
-if __name__ == '__main__':
-    print()
-    print("----" * 20)
-    print('Programa desenvolvido por dev-drizzithiago')
-
-    print()
-    print("----" * 20)
-    print('Configurando suas redes, aguarde...! \n')
-
-    # Chama a função
-    iniciando_programa = RedesWifi()
-    iniciando_programa.adicionando_rede_wifi()
-
-    # Limpa todos os texto e informa apenas que a rede foi adicionada
-    os.system('cls')
-
-    # indica ao usuário que a rede foi adicionada.
-    print('\n')
-    print(iniciando_programa)
-    sleep(10)
