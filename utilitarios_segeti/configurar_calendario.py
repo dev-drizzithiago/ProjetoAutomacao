@@ -18,7 +18,9 @@ class ShareCalendarMail:
         pass
 
     def adicionar_Reviewer(self):
-        comando_shell = f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}"'
+        comando_shell = (
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" -User {self.email_usuario}'
+        )
 
     def adicionar_Author(self):
         pass
