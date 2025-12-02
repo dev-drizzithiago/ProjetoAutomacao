@@ -3,6 +3,8 @@ Tem como finalidade compartilhar a caixa de correio da segeticonsultoria.
 -SendNotificationToUser $true # garante que a recepção receba um e-mail de convite,
 facilitando a adição do calendário no Outlook dela
 """
+import sys
+import ctypes
 import subprocess
 import itertools
 from time import sleep
@@ -113,22 +115,41 @@ class ShareCalendarMail:
     def conexao_exchange_online(self):
         comando_shell = 'Connect - ExchangeOnline'
 
-        response_processo = self._run_processo_powershell(comando_shell)
+        response_processo = self._run_spinner(comando_shell, 'Conectando ao Exchange...')
         print(response_processo.stdout)
 
     def instalacao_pacote_exchange(self):
         comando_shell = 'Install-Module -Name ExchangeOnlineManagement'
 
-        response_processo = self._run_processo_powershell(comando_shell)
+        response_processo = self._run_spinner(comando_shell, 'Instalado pacote...')
         print(response_processo.stdout)
 
 if __name__ == '__main__':
+
+    def is_admin():
+        try:
+            return ctypes.windll.shell32.IsUserAnAdmin()
+        except:
+            return False
+
+    ## Se o app não foi elevado vai abrir a janela para solicita as credinciais de administrador.
+    if not is_admin():
+        ctypes.windll.shell32.ShellExecuteW(
+            None,  # handle (não usado)
+            "runas",  # O verbo que força o UAC
+            sys.executable,  # O arquivo a ser executado (o interpretador Python)
+            " ".join(sys.argv),  # Os argumentos (o nome do seu script)
+            None,  # diretório de trabalho
+            1  # mostra a janela
+        )
+        sys.exit(0)  # Sai do script original
+
     print()
     print('Compartilhe um e-mail compartilhado')
     print('---' * 25)
     email_compartilhado = input('Entre com o E-mail compartilhado: ')
     email_usuario = input('Entre com o E-mail do usuário: ')
-
+    
     obj_calendar = ShareCalendarMail(email_compartilhado, email_usuario)
     obj_calendar.instalacao_pacote_exchange()
     obj_calendar.conexao_exchange_online()
