@@ -12,27 +12,46 @@ class ShareCalendarMail:
         self.email_usuario = usuario
 
     def adicionar_AvailabilityOnly(self):
-        pass
+        comando_shell = (
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
+            f'-User {self.email_usuario} -AccessRights AvailabilityOnly -SendNotificationToUser $true'
+        )
 
     def adicionar_LimitedDetails(self):
-        pass
+        comando_shell = (
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
+            f'-User {self.email_usuario} -AccessRights LimitedDetails -SendNotificationToUser $true'
+        )
 
     def adicionar_Reviewer(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" -User {self.email_usuario}'
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
+            f'-User {self.email_usuario} -AccessRights Reviewer -SendNotificationToUser $true'
         )
 
     def adicionar_Author(self):
-        pass
+        comando_shell = (
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
+            f'-User {self.email_usuario} -AccessRights Author -SendNotificationToUser $true'
+        )
 
     def adicionar_Editor(self):
-        pass
+        comando_shell = (
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
+            f'-User {self.email_usuario} -AccessRights Editor -SendNotificationToUser $true'
+        )
 
     def adicionar_PublishingEditor(self):
-        pass
+        comando_shell = (
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
+            f'-User {self.email_usuario} -AccessRights PublishingEditor -SendNotificationToUser $true'
+        )
 
     def adicionar_Owner(self):
-        pass
+        comando_shell = (
+            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
+            f'-User {self.email_usuario} -AccessRights Owner -SendNotificationToUser $true'
+        )
 
 
 if __name__ == '__main__':
