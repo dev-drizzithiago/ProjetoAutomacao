@@ -113,7 +113,7 @@ class ShareCalendarMail:
         print(response_processo.stdout)
 
     def conexao_exchange_online(self):
-        comando_shell = 'Connect - ExchangeOnline'
+        comando_shell = 'Connect-ExchangeOnline'
 
         response_processo = self._run_spinner(comando_shell, 'Conectando ao Exchange...')
         print(response_processo.stdout)
