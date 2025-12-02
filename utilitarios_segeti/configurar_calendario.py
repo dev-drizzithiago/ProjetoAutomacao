@@ -118,7 +118,7 @@ class ShareCalendarMail:
 
     def instalacao_pacote_exchange(self):
         comando_shell = 'Install-Module -Name ExchangeOnlineManagement'
-        
+
         response_processo = self._run_processo_powershell(comando_shell)
         print(response_processo.stdout)
 
@@ -130,3 +130,4 @@ if __name__ == '__main__':
     email_usuario = input('Entre com o E-mail do usuário: ')
 
     obj_calendar = ShareCalendarMail(email_compartilhado, email_usuario)
+    obj_calendar.instalacao_pacote_exchange()
