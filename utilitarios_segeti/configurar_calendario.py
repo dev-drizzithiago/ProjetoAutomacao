@@ -36,7 +36,7 @@ if __name__ == '__main__':
     print()
     print('Compartilhe um e-mail compartilhado')
     print('---' * 25)
-    email_compartilhado = input('E-mail compartilhado: ')
-    email_usuario = input('E-mail do usuário: ')
+    email_compartilhado = input('Entre com o E-mail compartilhado: ')
+    email_usuario = input('Entre com o E-mail do usuário: ')
 
     obj_calendar = ShareCalendarMail(email_compartilhado, email_usuario)
