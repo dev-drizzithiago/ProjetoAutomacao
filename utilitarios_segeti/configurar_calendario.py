@@ -116,6 +116,12 @@ class ShareCalendarMail:
         response_processo = self._run_processo_powershell(comando_shell)
         print(response_processo.stdout)
 
+    def instalacao_pacote_exchange(self):
+        comando_shell = 'Install-Module -Name ExchangeOnlineManagement'
+        
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
+
 if __name__ == '__main__':
     print()
     print('Compartilhe um e-mail compartilhado')
