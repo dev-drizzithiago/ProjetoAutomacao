@@ -2,6 +2,7 @@
 Tem como finalidade compartilhar a caixa de correio da segeticonsultoria.
 
 """
+import subprocess
 
 class ShareCalendarMail:
 
@@ -17,7 +18,7 @@ class ShareCalendarMail:
         pass
 
     def adicionar_Reviewer(self):
-        pass
+        comando_shell = f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}"'
 
     def adicionar_Author(self):
         pass
