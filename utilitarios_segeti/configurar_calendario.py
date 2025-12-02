@@ -117,12 +117,14 @@ class ShareCalendarMail:
 
         response_processo = self._run_spinner(comando_shell, 'Conectando ao Exchange...')
         print(response_processo.stdout)
+        input('Aperte ENTER para continuar')
 
     def instalacao_pacote_exchange(self):
         comando_shell = 'Install-Module -Name ExchangeOnlineManagement'
 
         response_processo = self._run_spinner(comando_shell, 'Instalado pacote...')
         print(response_processo.stdout)
+        input('Aperte ENTER para continuar')
 
 if __name__ == '__main__':
 
@@ -149,7 +151,7 @@ if __name__ == '__main__':
     print('---' * 25)
     email_compartilhado = input('Entre com o E-mail compartilhado: ')
     email_usuario = input('Entre com o E-mail do usuário: ')
-    
+
     obj_calendar = ShareCalendarMail(email_compartilhado, email_usuario)
     obj_calendar.instalacao_pacote_exchange()
     obj_calendar.conexao_exchange_online()
