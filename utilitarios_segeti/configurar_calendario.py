@@ -1,6 +1,7 @@
 """
 Tem como finalidade compartilhar a caixa de correio da segeticonsultoria.
-
+-SendNotificationToUser $true # garante que a recepção receba um e-mail de convite,
+facilitando a adição do calendário no Outlook dela
 """
 import subprocess
 import itertools
@@ -11,11 +12,11 @@ class ShareCalendarMail:
 
     def __init__(self, compartilhado, usuario):
         pass
-        self.email_compartilhamento = compartilhado
-        self.email_usuario = usuario
+        self._email_compartilhamento = compartilhado
+        self._email_usuario = usuario
 
     def _run_processo_powershell(self, comando_shell):
-        resultado_processo = run(
+        resultado_processo = subprocess.run(
             ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando_shell],
             shell=True,
             check=False,
@@ -48,46 +49,72 @@ class ShareCalendarMail:
 
     def adicionar_AvailabilityOnly(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
-            f'-User {self.email_usuario} -AccessRights AvailabilityOnly -SendNotificationToUser $true'
+            f'Add-MailboxFolderPermission -Identity "{self._email_compartilhamento}" '
+            f'-User {self._email_usuario} -AccessRights AvailabilityOnly -SendNotificationToUser $true'
         )
+
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
 
     def adicionar_LimitedDetails(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
-            f'-User {self.email_usuario} -AccessRights LimitedDetails -SendNotificationToUser $true'
+            f'Add-MailboxFolderPermission -Identity "{self._email_compartilhamento}" '
+            f'-User {self._email_usuario} -AccessRights LimitedDetails -SendNotificationToUser $true'
         )
+
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
 
     def adicionar_Reviewer(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
-            f'-User {self.email_usuario} -AccessRights Reviewer -SendNotificationToUser $true'
+            f'Add-MailboxFolderPermission -Identity "{self._email_compartilhamento}" '
+            f'-User {self._email_usuario} -AccessRights Reviewer -SendNotificationToUser $true'
         )
+
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
 
     def adicionar_Author(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
-            f'-User {self.email_usuario} -AccessRights Author -SendNotificationToUser $true'
+            f'Add-MailboxFolderPermission -Identity "{self._email_compartilhamento}" '
+            f'-User {self._email_usuario} -AccessRights Author -SendNotificationToUser $true'
         )
+
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
 
     def adicionar_Editor(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
-            f'-User {self.email_usuario} -AccessRights Editor -SendNotificationToUser $true'
+            f'Add-MailboxFolderPermission -Identity "{self._email_compartilhamento}" '
+            f'-User {self._email_usuario} -AccessRights Editor -SendNotificationToUser $true'
         )
+
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
 
     def adicionar_PublishingEditor(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
-            f'-User {self.email_usuario} -AccessRights PublishingEditor -SendNotificationToUser $true'
+            f'Add-MailboxFolderPermission -Identity "{self._email_compartilhamento}" '
+            f'-User {self._email_usuario} -AccessRights PublishingEditor -SendNotificationToUser $true'
         )
+
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
 
     def adicionar_Owner(self):
         comando_shell = (
-            f'Add-MailboxFolderPermission -Identity "{self.email_compartilhamento}" '
-            f'-User {self.email_usuario} -AccessRights Owner -SendNotificationToUser $true'
+            f'Add-MailboxFolderPermission -Identity "{self._email_compartilhamento}" '
+            f'-User {self._email_usuario} -AccessRights Owner -SendNotificationToUser $true'
         )
 
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
+
+    def conexao_exchange_online(self):
+        comando_shell = 'Connect - ExchangeOnline'
+
+        response_processo = self._run_processo_powershell(comando_shell)
+        print(response_processo.stdout)
 
 if __name__ == '__main__':
     print()
