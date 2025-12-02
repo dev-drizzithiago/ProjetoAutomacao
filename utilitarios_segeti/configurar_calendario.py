@@ -131,3 +131,4 @@ if __name__ == '__main__':
 
     obj_calendar = ShareCalendarMail(email_compartilhado, email_usuario)
     obj_calendar.instalacao_pacote_exchange()
+    obj_calendar.conexao_exchange_online()
