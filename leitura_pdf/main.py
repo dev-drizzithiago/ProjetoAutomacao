@@ -1,3 +1,11 @@
+"""
+[^\n]+ significa “uma ou mais ocorrências de qualquer character que não seja quebra de linha
+^ dentro da classe significa negação;
+. → qualquer caractere (exceto \n, a menos que você use re.DOTALL);
+* → zero ou mais ocorrências;
+? → modo não guloso (lazy), ou seja, vai pegar o mínimo necessário até conseguir casar a próxima parte da expressão.
+"""
+
 from PyPDF2 import PdfReader
 import pandas as pd
 import re
@@ -52,7 +60,25 @@ class LeituraPdf:
         )
 
         data_abertura = self.buscar_ocorrencia(
-            r'Data de abertura no CNPJ:.*?(\[0-9]{2}\/\[0-9]{2}\/[0-9]{4}\)',
+            r'Data de abertura no CNPJ:.*?([0-9]{2}/[0-9]{2}/[0-9]{4})',
+            texto,
+            flags=re.DOTALL
+        )
+
+        optante_simples_nacional = self.buscar_ocorrencia(
+            r'Optante pelo Simples Nacional:.*?([^\n]+)',
+            texto,
+            flags=re.DOTALL
+        )
+
+        regime_apuracao = self.buscar_ocorrencia(
+            r'Regime de Apuração:.*?([^\n]+)',
+            texto,
+            flags=re.DOTALL
+        )
+
+        num_declaracao = self.buscar_ocorrencia(
+            r'Nº da Declaração:.*?([^\n]+)',
             texto,
             flags=re.DOTALL
         )
@@ -61,6 +87,9 @@ class LeituraPdf:
         print(cpf_matriz)
         print(nome_empresaria)
         print(data_abertura)
+        print(optante_simples_nacional)
+        print(regime_apuracao)
+        print(num_declaracao)
 
 
 if __name__ == '__main__':
