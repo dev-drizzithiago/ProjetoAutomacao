@@ -41,6 +41,7 @@ class LeituraPdf:
 
     def extrair_campos_com_regex(self):
         texto = self.texto_completo
+        print(texto)
 
         periodo = self.buscar_ocorrencia(
             r"Período de Apuração:.*?([0-9]{2}/[0-9]{4}\s*a\s*[0-9]{2}/[0-9]{4})",
@@ -54,7 +55,7 @@ class LeituraPdf:
             flags=re.DOTALL
         )
         nome_empresaria = self.buscar_ocorrencia(
-            r'Nome empresarial:.*?([^\n]+)',
+            r'Nome empresarial:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
@@ -66,30 +67,42 @@ class LeituraPdf:
         )
 
         optante_simples_nacional = self.buscar_ocorrencia(
-            r'Optante pelo Simples Nacional:.*?([^\n]+)',
+            r'Optante pelo Simples Nacional:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
 
         regime_apuracao = self.buscar_ocorrencia(
-            r'Regime de Apuração:.*?([^\n]+)',
+            r'Regime de Apuração:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
 
         num_declaracao = self.buscar_ocorrencia(
-            r'Nº da Declaração:.*?([^\n]+)',
+            r'Nº da Declaração:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
 
-        print(periodo)
-        print(cpf_matriz)
-        print(nome_empresaria)
-        print(data_abertura)
-        print(optante_simples_nacional)
-        print(regime_apuracao)
-        print(num_declaracao)
+        receita_bruta_competencia = self.buscar_ocorrencia(
+            r'Receita Bruta do PA \(RPA\).*?([0-9.,]+)\s+0,00\s+[0-9.,]+',
+            texto,
+            flags=re.DOTALL
+        )
+
+        RPA = self.buscar_ocorrencia(
+            r'Receita bruta acumulada nos doze meses anteriores ao PA \(RBT12\).*?([0-9.,]+)\s+0,00\s+[0-9.,]+',
+            texto,
+            flags=re.DOTALL
+        )
+
+        print(RPA)
+        # print(cpf_matriz)
+        # print(nome_empresaria)
+        # print(data_abertura)
+        # print(optante_simples_nacional)
+        # print(regime_apuracao)
+        # print(num_declaracao)
 
 
 if __name__ == '__main__':
