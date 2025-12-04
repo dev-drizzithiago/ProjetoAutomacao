@@ -27,10 +27,18 @@ class LeituraPdf:
         })
         return df
 
+    def buscar_ocorrencia(self, pattern, text, flags=0, default=None):
+        m = re.search(pattern, text, flags)
+        return m.group(1).strip() if m else default
+
     def extrair_campos_com_regex(self):
         texto = self.texto_completo
+        texto_normalizado = texto.replace('**', ''). replace('\\-', '-')
 
-        return texto
+        periodo = self.buscar_ocorrencia(
+            r"Período de Apuração:.*?([0-9]{2}/[0-9]{4}\s*a\s*[0-9]{2}/[0-9]{4})", texto, flags=re.DOTALL)
+
+        print(periodo)
 
 
 if __name__ == '__main__':
