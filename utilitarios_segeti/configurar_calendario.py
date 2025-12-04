@@ -134,7 +134,7 @@ if __name__ == '__main__':
         except:
             return False
 
-    ## Se o app não foi elevado vai abrir a janela para solicita as credinciais de administrador.
+    ## Se o app não foi elevado vai abrir a janela para solicitar as credinciais de administrador.
     if not is_admin():
         ctypes.windll.shell32.ShellExecuteW(
             None,  # handle (não usado)
