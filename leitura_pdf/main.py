@@ -33,12 +33,19 @@ class LeituraPdf:
 
     def extrair_campos_com_regex(self):
         texto = self.texto_completo
-        texto_normalizado = texto.replace('**', ''). replace('\\-', '-')
 
         periodo = self.buscar_ocorrencia(
-            r"Período de Apuração:.*?([0-9]{2}/[0-9]{4}\s*a\s*[0-9]{2}/[0-9]{4})", texto, flags=re.DOTALL)
+            r"Período de Apuração:.*?([0-9]{2}/[0-9]{4}\s*a\s*[0-9]{2}/[0-9]{4})",
+            texto,
+            flags=re.DOTALL
+        )
+        cpf_matriz = self.buscar_ocorrencia(
+            r'CNPJ Matriz:.*?([0-9]{2}\.[0-9]{3}\.[0-9]{3}\-[0-9]{4}\.[0-9]{2}',
+            texto,
+            flags=re.DOTALL
+        )
 
-        print(periodo)
+        print(cpf_matriz)
 
 
 if __name__ == '__main__':
