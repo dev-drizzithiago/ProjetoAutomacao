@@ -39,7 +39,13 @@ class LeituraPdf:
         m = re.search(pattern, text, flags)
         return m.group(1).strip() if m else default
 
+    def buscar_duplo(self, pattern, text, flags=0, default=(None, None)):
+        m = re.search(pattern, text, flags)
+        print(m)
+        return (m.group(1), m.group(2)) if m else default
+
     def extrair_campos_com_regex(self):
+        flags = re.DOTALL | re.IGNORECASE
         texto = self.texto_completo
         print(texto)
 
@@ -84,19 +90,38 @@ class LeituraPdf:
             flags=re.DOTALL
         )
 
-        receita_bruta_competencia = self.buscar_ocorrencia(
+        RPA = self.buscar_ocorrencia(
             r'Receita Bruta do PA \(RPA\).*?([0-9.,]+)\s+0,00\s+[0-9.,]+',
             texto,
             flags=re.DOTALL
         )
 
-        RPA = self.buscar_ocorrencia(
-            r'Receita bruta acumulada nos doze meses anteriores ao PA \(RBT12\).*?([0-9.,]+)\s+0,00\s+[0-9.,]+',
+        RBT12 = self.buscar_ocorrencia(
+            r"ao PA\s*\(RBT12\)\s*([0-9\.,]+)",
             texto,
             flags=re.DOTALL
         )
 
-        print(RPA)
+        RBA = self.buscar_ocorrencia(
+            r"\(RBA\)\s*([0-9\.,]+)",
+            texto,
+            flags=re.DOTALL
+        )
+
+        RBAA = self.buscar_ocorrencia(
+            r"\(RBAA\)\s*([0-9\.,]+)",
+            texto,
+            flags=re.DOTALL
+        )
+
+        limite_receita_1, limite_receita_2 = self.buscar_duplo(
+            r"Limite de receita bruta proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
+            texto,
+            flags=flags,
+        )
+
+        print('1', limite_receita_1)
+        print('2', limite_receita_2)
         # print(cpf_matriz)
         # print(nome_empresaria)
         # print(data_abertura)
