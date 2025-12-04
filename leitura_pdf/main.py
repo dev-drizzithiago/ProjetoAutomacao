@@ -39,13 +39,28 @@ class LeituraPdf:
             texto,
             flags=re.DOTALL
         )
+
         cpf_matriz = self.buscar_ocorrencia(
-            r'CNPJ Matriz:.*?([0-9]{2}\.[0-9]{3}\.[0-9]{3}\-[0-9]{4}\.[0-9]{2}',
+            r'CNPJ Matriz:.*?([0-9]{2}\.[0-9]{3}\.[0-9]{3}\-[0-9]{4}\.[0-9]{2})',
+            texto,
+            flags=re.DOTALL
+        )
+        nome_empresaria = self.buscar_ocorrencia(
+            r'Nome empresarial:.*?([^\n]+)',
             texto,
             flags=re.DOTALL
         )
 
+        data_abertura = self.buscar_ocorrencia(
+            r'Data de abertura no CNPJ:.*?(\[0-9]{2}\/\[0-9]{2}\/[0-9]{4}\)',
+            texto,
+            flags=re.DOTALL
+        )
+
+        print(periodo)
         print(cpf_matriz)
+        print(nome_empresaria)
+        print(data_abertura)
 
 
 if __name__ == '__main__':
