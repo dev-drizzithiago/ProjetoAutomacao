@@ -10,8 +10,10 @@ class LeituraPdf:
 
     def extraindo_texto(self):
         leitura = PdfReader(self.arquivo_pdf)
-        for text_page in leitura.pages:
-            texto = text_page.extract_text()
+        self.lista_dados_pandas = []
+
+        for index, text_page in enumerate(leitura.pages, start=1):
+            texto = text_page.extract_text() or ''  # evita Non
             print()
             print(texto)
             print(type(texto))
