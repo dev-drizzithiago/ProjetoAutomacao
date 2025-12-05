@@ -120,13 +120,33 @@ class LeituraPdf:
             flags=flags,
         )
 
-        receita_brutas = self.buscar_ocorrencia(
-            r"(2\.2\.1\)\s*Mercado Interno)",
-            texto,
-            flags=flags,
-        )
+        # 1) Pega apenas o bloco 2.2) ... até 2.3)
+        m_bloco = re.search(r'2\.2\)\s*Receitas Brutas Anteriores.*?(2\.3\))', texto, flags)
+        if m_bloco:
+            # Se encontramos o início e o marcador 2.3), cortamos até antes do 2.3)
+            inicio = m_bloco.start()
+            fim = m_bloco.start(1)  # posição onde começa "2.3)"
+            bloco_22 = texto[inicio:fim]
+        else:
+            # fallback: pega a partir de "2.2)" até o fim
+            m_inicio = re.search(r'2\.2\)\s*Receitas Brutas Anteriores', texto, flags)
+            bloco_22 = texto[m_inicio.start():] if m_inicio else ""
 
-        print('1', receita_brutas)
+        # 2) Separa sub-blocos
+        # Mercado Interno
+        m_interno = re.search(r'2\.2\.1\)\s*Mercado Interno(.*?)(2\.2\.2\))', bloco_22, flags)
+        if m_interno:
+            bloco_interno = m_interno.group(1)
+        else:
+            # se não achou delimitador do externo, tenta até o fim do bloco
+            m_interno2 = re.search(r'2\.2\.1\)\s*Mercado Interno(.*)', bloco_22, flags)
+            bloco_interno = m_interno2.group(1) if m_interno2 else ""
+
+        # Mercado Externo
+        m_externo = re.search(r'2\.2\.2\)\s*Mercado Externo(.*)', bloco_22, flags)
+        bloco_externo = m_externo.group(1) if m_externo else ""
+
+    print('1', bloco_22)
         # print(cpf_matriz)
         # print(nome_empresaria)
         # print(data_abertura)
