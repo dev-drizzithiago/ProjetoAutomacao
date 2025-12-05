@@ -120,8 +120,13 @@ class LeituraPdf:
             flags=flags,
         )
 
-        print('1', limite_receita_1)
-        print('2', limite_receita_2)
+        receita_brutas = self.buscar_ocorrencia(
+            r"(2\.2\.1\)\s*Mercado Interno)",
+            texto,
+            flags=flags,
+        )
+
+        print('1', receita_brutas)
         # print(cpf_matriz)
         # print(nome_empresaria)
         # print(data_abertura)
