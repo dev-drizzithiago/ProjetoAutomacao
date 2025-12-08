@@ -145,7 +145,22 @@ class LeituraPdf:
         m_externo = re.search(r'2\.2\.2\)\s*Mercado Externo(.*)', bloco_22, flags)
         bloco_externo = m_externo.group(1) if m_externo else ""
 
-        print('1', bloco_22)
+        padrao_par = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
+        pares_interno = padrao_par.findall(bloco_interno) if bloco_interno else []
+        pares_externo = padrao_par.findall(bloco_externo) if bloco_externo else []
+
+        registros = []
+
+        for mes_ano, valor in pares_interno:
+            registros.append({
+                'mercado': 'Interno',
+                'mes_ano': mes_ano,
+                'valor': valor,
+            })
+
+        df = pd.DataFrame(registros).sort_values(by=['mercado', 'mes_ano']).reset_index(drop=True)
+
+        print('1', df)
         # print(cpf_matriz)
         # print(nome_empresaria)
         # print(data_abertura)
