@@ -54,12 +54,12 @@ class LeituraPdf:
             flags=re.DOTALL
         )
 
-        cpf_matriz = self.buscar_ocorrencia(
+        cnpj_matriz = self.buscar_ocorrencia(
             r'CNPJ Matriz:.*?([0-9]{2}\.[0-9]{3}\.[0-9]{3}\-[0-9]{4}\.[0-9]{2})',
             texto,
             flags=re.DOTALL
         )
-        nome_empresaria = self.buscar_ocorrencia(
+        nome_empresarial = self.buscar_ocorrencia(
             r'Nome empresarial:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
@@ -153,6 +153,12 @@ class LeituraPdf:
 
         for mes_ano, valor in pares_interno:
             registros.append({
+                'periodo': periodo,
+                'cnpj_matriz': cnpj_matriz,
+                'nome_empresarial': nome_empresarial,
+                'data_abertura': data_abertura,
+                'optante_simples_nacional': optante_simples_nacional,
+                'regime_apuracao': regime_apuracao,
                 'mercado': 'Interno',
                 'mes_ano': mes_ano,
                 'valor': valor,
