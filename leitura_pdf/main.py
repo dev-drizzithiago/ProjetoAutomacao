@@ -41,7 +41,6 @@ class LeituraPdf:
 
     def buscar_duplo(self, pattern, text, flags=0, default=(None, None)):
         m = re.search(pattern, text, flags)
-        print(m)
         return (m.group(1), m.group(2)) if m else default
 
     def extrair_campos_com_regex(self):
