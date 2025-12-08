@@ -146,7 +146,7 @@ class LeituraPdf:
         m_externo = re.search(r'2\.2\.2\)\s*Mercado Externo(.*)', bloco_22, flags)
         bloco_externo = m_externo.group(1) if m_externo else ""
 
-    print('1', bloco_22)
+        print('1', bloco_22)
         # print(cpf_matriz)
         # print(nome_empresaria)
         # print(data_abertura)
