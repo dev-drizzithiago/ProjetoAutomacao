@@ -159,6 +159,9 @@ class LeituraPdf:
                 'data_abertura': data_abertura,
                 'optante_simples_nacional': optante_simples_nacional,
                 'regime_apuracao': regime_apuracao,
+                'num_declaracao': num_declaracao,
+                'RPA': RPA,
+                'RBT12': RBT12,
                 
                 'mercado': 'Interno',
                 'mes_ano': mes_ano,
