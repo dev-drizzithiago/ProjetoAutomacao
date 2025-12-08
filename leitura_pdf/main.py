@@ -161,5 +161,3 @@ if __name__ == '__main__':
     obj_leitura_pdf.extraindo_texto()
     response_texto_df = obj_leitura_pdf.criar_dataFrame_por_pagina()
     response_regex = obj_leitura_pdf.extrair_campos_com_regex()
-
-
