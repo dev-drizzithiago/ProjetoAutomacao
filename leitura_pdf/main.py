@@ -161,8 +161,9 @@ class LeituraPdf:
                 'regime_apuracao': regime_apuracao,
                 'num_declaracao': num_declaracao,
                 'RPA': RPA,
+                'RBA': RBA,
                 'RBT12': RBT12,
-                
+                'RBAA': RBAA,
                 'mercado': 'Interno',
                 'mes_ano': mes_ano,
                 'valor': valor,
