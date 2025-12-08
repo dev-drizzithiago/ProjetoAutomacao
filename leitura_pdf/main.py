@@ -159,6 +159,7 @@ class LeituraPdf:
                 'data_abertura': data_abertura,
                 'optante_simples_nacional': optante_simples_nacional,
                 'regime_apuracao': regime_apuracao,
+                
                 'mercado': 'Interno',
                 'mes_ano': mes_ano,
                 'valor': valor,
