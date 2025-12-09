@@ -152,31 +152,30 @@ class LeituraPdf:
         pares_externo = padrao_par.findall(bloco_externo) if bloco_externo else []
 
 
-        f_salario = re.compile(
-            r'2\.3\s*.*'
-        )
+        f_salario = re.compile(r'2\.3\)\s*Folha\ de\ Salários\ Anteriores\s*\(R\$\).*?(?=2\.4\))', flags)
+
         if f_salario:
             busca_f_salario = f_salario.search(texto).group()
-            print(busca_f_salario)
 
-            par_padrao_salario = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
-            TESTE = par_padrao_salario.findall(busca_f_salario) if busca_f_salario else []
-            print(TESTE)
+        valores_f_salarios = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
+        resultado_f_salarios = valores_f_salarios.findall(busca_f_salario) if busca_f_salario else []
+        print(resultado_f_salarios)
 
         registros = {
             'periodo': periodo,
-             'cnpj_matriz': cnpj_matriz,
-             'nome_empresarial': nome_empresarial,
-             'data_abertura': data_abertura,
-             'optante_simples_nacional': optante_simples_nacional,
-             'regime_apuracao': regime_apuracao,
-             'num_declaracao': num_declaracao,
-             'RPA': RPA,
-             'RBA': RBA,
-             'RBT12': RBT12,
-             'RBAA': RBAA,
-             'interno': {k: v for (k, v) in pares_interno},
-             'externo': {k: v for (k, v) in pares_externo}
+            'cnpj_matriz': cnpj_matriz,
+            'nome_empresarial': nome_empresarial,
+            'data_abertura': data_abertura,
+            'optante_simples_nacional': optante_simples_nacional,
+            'regime_apuracao': regime_apuracao,
+            'num_declaracao': num_declaracao,
+            'RPA': RPA,
+            'RBA': RBA,
+            'RBT12': RBT12,
+            'RBAA': RBAA,
+            'interno': {k: v for (k, v) in pares_interno},
+            'externo': {k: v for (k, v) in pares_externo},
+            'f_salarios': {k: v for (k, v) in resultado_f_salarios},
         }
 
         # for k, v in registros.items():
