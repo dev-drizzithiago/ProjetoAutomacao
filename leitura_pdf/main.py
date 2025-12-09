@@ -160,7 +160,7 @@ class LeituraPdf:
             print(busca_f_salario)
 
             par_padrao_salario = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
-            TESTE = par_padrao_salario.findall(busca_f_salario) if busca_f_salario else ''
+            TESTE = par_padrao_salario.findall(busca_f_salario) if busca_f_salario else []
             print(TESTE)
 
         registros = {
