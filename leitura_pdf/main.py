@@ -149,6 +149,10 @@ class LeituraPdf:
         pares_interno = padrao_par.findall(bloco_interno) if bloco_interno else []
         pares_externo = padrao_par.findall(bloco_externo) if bloco_externo else []
 
+        rx_bloco_23_estrito = re.compile(r'2\.3\)\s*Folha\ de\ Salários\ Anteriores.*', flags)
+        m_bloco_ = rx_bloco_23_estrito.search(texto)
+
+        print(m_bloco_)
 
         registros = {
             'periodo': periodo,
