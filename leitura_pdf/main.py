@@ -151,32 +151,24 @@ class LeituraPdf:
 
         registros = {
             'periodo': periodo,
-            'cnpj_matriz': cnpj_matriz,
-            'nome_empresarial': nome_empresarial,
-            'data_abertura': data_abertura,
-            'optante_simples_nacional': optante_simples_nacional,
-            'regime_apuracao': regime_apuracao,
-            'num_declaracao': num_declaracao,
-            'RPA': RPA,
-            'RBA': RBA,
-            'RBT12': RBT12,
-            'RBAA': RBAA,
+             'cnpj_matriz': cnpj_matriz,
+             'nome_empresarial': nome_empresarial,
+             'data_abertura': data_abertura,
+             'optante_simples_nacional': optante_simples_nacional,
+             'regime_apuracao': regime_apuracao,
+             'num_declaracao': num_declaracao,
+             'RPA': RPA,
+             'RBA': RBA,
+             'RBT12': RBT12,
+             'RBAA': RBAA,
+             'interno': {k: v for (k, v) in pares_interno},
+             'externo': {k: v for (k, v) in pares_externo}
         }
-        registros['mercado'] = 'Interno'
-        for mes_ano, valor in pares_interno:
-            registros[mes_ano] = valor
 
-        for mes_ano, valor in pares_externo:
-            registros.append({
-                'mercado': 'Externo',
-                'mes_ano': mes_ano,
-                'valor': valor,
-            })
+        for k, v in registros.items():
+            print(f'{k} - {v}')
 
-        for item in registros:
-            print(item)
-
-        df = pd.DataFrame(registros).sort_values(by=['mercado', 'mes_ano']).reset_index(drop=True)
+        # df = pd.DataFrame(registros).sort_values(by=['mercado', 'mes_ano']).reset_index(drop=True)
 
         # print('1', df)
         # print(cpf_matriz)
