@@ -150,18 +150,22 @@ class LeituraPdf:
         pares_externo = padrao_par.findall(bloco_externo) if bloco_externo else []
 
         registros = []
+        registros.append(
+            {
+                'periodo': periodo,
+                'cnpj_matriz': cnpj_matriz,
+                'nome_empresarial': nome_empresarial,
+                'data_abertura': data_abertura,
+                'optante_simples_nacional': optante_simples_nacional,
+                'regime_apuracao': regime_apuracao,
+                'num_declaracao': num_declaracao,
+                'RPA'   RPA,
+                'RBA': RBA,
+                'RBT12': RBT12,
+                'RBAA': RBAA,
+            }
+        )
 
-        registros[0]['periodo'] = periodo,
-        registros[0]['cnpj_matriz'] = cnpj_matriz,
-        registros[0]['nome_empresarial'] = nome_empresarial,
-        registros[0]['data_abertura'] = data_abertura,
-        registros[0]['optante_simples_nacional'] = optante_simples_nacional,
-        registros[0]['regime_apuracao'] = regime_apuracao,
-        registros[0]['num_declaracao'] = num_declaracao,
-        registros[0]['RPA'] = RPA,
-        registros[0]['RBA'] = RBA,
-        registros[0]['RBT12'] = RBT12,
-        registros[0]['RBAA'] = RBAA,
 
         for mes_ano, valor in pares_interno:
             registros.append({
