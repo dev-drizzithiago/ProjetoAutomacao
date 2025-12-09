@@ -52,79 +52,66 @@ class LeituraPdf:
             texto,
             flags=re.DOTALL
         )
-        print(periodo)
 
         cnpj_matriz = self.buscar_ocorrencia(
             r'CNPJ Matriz:.*?([0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2})',
             texto,
             flags=re.DOTALL
         )
-        print(cnpj_matriz)
 
         nome_empresarial = self.buscar_ocorrencia(
             r'Nome empresarial:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
-        print(nome_empresarial)
 
         data_abertura = self.buscar_ocorrencia(
             r'Data de abertura no CNPJ:.*?([0-9]{2}/[0-9]{2}/[0-9]{4})',
             texto,
             flags=re.DOTALL
         )
-        print(data_abertura)
 
         optante_simples_nacional = self.buscar_ocorrencia(
             r'Optante pelo Simples Nacional:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
-        print(optante_simples_nacional)
 
         regime_apuracao = self.buscar_ocorrencia(
             r'Regime de Apuração:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
-        print(regime_apuracao)
 
         num_declaracao = self.buscar_ocorrencia(
             r'Nº da Declaração:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
-        print(num_declaracao)
 
         RPA = self.buscar_ocorrencia(
             r'Receita Bruta do PA \(RPA\).*?([0-9.,]+)\s+0,00\s+[0-9.,]+',
             texto,
             flags=re.DOTALL
         )
-        print(RPA)
 
         RBT12 = self.buscar_ocorrencia(
             r"ao PA\s*\(RBT12\)\s*([0-9\.,]+)",
             texto,
             flags=re.DOTALL
         )
-        print(RBT12)
 
         RBA = self.buscar_ocorrencia(
             r"\(RBA\).*?([0-9.,]+)\s+[0-9.,]+\s+[0-9.,]+",
             texto,
             flags=re.DOTALL
         )
-        print(RBA)
 
         RBAA = self.buscar_ocorrencia(
             r"\(RBAA\)\s*([0-9\.,]+)",
             texto,
             flags=re.DOTALL
         )
-        print(RBAA)
-
-
 
         limite_receita_1, limite_receita_2 = self.buscar_duplo(
             r"Limite de receita bruta proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
@@ -166,23 +153,24 @@ class LeituraPdf:
 
         for mes_ano, valor in pares_interno:
             registros.append({
-                'periodo': periodo,
-                'cnpj_matriz': cnpj_matriz,
-                'nome_empresarial': nome_empresarial,
-                'data_abertura': data_abertura,
-                'optante_simples_nacional': optante_simples_nacional,
-                'regime_apuracao': regime_apuracao,
-                'num_declaracao': num_declaracao,
-                'RPA': RPA,
-                'RBA': RBA,
-                'RBT12': RBT12,
-                'RBAA': RBAA,
+                # 'periodo': periodo,
+                # 'cnpj_matriz': cnpj_matriz,
+                # 'nome_empresarial': nome_empresarial,
+                # 'data_abertura': data_abertura,
+                # 'optante_simples_nacional': optante_simples_nacional,
+                # 'regime_apuracao': regime_apuracao,
+                # 'num_declaracao': num_declaracao,
+                # 'RPA': RPA,
+                # 'RBA': RBA,
+                # 'RBT12': RBT12,
+                # 'RBAA': RBAA,
                 'mercado': 'Interno',
                 'mes_ano': mes_ano,
                 'valor': valor,
             })
 
-        print(registros)
+        for item in registros:
+            print(item)
 
         df = pd.DataFrame(registros).sort_values(by=['mercado', 'mes_ano']).reset_index(drop=True)
 
