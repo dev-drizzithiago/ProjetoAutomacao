@@ -111,10 +111,11 @@ class LeituraPdf:
         print(RBT12)
 
         RBA = self.buscar_ocorrencia(
-            r"\(RBA\)\s*([0-9\.,]+)",
+            r"\(RBA\).*?([0-9.,]+)\s+[0-9.,]+\s+[0-9.,]+",
             texto,
             flags=re.DOTALL
         )
+        print(RBA)
 
         RBAA = self.buscar_ocorrencia(
             r"\(RBAA\)\s*([0-9\.,]+)",
