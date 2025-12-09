@@ -149,6 +149,7 @@ class LeituraPdf:
         pares_interno = padrao_par.findall(bloco_interno) if bloco_interno else []
         pares_externo = padrao_par.findall(bloco_externo) if bloco_externo else []
 
+
         registros = {
             'periodo': periodo,
              'cnpj_matriz': cnpj_matriz,
@@ -165,8 +166,8 @@ class LeituraPdf:
              'externo': {k: v for (k, v) in pares_externo}
         }
 
-        for k, v in registros.items():
-            print(f'{k} - {v}')
+        # for k, v in registros.items():
+        #     print(f'{k} - {v}')
 
         # df = pd.DataFrame(registros).sort_values(by=['mercado', 'mes_ano']).reset_index(drop=True)
 
