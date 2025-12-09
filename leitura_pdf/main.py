@@ -124,7 +124,7 @@ class LeituraPdf:
         )
         print(RBAA)
 
-        
+
 
         limite_receita_1, limite_receita_2 = self.buscar_duplo(
             r"Limite de receita bruta proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
@@ -181,6 +181,8 @@ class LeituraPdf:
                 'mes_ano': mes_ano,
                 'valor': valor,
             })
+
+        print(registros)
 
         df = pd.DataFrame(registros).sort_values(by=['mercado', 'mes_ano']).reset_index(drop=True)
 
