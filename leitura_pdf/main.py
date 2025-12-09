@@ -47,6 +47,8 @@ class LeituraPdf:
         flags = re.DOTALL | re.IGNORECASE
         texto = self.texto_completo
 
+        print(texto)
+
         periodo = self.buscar_ocorrencia(
             r"Período de Apuração:.*?([0-9]{2}/[0-9]{2}/[0-9]{4}\s*a\s*[0-9]{2}/[0-9]{2}/[0-9]{4})",
             texto,
@@ -149,10 +151,17 @@ class LeituraPdf:
         pares_interno = padrao_par.findall(bloco_interno) if bloco_interno else []
         pares_externo = padrao_par.findall(bloco_externo) if bloco_externo else []
 
-        rx_bloco_23_estrito = re.compile(r'2\.3\)\s*Folha.*', flags)
-        m_bloco_ = rx_bloco_23_estrito.search(texto)
 
-        print(m_bloco_)
+        f_salario = re.compile(
+            r'2\.3\s*.*'
+        )
+        if f_salario:
+            busca_f_salario = f_salario.search(texto).group()
+            print(busca_f_salario)
+
+            par_padrao_salario = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
+            TESTE = par_padrao_salario.findall(busca_f_salario) if busca_f_salario else ''
+            print(TESTE)
 
         registros = {
             'periodo': periodo,
