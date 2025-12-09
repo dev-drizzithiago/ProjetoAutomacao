@@ -159,7 +159,7 @@ class LeituraPdf:
                 'optante_simples_nacional': optante_simples_nacional,
                 'regime_apuracao': regime_apuracao,
                 'num_declaracao': num_declaracao,
-                'RPA'   RPA,
+                'RPA': RPA,
                 'RBA': RBA,
                 'RBT12': RBT12,
                 'RBAA': RBAA,
@@ -170,6 +170,13 @@ class LeituraPdf:
         for mes_ano, valor in pares_interno:
             registros.append({
                 'mercado': 'Interno',
+                'mes_ano': mes_ano,
+                'valor': valor,
+            })
+
+        for mes_ano, valor in pares_externo:
+            registros.append({
+                'mercado': 'Externo',
                 'mes_ano': mes_ano,
                 'valor': valor,
             })
