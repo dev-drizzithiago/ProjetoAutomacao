@@ -203,14 +203,21 @@ class LeituraPdf:
 
         resumo_declaracao = re.compile(r'2\.6\)\s*Resumo\ da\ Declaração\s*.*?(?=2\.7\))', flags)
         buscar_resumo_declaracao = resumo_declaracao.search(texto)
-        bloco_26 = buscar_resumo_declaracao.group(0)
-        print(bloco_26)
+        bloco_26 = buscar_resumo_declaracao.group(0) if buscar_resumo_declaracao else ''
 
-        compile_resumo_26 = re.compile(r'Valor\ Total\ do Débito\ Declarado\s*\(R\$\)', flags)
+        compile_resumo_26 = re.compile(r'\s*\(R\$\).*?([0-9.,]+).*?([0-9.,]+)', flags)
         busca_compile_resumo_26 = compile_resumo_26.search(bloco_26)
-        bloco_26_group = busca_compile_resumo_26
+        bloco_26_valor_auferida = busca_compile_resumo_26.group(1)
+        bloco_26_valor_debito_declarado = busca_compile_resumo_26.group(2)
+        # print(bloco_26_valor_auferida, bloco_26_valor_debito_declarado)
 
-        print(bloco_26_group)
+        compile_bloco_27 = re.compile(
+            r"""2\.7\)\s*Informações\ da\ Declaração\ por\ Estabelecimento\s*.*?(?=2\.8\))""",
+            flags
+        )
+        busca_compile_bloco_27 = compile_bloco_27.search(texto)
+
+        print(busca_compile_bloco_27)
 
         registros = {
             'periodo': periodo,
