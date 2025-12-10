@@ -190,10 +190,13 @@ class LeituraPdf:
         # print(resultado_f_salarios)
 
         sal_anteriores = re.compile(
-            r'2\.3\.1\)\s*Total\ de\ Folhas\ de\ Salários\ Anteriores.*?(R\$\).*?)\s*R\$\s*([0-9\.,]+)',
+            r'2\.3\.1\)\s*Total\ de\ Folhas\ de\ Salários\ Anteriores.*?(\s*R\$\s*\).*?)\s*R\$\s*([0-9\.,]+)',
             flags)
-        busca_sal_anteriores = sal_anteriores.search(texto).group(1)
-        print(busca_sal_anteriores)
+        busca_sal_anteriores = sal_anteriores.search(texto).group(2)
+
+        fator_r = re.compile(
+            r""
+        )
 
         registros = {
             'periodo': periodo,
