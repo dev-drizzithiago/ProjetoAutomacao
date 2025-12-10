@@ -78,7 +78,7 @@ class LeituraPdf:
         flags = re.DOTALL | re.VERBOSE | re.IGNORECASE
         texto = self.texto_completo
 
-        print(texto)
+        # print(texto)
 
         periodo = self.buscar_ocorrencia(
             r"Período de Apuração:.*?([0-9]{2}/[0-9]{2}/[0-9]{4}\s*a\s*[0-9]{2}/[0-9]{2}/[0-9]{4})",
@@ -197,7 +197,7 @@ class LeituraPdf:
         fator_r = re.compile(r"2\.4\)\s*Fator\ r.*?(?=2\.5\))", flags)
         busca_fator_r = fator_r.search(texto)
         bloco_24 = busca_fator_r.group(0)
-        bloco_24_fator_r = re.compile('Fator\ r.s*\s*.*?([0-9.,]+)')
+        bloco_24_fator_r = re.compile('Fator r.s*\s*.*?([0-9.,]+)')
         bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24)
         # print(bloco_24_fator_r_busca.group(1))
 
@@ -216,7 +216,9 @@ class LeituraPdf:
             flags
         )
         busca_compile_bloco_27 = compile_bloco_27.search(texto)
-        compile_bloco_27_sublime_receita_anual = re.compile(r'\s*Sublimite\ de\ Receita\ Anual\s*(\sR\$\s*):')
+        compile_bloco_27_sublime_receita_anual = re.compile(
+            r'\s*Sublimite\ de\ Receita\ Anual\s*(\sR\$\s*).*?([0-9.,]+)', flags
+        )
 
         bloco_27 = busca_compile_bloco_27.group(0) if busca_compile_bloco_27 else ''
 
