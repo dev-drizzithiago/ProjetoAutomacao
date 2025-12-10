@@ -156,6 +156,7 @@ class LeituraPdf:
         busca_f_salario = f_salario.search(texto).group()
         valores_f_salarios = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
         resultado_f_salarios = valores_f_salarios.findall(busca_f_salario) if busca_f_salario else []
+        print(resultado_f_salarios)
 
         fator_r = re.compile(r'2\.4\)\s*Fator\.*?(?=2\.5\))', flags)
         busca_fator_r = fator_r.search(texto)
