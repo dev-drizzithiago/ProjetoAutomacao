@@ -139,12 +139,14 @@ class LeituraPdf:
             texto,
             flags=re.DOTALL
         )
+        print(RBA)
 
         RBAA = self.buscar_ocorrencia(
             r"\(RBAA\)\s*([0-9\.,]+)",
             texto,
             flags=re.DOTALL
         )
+        print(RBAA)
 
         limite_receita_1, limite_receita_2 = self.buscar_duplo(
             r"Limite de receita bruta proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
