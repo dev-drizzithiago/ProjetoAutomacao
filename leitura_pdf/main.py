@@ -75,7 +75,7 @@ class LeituraPdf:
         return (m.group(1), m.group(2)) if m else default
 
     def extrair_campos_com_regex(self):
-        flags = re.DOTALL | re.IGNORECASE
+        flags = re.DOTALL | re.VERBOSE | re.IGNORECASE
         texto = self.texto_completo
 
         print(texto)
@@ -196,7 +196,7 @@ class LeituraPdf:
         busca_sal_anteriores = sal_anteriores.search(texto).group(2)
 
         fator_r = re.compile(
-            r"2\.4\)\s*Fator\ r\.*?(?=2\.5\))", flags
+            r"2\.4\)\s*Fator\ r.*?(?=2\.5\))", flags
         )
         busca_fator_r = fator_r.search(texto)
 
