@@ -195,8 +195,11 @@ class LeituraPdf:
         busca_sal_anteriores = sal_anteriores.search(texto).group(2)
 
         fator_r = re.compile(
-            r""
+            r"2\.4\)\s*Fator\ r\.*?"
         )
+        busca_fator_r = fator_r.search(texto)
+
+        print(busca_fator_r.group())
 
         registros = {
             'periodo': periodo,
