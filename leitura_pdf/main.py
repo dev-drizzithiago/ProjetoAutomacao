@@ -194,23 +194,21 @@ class LeituraPdf:
             flags)
         busca_sal_anteriores = sal_anteriores.search(texto).group(2)
 
-        fator_r = re.compile(
-            r"2\.4\)\s*Fator\ r.*?(?=2\.5\))", flags
-        )
+        fator_r = re.compile(r"2\.4\)\s*Fator\ r.*?(?=2\.5\))", flags)
         busca_fator_r = fator_r.search(texto)
         bloco_24 = busca_fator_r.group(0)
         bloco_24_fator_r = re.compile('Fator\ r.s*\s*.*?([0-9.,]+)')
-
         bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24)
         # print(bloco_24_fator_r_busca.group(1))
 
         resumo_declaracao = re.compile(r'2\.6\)\s*Resumo\ da\ Declaração\s*.*?(?=2\.7\))', flags)
         buscar_resumo_declaracao = resumo_declaracao.search(texto)
-        bloco_26 = buscar_resumo_declaracao.group(0)
         compile_resumo_26 = re.compile(r'.*?([0-9.,]+)')
-        busca_compile_resumo_26 = compile_resumo_26.search(bloco_26)
+        busca_bloco_26 = compile_resumo_26.search(buscar_resumo_declaracao)
+        busca_compile_resumo_26 = compile_resumo_26.search(busca_bloco_26)
+        bloco_26 = busca_compile_resumo_26.group(1)
 
-        print(busca_compile_resumo_26)
+        print(bloco_26)
 
         registros = {
             'periodo': periodo,
