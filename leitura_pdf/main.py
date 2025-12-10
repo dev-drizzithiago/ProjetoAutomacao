@@ -233,7 +233,7 @@ class LeituraPdf:
         bloco_27_receita_bruta_infomada = re.compile(
             r'Receita\ Bruta\ Informada:\s*(\s*R\$\s*).*?([0-9.,]+)', flags)
         receita_bruta_infomada = bloco_27_receita_bruta_infomada.search(bloco_27).group(2) if busca_compile_bloco_27 else ''
-        # print(receita_bruta_infomada)
+        print(receita_bruta_infomada)
 
         bloco_27_impostos = re.compile(r'\s*IRPJ.*?\s*Totais\ do\ Estabelecimento', flags)
         impostos = bloco_27_impostos.search(bloco_27).group()
@@ -241,7 +241,7 @@ class LeituraPdf:
             r'\s*Total\s*'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+).'
+            r'.*?([0-9.,]+)'
             r'*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
