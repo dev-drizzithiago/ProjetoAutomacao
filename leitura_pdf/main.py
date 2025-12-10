@@ -212,12 +212,18 @@ class LeituraPdf:
         # print(bloco_26_valor_auferida, bloco_26_valor_debito_declarado)
 
         compile_bloco_27 = re.compile(
-            r"""2\.7\)\s*Informações\ da\ Declaração\ por\ Estabelecimento\s*.*?(?=2\.8\))""",
+            r"\.7\)\s*Informações\ da\ Declaração\ por\ Estabelecimento\s*.*?(?=2\.8\))",
             flags
         )
         busca_compile_bloco_27 = compile_bloco_27.search(texto)
+        compile_bloco_27_sublime_receita_anual = re.compile(r'\s*Sublimite\ de\ Receita\ Anual\s*(\sR\$\s*):')
 
-        print(busca_compile_bloco_27)
+        bloco_27 = busca_compile_bloco_27.group(0) if busca_compile_bloco_27 else ''
+
+        busca_bloco_27_sublime_receita_anual = compile_bloco_27_sublime_receita_anual.search(bloco_27)
+
+        print()
+        print(busca_bloco_27_sublime_receita_anual)
 
         registros = {
             'periodo': periodo,
