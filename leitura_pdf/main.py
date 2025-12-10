@@ -237,10 +237,20 @@ class LeituraPdf:
 
         bloco_27_impostos = re.compile(r'\s*IRPJ.*?\s*Totais\ do\ Estabelecimento', flags)
         impostos = bloco_27_impostos.search(bloco_27).group()
-        bloco_27_busca_impostos = re.compile(
-            r''
+        bloco_27_compile_impostos = re.compile(
+            r'\s*Total\s*'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+).'
+            r'*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)', flags
         )
-        print(impostos)
+        busca_valores_impostos = bloco_27_compile_impostos.search(impostos).group()
+        print(busca_valores_impostos)
 
 
 
