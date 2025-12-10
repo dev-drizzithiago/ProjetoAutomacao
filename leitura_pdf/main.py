@@ -156,9 +156,8 @@ class LeituraPdf:
         busca_f_salario = f_salario.search(texto).group()
         valores_f_salarios = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
         resultado_f_salarios = valores_f_salarios.findall(busca_f_salario) if busca_f_salario else []
-        print(resultado_f_salarios)
 
-        fator_r = re.compile(r'2\.4\)\s*Fator\.*?(?=2\.5\))', flags)
+        fator_r = re.compile(r'2\.3\.1\)\s*Total de Folhas de Salários Anteriores (R$)\.*?', flags)
         busca_fator_r = fator_r.search(texto)
         print(busca_fator_r)
 
@@ -180,7 +179,7 @@ class LeituraPdf:
         }
 
         # for k, v in registros.items():
-        #         #     print(f'{k} - {v}')
+        #     print(f'{k} - {v}')
 
         # df = pd.DataFrame(registros).sort_values(by=['mercado', 'mes_ano']).reset_index(drop=True)
 
