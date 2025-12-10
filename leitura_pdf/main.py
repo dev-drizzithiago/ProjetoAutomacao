@@ -204,11 +204,13 @@ class LeituraPdf:
         bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24)
         # print(bloco_24_fator_r_busca.group(1))
 
-        resumo_declaracao = re.compile(
-            r'2\.6\)\s*Resumo\ da\ Declaração\s*\*?(?=2\.7\))', flags
-        )
+        resumo_declaracao = re.compile(r'2\.6\)\s*Resumo\ da\ Declaração\s*.*?(?=2\.7\))', flags)
         buscar_resumo_declaracao = resumo_declaracao.search(texto)
-        print(buscar_resumo_declaracao)
+        bloco_26 = buscar_resumo_declaracao.group(0)
+        compile_resumo_26 = re.compile(r'.*?([0-9.,]+)')
+        busca_compile_resumo_26 = compile_resumo_26.search(bloco_26)
+
+        print(busca_compile_resumo_26)
 
         registros = {
             'periodo': periodo,
