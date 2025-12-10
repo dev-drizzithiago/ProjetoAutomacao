@@ -157,7 +157,7 @@ class LeituraPdf:
         valores_f_salarios = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
         resultado_f_salarios = valores_f_salarios.findall(busca_f_salario) if busca_f_salario else []
 
-        fator_r = re.compile(r'2\.3\.1\)\s*Total de Folhas de Salários Anteriores (R$)\.*?', flags)
+        fator_r = re.compile(r'2\.3\.1\)\s*Total\ de\ Folhas\ de\ Salários\ Anteriores', flags)
         busca_fator_r = fator_r.search(texto)
         print(busca_fator_r)
 
