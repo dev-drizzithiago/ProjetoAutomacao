@@ -247,10 +247,24 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)', flags
         )
-        busca_valores_impostos = bloco_27_compile_impostos.search(impostos).group()
-        print(busca_valores_impostos)
+        busca_valores_impostos = bloco_27_compile_impostos.search(impostos)
+        tributos_01 = {
+            'IRPJ': busca_valores_impostos.group(1),
+            'CSLL': busca_valores_impostos.group(2),
+            'COFINS': busca_valores_impostos.group(3),
+            'PIS/Pasep': busca_valores_impostos.group(4),
+            'INSS/CPP': busca_valores_impostos.group(5),
+            'ICMS': busca_valores_impostos.group(6),
+            'IPI': busca_valores_impostos.group(7),
+            'ISS': busca_valores_impostos.group(8),
+            'Total': busca_valores_impostos.group(9),
+            'Parcela 1': busca_valores_impostos.group(11),
+        }
+        print(tributos_01)
 
 
 
