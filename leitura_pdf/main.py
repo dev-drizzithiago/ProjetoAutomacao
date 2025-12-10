@@ -217,15 +217,32 @@ class LeituraPdf:
         )
         busca_compile_bloco_27 = compile_bloco_27.search(texto)
         compile_bloco_27_sublime_receita_anual = re.compile(
-            r'\s*Sublimite\ de\ Receita\ Anual\s*(\sR\$\s*).*?([0-9.,]+)', flags
+            r'\s*Sublimite\ de\ Receita\ Anual.*?([0-9.,]+)', flags
         )
-
         bloco_27 = busca_compile_bloco_27.group(0) if busca_compile_bloco_27 else ''
 
         busca_bloco_27_sublime_receita_anual = compile_bloco_27_sublime_receita_anual.search(bloco_27)
+        sublime_receita_anual = busca_bloco_27_sublime_receita_anual.group(1) if busca_compile_bloco_27 else ''
+        # print(bloco_27_sublime_receita_anual)
 
-        print()
-        print(busca_bloco_27_sublime_receita_anual)
+        bloco_27_recolher_imcs_iss = re.compile(
+            r'\s*Impedido\ de\ recolher\ ICMS/ISS\ no\ DAS:\s*.*?([^\n]+)',flags)
+        recolher_imcs_iss = bloco_27_recolher_imcs_iss.search(bloco_27).group(1) if busca_compile_bloco_27 else ''
+        # print(recolher_imcs_iss)
+
+        bloco_27_receita_bruta_infomada = re.compile(
+            r'Receita\ Bruta\ Informada:\s*(\s*R\$\s*).*?([0-9.,]+)', flags)
+        receita_bruta_infomada = bloco_27_receita_bruta_infomada.search(bloco_27).group(2) if busca_compile_bloco_27 else ''
+        # print(receita_bruta_infomada)
+
+        bloco_27_impostos = re.compile(r'\s*IRPJ.*?\s*Totais\ do\ Estabelecimento', flags)
+        impostos = bloco_27_impostos.search(bloco_27).group()
+        bloco_27_busca_impostos = re.compile(
+            r''
+        )
+        print(impostos)
+
+
 
         registros = {
             'periodo': periodo,
