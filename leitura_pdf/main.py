@@ -182,7 +182,6 @@ class LeituraPdf:
         pares_interno = padrao_par.findall(bloco_interno) if bloco_interno else []
         pares_externo = padrao_par.findall(bloco_externo) if bloco_externo else []
 
-
         f_salario = re.compile(r'2\.3\)\s*Folha\ de\ Salários\ Anteriores\s*\(R\$\).*?(?=2\.4\))', flags)
         busca_f_salario = f_salario.search(texto).group()
 
@@ -199,8 +198,17 @@ class LeituraPdf:
             r"2\.4\)\s*Fator\ r.*?(?=2\.5\))", flags
         )
         busca_fator_r = fator_r.search(texto)
+        bloco_24 = busca_fator_r.group(0)
+        bloco_24_fator_r = re.compile('Fator\ r.s*\s*.*?([0-9.,]+)')
 
-        print(busca_fator_r)
+        bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24)
+        # print(bloco_24_fator_r_busca.group(1))
+
+        resumo_declaracao = re.compile(
+            r'2\.6\)\s*Resumo\ da\ Declaração\s*\*?(?=2\.7\))', flags
+        )
+        buscar_resumo_declaracao = resumo_declaracao.search(texto)
+        print(buscar_resumo_declaracao)
 
         registros = {
             'periodo': periodo,
