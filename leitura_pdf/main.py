@@ -196,7 +196,7 @@ class LeituraPdf:
         busca_sal_anteriores = sal_anteriores.search(texto).group(2)
 
         fator_r = re.compile(
-            r"2\.4\)\s*Fator\ r\.*?(=)\s*([0-9\.,]+)", flags
+            r"Fator\ r\. =\.*?()", flags
         )
         busca_fator_r = fator_r.search(texto)
 
