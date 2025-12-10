@@ -4,6 +4,37 @@
 . → qualquer caractere (exceto \n, a menos que você use re.DOTALL);
 * → zero ou mais ocorrências;
 ? → modo não guloso (lazy), ou seja, vai pegar o mínimo necessário até conseguir casar a próxima parte da expressão.
+
+
+1) Como o regex engine lê isso
+
+
+2\.3\.1\) → casa literalmente 2.3.1).
+
+
+\s* → espaços/brancos opcionais.
+
+
+Total\ de\ Folhas\ de\ Salários\ Anteriores → cabeçalho literal.
+
+
+.*? → lazy (mínimo possível) até encontrar o próximo trecho.
+
+
+(R\$\).*?) → aqui há um ponto sensível:
+
+( abre um grupo de captura.
+R\$\) → casa R$) (atenção: você está escapando ) como literal, mas no texto real provavelmente existe (R$), não R$). Se o texto for ... (R$) ..., o padrão deveria ser \(\s*R\$\s*\) para bater com os parênteses.
+.*? continua lazy,
+) fecha o grupo 1.
+
+
+
+\s*R\$\s* → encontra outro R$ (fora de parênteses).
+
+
+([0-9\.,]+) → grupo 2: captura o número (ex.: 63.922,03).
+
 """
 
 from PyPDF2 import PdfReader
