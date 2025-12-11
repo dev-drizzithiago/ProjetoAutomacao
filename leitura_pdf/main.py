@@ -277,7 +277,7 @@ class LeituraPdf:
         # print(totais_estabelecimentos)
 
         bloco_27_total_debito_declarado = re.compile(
-            r'\s*Total\ do\ Débito\ Declarado\ (\s*exigível\ + suspenso\s*).*'
+            r'Total\ do\ Débito\ Declarado\s*\(\s*exigível\s*\+\s*suspenso\s*\).*'
 
         )
         total_debito_exigibilidade = bloco_27_total_debito_declarado.search(bloco_27)
