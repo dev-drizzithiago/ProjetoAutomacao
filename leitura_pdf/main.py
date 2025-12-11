@@ -139,14 +139,14 @@ class LeituraPdf:
             texto,
             flags=re.DOTALL
         )
-        print(RBA)
+        # print(RBA)
 
         RBAA = self.buscar_ocorrencia(
             r"\(RBAA\)\s*([0-9\.,]+)",
             texto,
             flags=re.DOTALL
         )
-        print(RBAA)
+        # print(RBAA)
 
         limite_receita_1, limite_receita_2 = self.buscar_duplo(
             r"Limite de receita bruta proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
@@ -214,7 +214,7 @@ class LeituraPdf:
         # print(bloco_26_valor_auferida, bloco_26_valor_debito_declarado)
 
         compile_bloco_27 = re.compile(
-            r"\.7\)\s*Informações\ da\ Declaração\ por\ Estabelecimento\s*.*?(?=2\.8\))",
+            r"2\.7\)\s*Informações\ da\ Declaração\ por\ Estabelecimento\s*.*?(?=2\.8\))",
             flags
         )
         busca_compile_bloco_27 = compile_bloco_27.search(texto)
@@ -269,9 +269,9 @@ class LeituraPdf:
         # print(tributos_01)
 
         bloco_27_totais_estabelecimentos = re.compile(
-            r'\s*Valor\ Informado:\.*'
+            r'\s*Valor\ Informado\s*.*([0-9.,]+)'
         )
-        totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(texto)
+        totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(bloco_27)
         print(totais_estabelecimentos)
 
         registros = {
