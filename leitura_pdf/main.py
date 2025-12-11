@@ -78,6 +78,8 @@ class LeituraPdf:
         flags = re.DOTALL | re.VERBOSE | re.IGNORECASE
         texto = self.texto_completo
 
+        registros = dict()
+
         # print(texto)
 
         periodo = self.buscar_ocorrencia(
@@ -269,10 +271,16 @@ class LeituraPdf:
         # print(tributos_01)
 
         bloco_27_totais_estabelecimentos = re.compile(
-            r'\s*Valor\ Informado\s*.*?([0-9.,]+)'
+            r'\s*Valor\ Informado\s*.*?([0-9.,]+)', flags
         )
         totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(bloco_27).group(1)
-        print(totais_estabelecimentos)
+        # print(totais_estabelecimentos)
+
+        bloco_27_total_debito_declarado = re.compile(
+            r'\s*Total\ do\ Débito\ Declarado\s*.*?\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa\s*(\s*R\$\s*)'
+        )
+        total_debito_exigibilidade = bloco_27_total_debito_declarado.search(bloco_27)
+        print(total_debito_exigibilidade)
 
         registros = {
             'periodo': periodo,
