@@ -75,7 +75,7 @@ class LeituraPdf:
         return (m.group(1), m.group(2)) if m else default
 
     def extrair_campos_com_regex(self):
-        flags = re.DOTALL | re.VERBOSE | re.IGNORECASE
+        flags = re.DOTALL | re.VERBOSE | re.IGNORECASE | re.MULTILINE
         texto = self.texto_completo
 
         registros = dict()
@@ -277,10 +277,12 @@ class LeituraPdf:
         # print(totais_estabelecimentos)
 
         bloco_27_total_debito_declarado = re.compile(
-            r'Total\ do\ Débito\ Declarado\s*\(\s*exigível\s*\+\s*suspenso\s*\).*'
-
+            r'Total\ do\ Débito\ Declarado\s*\(\s*exigível\s*\+\s*suspenso\s*\)'
+            r'.*?'
+            r'(?=^\s*Total\ do\ Débito\ Exigível)',
+            flags
         )
-        total_debito_exigibilidade = bloco_27_total_debito_declarado.search(bloco_27)
+        total_debito_exigibilidade = bloco_27_total_debito_declarado.search(bloco_27).group()
         print(total_debito_exigibilidade)
 
         registros = {
