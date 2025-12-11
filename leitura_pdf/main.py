@@ -235,7 +235,7 @@ class LeituraPdf:
         bloco_27_receita_bruta_infomada = re.compile(
             r'Receita\ Bruta\ Informada:\s*(\s*R\$\s*).*?([0-9.,]+)', flags)
         receita_bruta_infomada = bloco_27_receita_bruta_infomada.search(bloco_27).group(2) if busca_compile_bloco_27 else ''
-        print(receita_bruta_infomada)
+        # print(receita_bruta_infomada)
 
         bloco_27_impostos = re.compile(r'\s*IRPJ.*?\s*Totais\ do\ Estabelecimento', flags)
         impostos = bloco_27_impostos.search(bloco_27).group()
@@ -266,9 +266,13 @@ class LeituraPdf:
             'Total': busca_valores_impostos.group(9),
             'Parcela 1': busca_valores_impostos.group(11),
         }
-        print(tributos_01)
+        # print(tributos_01)
 
-
+        bloco_27_totais_estabelecimentos = re.compile(
+            r'\s*Valor\ Informado:\.*'
+        )
+        totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(texto).group()
+        print(totais_estabelecimentos)
 
         registros = {
             'periodo': periodo,
