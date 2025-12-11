@@ -269,9 +269,9 @@ class LeituraPdf:
         # print(tributos_01)
 
         bloco_27_totais_estabelecimentos = re.compile(
-            r'\s*Valor\ Informado\s*.*([0-9.,]+)'
+            r'\s*Valor\ Informado\s*.*?([0-9.,]+)'
         )
-        totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(bloco_27)
+        totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(bloco_27).group(1)
         print(totais_estabelecimentos)
 
         registros = {
