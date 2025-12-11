@@ -271,7 +271,7 @@ class LeituraPdf:
         bloco_27_totais_estabelecimentos = re.compile(
             r'\s*Valor\ Informado:\.*'
         )
-        totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(texto).group()
+        totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(texto)
         print(totais_estabelecimentos)
 
         registros = {
