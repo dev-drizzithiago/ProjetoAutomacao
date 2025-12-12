@@ -297,7 +297,6 @@ class LeituraPdf:
             flags
         )
         busca_debito_declarado = valor_debito_declarado.search(total_debito_declarado_busca)
-
         total_debito_declarado_ = {
             'total_debito_declarado_': {
                 'IRPJ': busca_debito_declarado.group(1),
@@ -311,8 +310,42 @@ class LeituraPdf:
                 'Total ': busca_debito_declarado.group(9),
             }
         }
-        print(total_debito_declarado_['total_debito_declarado_'])
 
+        bloco_27_total_debito_com_exigibilidade_suspensa = re.compile(
+            r'Total\ do\ Débito\ com\ Exigibilidade\ Suspensa'
+            r'.*?'
+            r'(?=^\s*Total\ do\ Débito\ Exigível)',
+            flags
+        )
+        total_debito_exigibilidade_suspensa = bloco_27_total_debito_com_exigibilidade_suspensa.search(bloco_27).group()
+        valor_debito_exigibilidade_suspensa = re.compile(
+            r'\s*ISS\s*'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)',
+            flags
+        )
+        busca_debito_exigibilidade_suspensa = valor_debito_exigibilidade_suspensa.search(total_debito_exigibilidade_suspensa)
+        total_debito_exigibilidade_suspensa_ = {
+            'total_debito_exigibilidade_suspensa_': {
+                'IRPJ': busca_debito_exigibilidade_suspensa.group(1),
+                'CSLL': busca_debito_exigibilidade_suspensa.group(2),
+                'COFINS': busca_debito_exigibilidade_suspensa.group(3),
+                'PIS/Pasep': busca_debito_exigibilidade_suspensa.group(4),
+                'INSS/CPP': busca_debito_exigibilidade_suspensa.group(5),
+                'ICMS': busca_debito_exigibilidade_suspensa.group(6),
+                'IPI': busca_debito_exigibilidade_suspensa.group(7),
+                'ISS ': busca_debito_exigibilidade_suspensa.group(8),
+                'Total ': busca_debito_exigibilidade_suspensa.group(9),
+            }
+        }
+        print(total_debito_exigibilidade_suspensa_)
         registros = {
             'periodo': periodo,
             'cnpj_matriz': cnpj_matriz,
