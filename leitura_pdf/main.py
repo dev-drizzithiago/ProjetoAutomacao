@@ -466,17 +466,17 @@ class LeituraPdf:
         valor_tot_debit_exigi = re.compile(
             r'\s*ISS\s*'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,])'
+            r'.*?([0-9.,])'
+            r'.*?([0-9.,])'
+            r'.*?([0-9.,])'
+            r'.*?([0-9.,])'
+            r'.*?([0-9.,])'
+            r'.*?([0-9.,])'
             r'.*?([0-9.,]+)',
             flags
         )
-        busca_valores_tot_debit_exigi = valor_tot_debit_exigi.search(busca_compile_28_tot_debit_exigi_suspensa)
+        busca_valores_tot_debit_exigi = valor_tot_debit_exigi.search(busca_compile_28_tot_debit_exigi).group()
         print(busca_valores_tot_debit_exigi)
 
 
