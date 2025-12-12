@@ -278,12 +278,18 @@ class LeituraPdf:
 
         bloco_27_total_debito_declarado = re.compile(
             r'Total\ do\ Débito\ Declarado\s*\(\s*exigível\s*\+\s*suspenso\s*\)'
-            r'.*?IRPJ.*?'
+            r'.*?'
             r'(?=^\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa)',
             flags
         )
-        total_debito_exigibilidade = bloco_27_total_debito_declarado.search(bloco_27).group()
-        print(total_debito_exigibilidade)
+        total_debito_declarado_busca = bloco_27_total_debito_declarado.search(bloco_27).group()
+        valor_debito_declarado = re.compile(
+            r'\s*ISS\s*'
+            r'.*?([0-9.,]+)',
+            flags
+        )
+        busca_debito_declarado = valor_debito_declarado.search(total_debito_declarado_busca)
+        print(busca_debito_declarado)
 
         registros = {
             'periodo': periodo,
