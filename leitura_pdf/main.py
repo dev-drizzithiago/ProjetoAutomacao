@@ -147,13 +147,20 @@ class LeituraPdf:
             flags=re.DOTALL
         )
 
-        limite_receita_1, limite_receita_2 = self.buscar_duplo(
-            r"Limite de receita bruta proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
+        mercado_interno, mercado_exteno = self.buscar_duplo(
+            r"\s*Limite\ de\ receita\ bruta\ proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
             texto,
             flags=flags,
         )
-        print(limite_receita_1)
-        print(limite_receita_2)
+        print(mercado_interno)
+        print(mercado_exteno)
+
+        limite_receita_bruta_proporcionalizado = {
+            'receita_bruta_proporcionalizado': {
+                'mercado_interno': mercado_interno,
+                'mercado_exteno': mercado_exteno,
+            }
+        }
 
         # 1) Pega apenas o bloco 2.2) ... até 2.3)
         m_bloco = re.search(r'2\.2\)\s*Receitas Brutas Anteriores.*?(2\.3\))', texto, flags)
@@ -593,7 +600,7 @@ class LeituraPdf:
             }
         }
 
-        print(registros)
+        # print(registros)
 
         # for k, v in registros.items():
         #     print(f'{k} - {v}')
