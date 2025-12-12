@@ -214,7 +214,7 @@ class LeituraPdf:
         bloco_26_valor_auferida = busca_compile_resumo_26.group(1)
         bloco_26_valor_debito_declarado = busca_compile_resumo_26.group(2)
         # print(bloco_26_valor_auferida, bloco_26_valor_debito_declarado)
-        
+
         ## -------------------------------------------------------------------------------------------------------------
         compile_bloco_27 = re.compile(
             r"2\.7\)\s*Informações\ da\ Declaração\ por\ Estabelecimento\s*.*?(?=2\.8\))",
