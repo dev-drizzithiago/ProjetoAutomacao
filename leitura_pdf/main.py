@@ -509,6 +509,10 @@ class LeituraPdf:
             'RBA': RBA,
             'RBT12': RBT12,
             'RBAA': RBAA,
+            'receita_bruta_proporcionalizado': {
+                'mercado_interno': mercado_interno,
+                'mercado_exteno': mercado_exteno,
+            },
             'interno': {k: v for (k, v) in pares_interno},
             'externo': {k: v for (k, v) in pares_externo},
             'f_salarios': {k: v for (k, v) in resultado_f_salarios},
