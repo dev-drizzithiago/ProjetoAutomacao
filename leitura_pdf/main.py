@@ -411,7 +411,6 @@ class LeituraPdf:
             flags
         )
         busca_valores_tot_debit_declarado = valores_tot_debit_declarado.search(busca_tot_debit_declarado)
-
         dados_valores_tot_debit_declarado = {
             'total_debito_declarado': {
                 'IRPJ': busca_valores_tot_debit_declarado.group(1),
@@ -427,8 +426,11 @@ class LeituraPdf:
         }
 
         compile_28_tot_debit_exigi_suspensa = re.compile(
-            r'Total do Débito com Exigibilidade Suspensa (R$)'
+            r'\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa',
+            flags
         )
+        busca_compile_28_tot_debit_exigi_suspensa = compile_28_tot_debit_exigi_suspensa.search(busca_texto_compile_28)
+        print(busca_compile_28_tot_debit_exigi_suspensa)
 
         registros = {
             'periodo': periodo,
