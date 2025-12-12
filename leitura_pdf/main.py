@@ -200,6 +200,8 @@ class LeituraPdf:
         bloco_24_fator_r = re.compile('Fator r.s*\s*.*?([0-9.,]+)')
         bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24)
 
+        ## -------------------------------------------------------------------------------------------------------------
+        # BLOCO 2.6 ----------------------------------------------------------------------------------------------------
         resumo_declaracao = re.compile(r'2\.6\)\s*Resumo\ da\ Declaração\s*.*?(?=2\.7\))', flags)
         buscar_resumo_declaracao = resumo_declaracao.search(texto)
         bloco_26 = buscar_resumo_declaracao.group(0) if buscar_resumo_declaracao else ''
