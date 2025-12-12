@@ -465,6 +465,14 @@ class LeituraPdf:
         busca_compile_28_tot_debit_exigi = compile_28_tot_debit_exigi.search(busca_texto_compile_28).group()
         valor_tot_debit_exigi = re.compile(
             r'\s*ISS\s*'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)',
             flags
         )
