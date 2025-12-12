@@ -353,8 +353,12 @@ class LeituraPdf:
             r'Total\ do\ Débito\ Exigível.*',
             flags
         )
-        total_debito_exigivel = bloco_27_total_debito_exigivel.search(bloco_27).group()
-        print(total_debito_exigivel)
+        total_debito_exigivel = bloco_27_total_debito_exigivel.search(bloco_27).group(0)
+        valor_debito_exigivel = re.compile(
+            r'\s*ISS\s*'
+        )
+        busca_debito_exigivel = valor_debito_exigivel.search(total_debito_exigivel)
+        print(busca_debito_exigivel)
 
         registros = {
             'periodo': periodo,
