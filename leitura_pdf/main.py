@@ -350,9 +350,9 @@ class LeituraPdf:
         }
 
         bloco_27_total_debito_Exigível = re.compile(
-            r'Total\ do\ Débito\ Exigível\s*(\s*R\$\s*)'
+            r'Total\ do\ Débito\ Exigível'
             r'.*?'
-            r'(?=^2\.8\))',
+            r'(?=^\s*Total\ Geral\ da\ Empresa)',
             flags
         )
         total_debito_Exigível = bloco_27_total_debito_Exigível.search(bloco_27)
