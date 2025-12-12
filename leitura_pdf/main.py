@@ -277,6 +277,7 @@ class LeituraPdf:
         totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(bloco_27).group(1)
         # print(totais_estabelecimentos)
 
+        # Total do Débito Declarado (exigível + suspenso)
         bloco_27_total_debito_declarado = re.compile(
             r'Total\ do\ Débito\ Declarado\s*\(\s*exigível\s*\+\s*suspenso\s*\)'
             r'.*?'
@@ -312,6 +313,7 @@ class LeituraPdf:
             }
         }
 
+        # Total do Débito com Exigibilidade Suspensa (R$)
         bloco_27_total_debito_com_exigibilidade_suspensa = re.compile(
             r'Total\ do\ Débito\ com\ Exigibilidade\ Suspensa'
             r'.*?'
@@ -347,6 +349,14 @@ class LeituraPdf:
             }
         }
 
+        bloco_27_total_debito_Exigível = re.compile(
+            r'Total\ do\ Débito\ Exigível\s*(\s*R\$\s*)'
+            r'.*?'
+            r'(?=^2\.8\))',
+            flags
+        )
+        total_debito_Exigível = bloco_27_total_debito_Exigível.search(bloco_27)
+        print(total_debito_Exigível)
 
         registros = {
             'periodo': periodo,
