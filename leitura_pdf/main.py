@@ -367,8 +367,22 @@ class LeituraPdf:
             r'.*?([0-9.,]+)',
             flags
         )
-        busca_debito_exigivel = valor_debito_exigivel.search(total_debito_exigivel).group()
-        print(busca_debito_exigivel)
+        busca_debito_exigivel = valor_debito_exigivel.search(total_debito_exigivel)
+        dict_total_debito_exigivel = {
+            'total_debito_exigivel': {
+                'IRPJ': busca_debito_exigivel.group(1),
+                'CSLL': busca_debito_exigivel.group(2),
+                'COFINS': busca_debito_exigivel.group(3),
+                'PIS/Pasep': busca_debito_exigivel.group(4),
+                'INSS/CPP': busca_debito_exigivel.group(5),
+                'ICMS': busca_debito_exigivel.group(6),
+                'IPI': busca_debito_exigivel.group(7),
+                'ISS ': busca_debito_exigivel.group(8),
+                'Total ': busca_debito_exigivel.group(9),
+            }
+        }
+
+        print(dict_total_debito_exigivel)
 
         registros = {
             'periodo': periodo,
