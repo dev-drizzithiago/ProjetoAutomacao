@@ -228,17 +228,17 @@ class LeituraPdf:
         bloco_27 = busca_compile_bloco_27.group(0) if busca_compile_bloco_27 else ''
 
         busca_bloco_27_sublime_receita_anual = compile_bloco_27_sublime_receita_anual.search(bloco_27)
-        sublime_receita_anual = busca_bloco_27_sublime_receita_anual.group(1) if busca_compile_bloco_27 else ''
+        sublime_receita_anual = busca_bloco_27_sublime_receita_anual.group(1)
         print(sublime_receita_anual)
 
         bloco_27_recolher_imcs_iss = re.compile(
             r'\s*Impedido\ de\ recolher\ ICMS/ISS\ no\ DAS:\s*.*?([^\n]+)',flags)
-        recolher_imcs_iss = bloco_27_recolher_imcs_iss.search(bloco_27).group(1) if busca_compile_bloco_27 else ''
+        recolher_imcs_iss = bloco_27_recolher_imcs_iss.search(bloco_27).group(1)
         print(recolher_imcs_iss)
 
         bloco_27_receita_bruta_infomada = re.compile(
             r'Receita\ Bruta\ Informada:\s*(\s*R\$\s*).*?([0-9.,]+)', flags)
-        receita_bruta_infomada = bloco_27_receita_bruta_infomada.search(bloco_27).group(2) if busca_compile_bloco_27 else ''
+        receita_bruta_infomada = bloco_27_receita_bruta_infomada.search(bloco_27).group(2)
         print(receita_bruta_infomada)
 
         bloco_27_impostos = re.compile(r'\s*IRPJ.*?\s*Totais\ do\ Estabelecimento', flags)
