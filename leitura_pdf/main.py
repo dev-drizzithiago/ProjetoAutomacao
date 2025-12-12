@@ -353,7 +353,7 @@ class LeituraPdf:
             r'Total\ do\ Débito\ Exigível.*',
             flags
         )
-        total_debito_exigivel = bloco_27_total_debito_exigivel.search(bloco_27).group(0)
+        total_debito_exigivel = bloco_27_total_debito_exigivel.search(bloco_27).group()
         valor_debito_exigivel = re.compile(
             r'\s*ISS\s*'
             r'.*?([0-9.,]+)'
@@ -382,7 +382,50 @@ class LeituraPdf:
             }
         }
 
-        print(dict_total_debito_exigivel)
+        compile_28 = re.compile(
+            r'2\.8\)\s*Total\ Geral\ da\ Empresa'
+            r'.*?'
+            r'3\.\s*Informações\ da\ Recepção\ da\ Declaração',
+            flags
+        )
+        busca_texto_compile_28 = compile_28.search(texto).group()
+
+        compile_tot_debit_declarado = re.compile(
+            r'Total\ do\ Débito\ Declarado'
+            r'.*?'
+            r'(?=^\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa)',
+            flags
+        )
+        busca_tot_debit_declarado = compile_tot_debit_declarado.search(busca_texto_compile_28).group()
+        valores_tot_debit_declarado = re.compile(
+            r'\s*ISS\s*'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)',
+            flags
+        )
+        busca_valores_tot_debit_declarado = valores_tot_debit_declarado.search(busca_tot_debit_declarado)
+        print(busca_valores_tot_debit_declarado)
+
+        dados_valores_tot_debet_declarado = {
+            'total_debito_declarado': {
+                'IRPJ': busca_valores_tot_debit_declarado.group(1),
+                'CSLL': busca_valores_tot_debit_declarado.group(2),
+                'COFINS': busca_valores_tot_debit_declarado.group(3),
+                'PIS/Pasep': busca_valores_tot_debit_declarado.group(4),
+                'INSS/CPP': busca_valores_tot_debit_declarado.group(5),
+                'ICMS': busca_valores_tot_debit_declarado.group(6),
+                'IPI': busca_valores_tot_debit_declarado.group(7),
+                'ISS ': busca_valores_tot_debit_declarado.group(8),
+                'Total ': busca_valores_tot_debit_declarado.group(9),
+            }
+        }
 
         registros = {
             'periodo': periodo,
