@@ -330,7 +330,8 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)', flags
         )
-        busca_debito_exigibilidade_suspensa = valor_debito_exigibilidade_suspensa.search(total_debito_exigibilidade_suspensa)
+        busca_debito_exigibilidade_suspensa = valor_debito_exigibilidade_suspensa.search(
+            total_debito_exigibilidade_suspensa)
         total_debito_exigibilidade_suspensa_ = {
             'total_debito_exigibilidade_suspensa_': {
                 'IRPJ': busca_debito_exigibilidade_suspensa.group(1),
@@ -426,7 +427,8 @@ class LeituraPdf:
             r'.*?'
             r'Total\ do\ Débito\ Exigível', flags
         )
-        busca_compile_28_tot_debit_exigi_suspensa = compile_28_tot_debit_exigi_suspensa.search(busca_texto_compile_28).group()
+        busca_compile_28_tot_debit_exigi_suspensa = compile_28_tot_debit_exigi_suspensa.search(
+            busca_texto_compile_28).group()
         valor_tot_debit_exigi_suspensa = re.compile(
             r'\s*ISS\s*'
             r'.*?([0-9.,]+)'
@@ -440,7 +442,8 @@ class LeituraPdf:
             r'.*?([0-9.,]+)',
             flags
         )
-        busca_valores_tot_debit_exigi_suspensa = valor_tot_debit_exigi_suspensa.search(busca_compile_28_tot_debit_exigi_suspensa)
+        busca_valores_tot_debit_exigi_suspensa = valor_tot_debit_exigi_suspensa.search(
+            busca_compile_28_tot_debit_exigi_suspensa)
         dados_valores_tot_debit_exigi_suspensa = {
             'total_debito_exigi_suspensa': {
                 'IRPJ': busca_valores_tot_debit_exigi_suspensa.group(1),
