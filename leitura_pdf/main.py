@@ -246,7 +246,7 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
-            r'*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
@@ -285,11 +285,33 @@ class LeituraPdf:
         total_debito_declarado_busca = bloco_27_total_debito_declarado.search(bloco_27).group()
         valor_debito_declarado = re.compile(
             r'\s*ISS\s*'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)',
             flags
         )
-        busca_debito_declarado = valor_debito_declarado.search(total_debito_declarado_busca).group()
-        print(busca_debito_declarado)
+        busca_debito_declarado = valor_debito_declarado.search(total_debito_declarado_busca)
+
+        total_debito_declarado_ = {
+            'total_debito_declarado_': {
+                'IRPJ': busca_debito_declarado.group(1),
+                'CSLL': busca_debito_declarado.group(2),
+                'COFINS': busca_debito_declarado.group(3),
+                'PIS/Pasep': busca_debito_declarado.group(4),
+                'INSS/CPP': busca_debito_declarado.group(5),
+                'ICMS': busca_debito_declarado.group(6),
+                'IPI': busca_debito_declarado.group(7),
+                'ISS ': busca_debito_declarado.group(8),
+                'Total ': busca_debito_declarado.group(9),
+            }
+        }
+        print(total_debito_declarado_['total_debito_declarado_'])
 
         registros = {
             'periodo': periodo,
