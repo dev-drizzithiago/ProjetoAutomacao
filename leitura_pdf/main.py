@@ -356,8 +356,18 @@ class LeituraPdf:
         total_debito_exigivel = bloco_27_total_debito_exigivel.search(bloco_27).group(0)
         valor_debito_exigivel = re.compile(
             r'\s*ISS\s*'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)',
+            flags
         )
-        busca_debito_exigivel = valor_debito_exigivel.search(total_debito_exigivel)
+        busca_debito_exigivel = valor_debito_exigivel.search(total_debito_exigivel).group()
         print(busca_debito_exigivel)
 
         registros = {
