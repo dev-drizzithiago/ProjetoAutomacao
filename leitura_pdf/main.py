@@ -152,8 +152,6 @@ class LeituraPdf:
             texto,
             flags=flags,
         )
-        print(mercado_interno)
-        print(mercado_exteno)
 
         limite_receita_bruta_proporcionalizado = {
             'receita_bruta_proporcionalizado': {
@@ -604,7 +602,7 @@ class LeituraPdf:
             }
         }
 
-        # print(registros)
+        print(registros)
 
         # for k, v in registros.items():
         #     print(f'{k} - {v}')
