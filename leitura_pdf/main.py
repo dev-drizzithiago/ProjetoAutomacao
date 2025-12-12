@@ -194,6 +194,8 @@ class LeituraPdf:
             flags)
         busca_sal_anteriores = sal_anteriores.search(texto).group(2)
 
+        ## -------------------------------------------------------------------------------------------------------------
+        # BLOCO 2.4 ----------------------------------------------------------------------------------------------------
         fator_r = re.compile(r"2\.4\)\s*Fator\ r.*?(?=2\.5\))", flags)
         busca_fator_r = fator_r.search(texto)
         bloco_24 = busca_fator_r.group(0)
@@ -225,6 +227,7 @@ class LeituraPdf:
 
         busca_bloco_27_sublime_receita_anual = compile_bloco_27_sublime_receita_anual.search(bloco_27)
         sublime_receita_anual = busca_bloco_27_sublime_receita_anual.group(1)
+        print(sublime_receita_anual)
 
         bloco_27_recolher_imcs_iss = re.compile(
             r'\s*Impedido\ de\ recolher\ ICMS/ISS\ no\ DAS:\s*.*?([^\n]+)',flags)
@@ -500,6 +503,21 @@ class LeituraPdf:
             'interno': {k: v for (k, v) in pares_interno},
             'externo': {k: v for (k, v) in pares_externo},
             'f_salarios': {k: v for (k, v) in resultado_f_salarios},
+            'receita_bruta_infomada': receita_bruta_infomada,
+            'tributos_01': {
+                'IRPJ': busca_valores_impostos.group(1),
+                'CSLL': busca_valores_impostos.group(2),
+                'COFINS': busca_valores_impostos.group(3),
+                'PIS/Pasep': busca_valores_impostos.group(4),
+                'INSS/CPP': busca_valores_impostos.group(5),
+                'ICMS': busca_valores_impostos.group(6),
+                'IPI': busca_valores_impostos.group(7),
+                'ISS': busca_valores_impostos.group(8),
+                'Total': busca_valores_impostos.group(9),
+                'Parcela 1': busca_valores_impostos.group(11),
+            },
+            'sublime_receita_anual': sublime_receita_anual,
+            'totais_estabelecimentos': totais_estabelecimentos,
             'total_27_debito_declarado_': {
                 'IRPJ': busca_debito_declarado.group(1),
                 'CSLL': busca_debito_declarado.group(2),
