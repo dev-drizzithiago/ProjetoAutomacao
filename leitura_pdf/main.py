@@ -213,9 +213,10 @@ class LeituraPdf:
         busca_compile_resumo_26 = compile_resumo_26.search(bloco_26)
         bloco_26_valor_auferida = busca_compile_resumo_26.group(1)
         bloco_26_valor_debito_declarado = busca_compile_resumo_26.group(2)
-        # print(bloco_26_valor_auferida, bloco_26_valor_debito_declarado)
+        print(bloco_26_valor_auferida, bloco_26_valor_debito_declarado)
 
         ## -------------------------------------------------------------------------------------------------------------
+        # BLOCO 2.7 ----------------------------------------------------------------------------------------------------
         compile_bloco_27 = re.compile(
             r"2\.7\)\s*Informações\ da\ Declaração\ por\ Estabelecimento\s*.*?(?=2\.8\))",
             flags
@@ -228,17 +229,17 @@ class LeituraPdf:
 
         busca_bloco_27_sublime_receita_anual = compile_bloco_27_sublime_receita_anual.search(bloco_27)
         sublime_receita_anual = busca_bloco_27_sublime_receita_anual.group(1) if busca_compile_bloco_27 else ''
-        # print(bloco_27_sublime_receita_anual)
+        print(sublime_receita_anual)
 
         bloco_27_recolher_imcs_iss = re.compile(
             r'\s*Impedido\ de\ recolher\ ICMS/ISS\ no\ DAS:\s*.*?([^\n]+)',flags)
         recolher_imcs_iss = bloco_27_recolher_imcs_iss.search(bloco_27).group(1) if busca_compile_bloco_27 else ''
-        # print(recolher_imcs_iss)
+        print(recolher_imcs_iss)
 
         bloco_27_receita_bruta_infomada = re.compile(
             r'Receita\ Bruta\ Informada:\s*(\s*R\$\s*).*?([0-9.,]+)', flags)
         receita_bruta_infomada = bloco_27_receita_bruta_infomada.search(bloco_27).group(2) if busca_compile_bloco_27 else ''
-        # print(receita_bruta_infomada)
+        print(receita_bruta_infomada)
 
         bloco_27_impostos = re.compile(r'\s*IRPJ.*?\s*Totais\ do\ Estabelecimento', flags)
         impostos = bloco_27_impostos.search(bloco_27).group()
@@ -269,20 +270,18 @@ class LeituraPdf:
             'Total': busca_valores_impostos.group(9),
             'Parcela 1': busca_valores_impostos.group(11),
         }
-        # print(tributos_01)
 
         bloco_27_totais_estabelecimentos = re.compile(
             r'\s*Valor\ Informado\s*.*?([0-9.,]+)', flags
         )
         totais_estabelecimentos = bloco_27_totais_estabelecimentos.search(bloco_27).group(1)
-        # print(totais_estabelecimentos)
+        print(totais_estabelecimentos)
 
-        # Total do Débito Declarado (exigível + suspenso)
+        '''# BLOCO 2.7 Total do Débito Declarado (exigível + suspenso)'''
         bloco_27_total_debito_declarado = re.compile(
             r'Total\ do\ Débito\ Declarado\s*\(\s*exigível\s*\+\s*suspenso\s*\)'
             r'.*?'
-            r'(?=^\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa)',
-            flags
+            r'(?=^\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa)', flags
         )
         total_debito_declarado_busca = bloco_27_total_debito_declarado.search(bloco_27).group()
         valor_debito_declarado = re.compile(
@@ -295,8 +294,7 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)',
-            flags
+            r'.*?([0-9.,]+)', flags
         )
         busca_debito_declarado = valor_debito_declarado.search(total_debito_declarado_busca)
         total_debito_declarado_ = {
@@ -313,12 +311,11 @@ class LeituraPdf:
             }
         }
 
-        # Total do Débito com Exigibilidade Suspensa (R$)
+        '''# BLOCO 2.7 Total do Débito com Exigibilidade Suspensa (R$)'''
         bloco_27_total_debito_com_exigibilidade_suspensa = re.compile(
             r'Total\ do\ Débito\ com\ Exigibilidade\ Suspensa'
             r'.*?'
-            r'(?=^\s*Total\ do\ Débito\ Exigível)',
-            flags
+            r'(?=^\s*Total\ do\ Débito\ Exigível)', flags
         )
         total_debito_exigibilidade_suspensa = bloco_27_total_debito_com_exigibilidade_suspensa.search(bloco_27).group()
         valor_debito_exigibilidade_suspensa = re.compile(
@@ -331,8 +328,7 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)',
-            flags
+            r'.*?([0-9.,]+)', flags
         )
         busca_debito_exigibilidade_suspensa = valor_debito_exigibilidade_suspensa.search(total_debito_exigibilidade_suspensa)
         total_debito_exigibilidade_suspensa_ = {
@@ -349,9 +345,9 @@ class LeituraPdf:
             }
         }
 
+        '''# BLOCO 2.7 Total do Débito Exigível (R$)'''
         bloco_27_total_debito_exigivel = re.compile(
-            r'Total\ do\ Débito\ Exigível.*',
-            flags
+            r'Total\ do\ Débito\ Exigível.*', flags
         )
         total_debito_exigivel = bloco_27_total_debito_exigivel.search(bloco_27).group()
         valor_debito_exigivel = re.compile(
@@ -364,8 +360,7 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)',
-            flags
+            r'.*?([0-9.,]+)', flags
         )
         busca_debito_exigivel = valor_debito_exigivel.search(total_debito_exigivel)
         dict_total_debito_exigivel = {
@@ -382,15 +377,16 @@ class LeituraPdf:
             }
         }
 
+        ## -------------------------------------------------------------------------------------------------------------
+        # BLOCO 2.8 ----------------------------------------------------------------------------------------------------
         compile_28 = re.compile(
             r'2\.8\)\s*Total\ Geral\ da\ Empresa'
             r'.*?'
-            r'3\.\s*Informações\ da\ Recepção\ da\ Declaração',
-            flags
+            r'3\.\s*Informações\ da\ Recepção\ da\ Declaração', flags
         )
         busca_texto_compile_28 = compile_28.search(texto).group()
 
-        # Total do Débito Declarado (exigível + suspenso) (R$)
+        '''# BLOCO 2.8 Total do Débito Declarado (exigível + suspenso) (R$)'''
         compile_tot_debit_declarado = re.compile(
             r'Total\ do\ Débito\ Declarado'
             r'.*?'
@@ -424,7 +420,7 @@ class LeituraPdf:
             }
         }
 
-        # Total do Débito com Exigibilidade Suspensa (R$)
+        '''# BLOCO 2.8 Total do Débito com Exigibilidade Suspensa (R$)'''
         compile_28_tot_debit_exigi_suspensa = re.compile(
             r'\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa'
             r'.*?'
@@ -459,7 +455,7 @@ class LeituraPdf:
             }
         }
 
-        # Total do Débito Exigível (R$)
+        '''# BLOCO 2.8 Total do Débito Exigível (R$)'''
         compile_28_tot_debit_exigi = re.compile(r'Total\ do\ Débito\ Exigível.*',flags)
         busca_compile_28_tot_debit_exigi = compile_28_tot_debit_exigi.search(busca_texto_compile_28).group()
         valor_tot_debit_exigi = re.compile(
