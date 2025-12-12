@@ -466,20 +466,37 @@ class LeituraPdf:
         valor_tot_debit_exigi = re.compile(
             r'\s*ISS\s*'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,])'
-            r'.*?([0-9.,])'
-            r'.*?([0-9.,])'
-            r'.*?([0-9.,])'
-            r'.*?([0-9.,])'
-            r'.*?([0-9.,])'
-            r'.*?([0-9.,])'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
+            r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)',
             flags
         )
-        busca_valores_tot_debit_exigi = valor_tot_debit_exigi.search(busca_compile_28_tot_debit_exigi).group()
-        print(busca_valores_tot_debit_exigi)
+        busca_valores_tot_debit_exigi = valor_tot_debit_exigi.search(busca_compile_28_tot_debit_exigi)
 
-
+        dados_valores_tot_debit_exigi = {
+            'total_debito_exigi_suspensa': {
+                'IRPJ': busca_valores_tot_debit_exigi.group(6),
+                'CSLL': busca_valores_tot_debit_exigi.group(7),
+                'COFINS': busca_valores_tot_debit_exigi.group(8),
+                'PIS/Pasep': busca_valores_tot_debit_exigi.group(9),
+                'INSS/CPP': busca_valores_tot_debit_exigi.group(10),
+                'ICMS': busca_valores_tot_debit_exigi.group(11),
+                'IPI': busca_valores_tot_debit_exigi.group(12),
+                'ISS ': busca_valores_tot_debit_exigi.group(13),
+                'Total ': busca_valores_tot_debit_exigi.group(14),
+            }
+        }
+        print(dados_valores_tot_debit_exigi)
 
         registros = {
             'periodo': periodo,
