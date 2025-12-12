@@ -602,7 +602,8 @@ class LeituraPdf:
             }
         }
 
-        print(registros)
+        for k, v in registros.items():
+            print(k, v)
 
         # for k, v in registros.items():
         #     print(f'{k} - {v}')
