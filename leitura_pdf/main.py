@@ -152,6 +152,8 @@ class LeituraPdf:
             texto,
             flags=flags,
         )
+        print(limite_receita_1)
+        print(limite_receita_2)
 
         # 1) Pega apenas o bloco 2.2) ... até 2.3)
         m_bloco = re.search(r'2\.2\)\s*Receitas Brutas Anteriores.*?(2\.3\))', texto, flags)
@@ -200,7 +202,7 @@ class LeituraPdf:
         busca_fator_r = fator_r.search(texto)
         bloco_24 = busca_fator_r.group(0)
         bloco_24_fator_r = re.compile('Fator r.s*\s*.*?([0-9.,]+)')
-        bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24)
+        bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24).group()
 
         ## -------------------------------------------------------------------------------------------------------------
         # BLOCO 2.6 ----------------------------------------------------------------------------------------------------
@@ -227,7 +229,7 @@ class LeituraPdf:
 
         busca_bloco_27_sublime_receita_anual = compile_bloco_27_sublime_receita_anual.search(bloco_27)
         sublime_receita_anual = busca_bloco_27_sublime_receita_anual.group(1)
-        print(sublime_receita_anual)
+
 
         bloco_27_recolher_imcs_iss = re.compile(
             r'\s*Impedido\ de\ recolher\ ICMS/ISS\ no\ DAS:\s*.*?([^\n]+)',flags)
@@ -503,6 +505,12 @@ class LeituraPdf:
             'interno': {k: v for (k, v) in pares_interno},
             'externo': {k: v for (k, v) in pares_externo},
             'f_salarios': {k: v for (k, v) in resultado_f_salarios},
+            'busca_sal_anteriores': busca_sal_anteriores,
+            'bloco_24_fator_r_busca': bloco_24_fator_r_busca,
+            'bloco_26_valor_auferida': bloco_26_valor_auferida,
+            'bloco_26_valor_debito_declarado': bloco_26_valor_debito_declarado,
+            'sublime_receita_anual': sublime_receita_anual,
+            'recolher_imcs_iss': recolher_imcs_iss,
             'receita_bruta_infomada': receita_bruta_infomada,
             'tributos_01': {
                 'IRPJ': busca_valores_impostos.group(1),
@@ -516,7 +524,6 @@ class LeituraPdf:
                 'Total': busca_valores_impostos.group(9),
                 'Parcela 1': busca_valores_impostos.group(11),
             },
-            'sublime_receita_anual': sublime_receita_anual,
             'totais_estabelecimentos': totais_estabelecimentos,
             'total_27_debito_declarado_': {
                 'IRPJ': busca_debito_declarado.group(1),
