@@ -390,11 +390,11 @@ class LeituraPdf:
         )
         busca_texto_compile_28 = compile_28.search(texto).group()
 
+        # Total do Débito Declarado (exigível + suspenso) (R$)
         compile_tot_debit_declarado = re.compile(
             r'Total\ do\ Débito\ Declarado'
             r'.*?'
-            r'(?=^\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa)',
-            flags
+            r'(?=^\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa)', flags
         )
         busca_tot_debit_declarado = compile_tot_debit_declarado.search(busca_texto_compile_28).group()
         valores_tot_debit_declarado = re.compile(
@@ -407,8 +407,7 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)',
-            flags
+            r'.*?([0-9.,]+)', flags
         )
         busca_valores_tot_debit_declarado = valores_tot_debit_declarado.search(busca_tot_debit_declarado)
         dados_valores_tot_debit_declarado = {
@@ -425,11 +424,11 @@ class LeituraPdf:
             }
         }
 
+        # Total do Débito com Exigibilidade Suspensa (R$)
         compile_28_tot_debit_exigi_suspensa = re.compile(
             r'\s*Total\ do\ Débito\ com\ Exigibilidade\ Suspensa'
             r'.*?'
-            r'Total\ do\ Débito\ Exigível',
-            flags
+            r'Total\ do\ Débito\ Exigível', flags
         )
         busca_compile_28_tot_debit_exigi_suspensa = compile_28_tot_debit_exigi_suspensa.search(busca_texto_compile_28).group()
         valor_tot_debit_exigi_suspensa = re.compile(
@@ -460,7 +459,7 @@ class LeituraPdf:
             }
         }
 
-
+        # Total do Débito Exigível (R$)
         compile_28_tot_debit_exigi = re.compile(r'Total\ do\ Débito\ Exigível.*',flags)
         busca_compile_28_tot_debit_exigi = compile_28_tot_debit_exigi.search(busca_texto_compile_28).group()
         valor_tot_debit_exigi = re.compile(
@@ -478,11 +477,9 @@ class LeituraPdf:
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
             r'.*?([0-9.,]+)'
-            r'.*?([0-9.,]+)',
-            flags
+            r'.*?([0-9.,]+)', flags
         )
         busca_valores_tot_debit_exigi = valor_tot_debit_exigi.search(busca_compile_28_tot_debit_exigi)
-
         dados_valores_tot_debit_exigi = {
             'total_debito_exigi_suspensa': {
                 'IRPJ': busca_valores_tot_debit_exigi.group(6),
@@ -496,7 +493,6 @@ class LeituraPdf:
                 'Total ': busca_valores_tot_debit_exigi.group(14),
             }
         }
-        print(dados_valores_tot_debit_exigi)
 
         registros = {
             'periodo': periodo,
