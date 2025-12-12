@@ -77,7 +77,6 @@ class LeituraPdf:
     def extrair_campos_com_regex(self):
         flags = re.DOTALL | re.VERBOSE | re.IGNORECASE | re.MULTILINE
         texto = self.texto_completo
-
         registros = dict()
 
         # print(texto)
@@ -87,74 +86,85 @@ class LeituraPdf:
             texto,
             flags=re.DOTALL
         )
+        print(periodo)
 
         cnpj_matriz = self.buscar_ocorrencia(
             r'CNPJ Matriz:.*?([0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2})',
             texto,
             flags=re.DOTALL
         )
+        print(cnpj_matriz)
 
         nome_empresarial = self.buscar_ocorrencia(
             r'Nome empresarial:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
+        print(nome_empresarial)
 
         data_abertura = self.buscar_ocorrencia(
             r'Data de abertura no CNPJ:.*?([0-9]{2}/[0-9]{2}/[0-9]{4})',
             texto,
             flags=re.DOTALL
         )
+        print(data_abertura)
 
         optante_simples_nacional = self.buscar_ocorrencia(
             r'Optante pelo Simples Nacional:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
+        print(optante_simples_nacional)
 
         regime_apuracao = self.buscar_ocorrencia(
             r'Regime de Apuração:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
+        print(regime_apuracao)
 
         num_declaracao = self.buscar_ocorrencia(
             r'Nº da Declaração:\s*([^\n]+)',
             texto,
             flags=re.DOTALL
         )
+        print(num_declaracao)
 
         RPA = self.buscar_ocorrencia(
             r'Receita Bruta do PA \(RPA\).*?([0-9.,]+)\s+0,00\s+[0-9.,]+',
             texto,
             flags=re.DOTALL
         )
+        print(RPA)
 
         RBT12 = self.buscar_ocorrencia(
             r"ao PA\s*\(RBT12\)\s*([0-9\.,]+)",
             texto,
             flags=re.DOTALL
         )
+        print(RBT12)
 
         RBA = self.buscar_ocorrencia(
             r"\(RBA\).*?([0-9.,]+)\s+[0-9.,]+\s+[0-9.,]+",
             texto,
             flags=re.DOTALL
         )
-        # print(RBA)
+        print(RBA)
 
         RBAA = self.buscar_ocorrencia(
             r"\(RBAA\)\s*([0-9\.,]+)",
             texto,
             flags=re.DOTALL
         )
-        # print(RBAA)
+        print(RBAA)
 
         limite_receita_1, limite_receita_2 = self.buscar_duplo(
             r"Limite de receita bruta proporcionalizado\s*([0-9\.,]+)\s+([0-9.,]+)",
             texto,
             flags=flags,
         )
+        print(limite_receita_1)
+        print(limite_receita_2)
 
         # 1) Pega apenas o bloco 2.2) ... até 2.3)
         m_bloco = re.search(r'2\.2\)\s*Receitas Brutas Anteriores.*?(2\.3\))', texto, flags)
@@ -191,7 +201,7 @@ class LeituraPdf:
 
         valores_f_salarios = re.compile(r'(\d{2}/\d{4})\s*([0-9\.,]+)', flags)
         resultado_f_salarios = valores_f_salarios.findall(busca_f_salario) if busca_f_salario else []
-        # print(resultado_f_salarios)
+        print(resultado_f_salarios)
 
         sal_anteriores = re.compile(
             r'2\.3\.1\)\s*Total\ de\ Folhas\ de\ Salários\ Anteriores.*?(\s*R\$\s*\).*?)\s*R\$\s*([0-9\.,]+)',
@@ -203,7 +213,7 @@ class LeituraPdf:
         bloco_24 = busca_fator_r.group(0)
         bloco_24_fator_r = re.compile('Fator r.s*\s*.*?([0-9.,]+)')
         bloco_24_fator_r_busca = bloco_24_fator_r.search(bloco_24)
-        # print(bloco_24_fator_r_busca.group(1))
+        print(bloco_24_fator_r_busca.group(1))
 
         resumo_declaracao = re.compile(r'2\.6\)\s*Resumo\ da\ Declaração\s*.*?(?=2\.7\))', flags)
         buscar_resumo_declaracao = resumo_declaracao.search(texto)
