@@ -411,9 +411,8 @@ class LeituraPdf:
             flags
         )
         busca_valores_tot_debit_declarado = valores_tot_debit_declarado.search(busca_tot_debit_declarado)
-        print(busca_valores_tot_debit_declarado)
 
-        dados_valores_tot_debet_declarado = {
+        dados_valores_tot_debit_declarado = {
             'total_debito_declarado': {
                 'IRPJ': busca_valores_tot_debit_declarado.group(1),
                 'CSLL': busca_valores_tot_debit_declarado.group(2),
@@ -426,6 +425,10 @@ class LeituraPdf:
                 'Total ': busca_valores_tot_debit_declarado.group(9),
             }
         }
+
+        compile_28_tot_debit_exigi_suspensa = re.compile(
+            r'Total do Débito com Exigibilidade Suspensa (R$)'
+        )
 
         registros = {
             'periodo': periodo,
