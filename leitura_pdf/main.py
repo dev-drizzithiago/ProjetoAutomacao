@@ -288,7 +288,7 @@ class LeituraPdf:
             r'.*?([0-9.,]+)',
             flags
         )
-        busca_debito_declarado = valor_debito_declarado.search(total_debito_declarado_busca)
+        busca_debito_declarado = valor_debito_declarado.search(total_debito_declarado_busca).group()
         print(busca_debito_declarado)
 
         registros = {
