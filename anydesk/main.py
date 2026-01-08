@@ -45,9 +45,9 @@ class GeranciadorDePacotes:
         print(response_powershell.stdout)
 
     def remover_processo(self):
-        print('Fechando pacote')
-        # comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
-        comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue"
+        print('Fechando Processo do Anydesk')
+        comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
+        # comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue"
 
         response_powershell = subprocess.run(
             ['powershell', '-Command', comando_shell],
@@ -58,7 +58,7 @@ class GeranciadorDePacotes:
 
     def removendo_config_anydesk(self):
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
-        
+
         os.rmdir(caminho_confi_anydesk)
         # print(caminho_confi_anydesk)
 
@@ -67,6 +67,6 @@ class GeranciadorDePacotes:
 if __name__ == '__main__':
     obj_pacote = GeranciadorDePacotes()
 
-    obj_pacote.removendo_config_anydesk()
-    # sleep(5)
-    # obj_pacote.remover_processo()
+    obj_pacote.abrir_processo()
+    sleep(15)
+    obj_pacote.remover_processo()
