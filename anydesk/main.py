@@ -30,7 +30,7 @@ class GeranciadorDePacotes:
 
     def get_Processos(self):
         # comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
-        comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue"
+        comando_shell = "Get-Process  -ErrorAction SilentlyContinue"
 
         response_powershell = subprocess.run(
             ['powershell', '-Command', comando_shell],
@@ -39,19 +39,13 @@ class GeranciadorDePacotes:
 
         print(response_powershell.stdout)
 
-    def abrir_app(self):
+    def abrir_processo(self):
         caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
-        comando_shell = f'Start-Process "{caminho_app}"'
+        os.startfile(caminho_app)
 
-        response_powershell = subprocess.run(
-            ['powershell', '-Command', comando_shell],
-            text=True, capture_output=True
-        )
-
-        print(response_powershell.stdout)
 
 if __name__ == '__main__':
     obj_pacote = GeranciadorDePacotes()
 
-    obj_pacote.abrir_app()
+    obj_pacote.get_Processos()
     # obj_pacote.get_Processos()
