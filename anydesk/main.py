@@ -1,9 +1,17 @@
 import os
+import shutil
 import subprocess
 from time import sleep
 
 import ctypes
 import sys
+
+from pathlib import Path
+
+path_home = Path.home()
+pasta_download_onedrive = Path(path_home, 'Downloads')
+path_file_name = os.path.join(pasta_download_onedrive, 'AnyDesk.exe')
+
 
 def verificar_elevacao():
     def is_admin():
@@ -29,8 +37,11 @@ class GeranciadorDePacotes:
     def __init__(self):
         pass
 
-    def procurar_pacotes(self):
-        pacote = ' anydesk'
+    def procurar_pacote_anydesk(self):
+
+        print('Procurando por um pacote AnyDesk instalado')
+
+        pacote = 'anydesk'
         comando_shell = f"winget search {pacote}"
 
         response_powershell = subprocess.run(
@@ -40,8 +51,20 @@ class GeranciadorDePacotes:
 
         print(response_powershell.stdout)
 
+    def instalar_pacote_anydesk(self):
+        comando_shell = (
+            f'Start-Process "{path_file_name}" --silent'
+        )
+
+        response_powershell = subprocess.run(
+            ['powershell', '-Command', comando_shell],
+            text=True, capture_output=True
+        )
+
+        print(response_powershell.stdout)
+
     def desinstalar_pocotes(self):
-        pacote = 'AnyDeskSoftwareGmbH.AnyDesk'
+        pacote = 'AnyDesk.AnyDesk'
         comando_shell = f"winget uninstall --id {pacote} --silent"
 
         response_powershell = subprocess.run(
@@ -78,11 +101,11 @@ class GeranciadorDePacotes:
         print(response_powershell.stdout)
 
     def removendo_config_anydesk(self):
-        print('Removendo Configuração do Anydesk')
+        print('Removendo Configurações do Anydesk')
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
 
-        os.rmdir(caminho_confi_anydesk)
-        # print(caminho_confi_anydesk)
+        if os.path.exists(caminho_confi_anydesk):
+            shutil.rmtree(caminho_confi_anydesk)
 
 
 
@@ -92,8 +115,8 @@ if __name__ == '__main__':
         obj_pacote = GeranciadorDePacotes()
 
         obj_pacote.removendo_config_anydesk()
-        # sleep(15)
-        # obj_pacote.remover_processo()
-
-        print('Finalizando o processo.')
+        input('Aperte ENTER para continuar...')
+        # # obj_pacote.remover_processo()
+        #
+        # print('Finalizando o processo.')
         sleep(5)
