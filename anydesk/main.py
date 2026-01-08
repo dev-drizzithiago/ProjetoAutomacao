@@ -7,7 +7,7 @@ class GeranciadorDePacotes:
 
 
     def procurar_pacotes(self):
-        pacote = 'anydesk'
+        pacote = 'office'
         comando_powershell = f"winget search {pacote}"
 
         response_powershell = subprocess.run(
