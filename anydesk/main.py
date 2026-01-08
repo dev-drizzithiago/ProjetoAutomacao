@@ -1,5 +1,5 @@
 import subprocess
-
+from pathlib import Path
 
 class GeranciadorDePacotes:
     def __init__(self):
@@ -28,8 +28,8 @@ class GeranciadorDePacotes:
         print(response_powershell.stdout)
 
     def get_Processos(self):
-        comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
-        # comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue"
+        # comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
+        comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue"
 
         response_powershell = subprocess.run(
             ['powershell', '-Command', comando_shell],
@@ -37,6 +37,10 @@ class GeranciadorDePacotes:
         )
 
         print(response_powershell.stdout)
+
+    def abrir_app(self):
+        caminho_app = ""
+
 
 
 if __name__ == '__main__':
