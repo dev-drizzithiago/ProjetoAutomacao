@@ -34,7 +34,8 @@ class GeranciadorDePacotes:
         caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
 
         # comando_shell = fr'Start-Service AnyDesk'
-        comando_shell = fr'Start-Process "{caminho_app}" -ArgumentList "--tray"'
+        # comando_shell = fr'Start-Process "{caminho_app}" -ArgumentList "--tray"'
+        comando_shell = fr'Start-Process "{caminho_app}" -WindowStyle Minimized'
 
         response_powershell = subprocess.run(
             ['powershell', '-Command', comando_shell],
@@ -55,9 +56,17 @@ class GeranciadorDePacotes:
 
         print(response_powershell.stdout)
 
+    def removendo_config_anydesk(self):
+        caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
+        
+        os.rmdir(caminho_confi_anydesk)
+        # print(caminho_confi_anydesk)
+
+
+
 if __name__ == '__main__':
     obj_pacote = GeranciadorDePacotes()
 
-    obj_pacote.abrir_processo()
+    obj_pacote.removendo_config_anydesk()
     # sleep(5)
     # obj_pacote.remover_processo()
