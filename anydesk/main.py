@@ -2,6 +2,28 @@ import os
 import subprocess
 from time import sleep
 
+import ctypes
+import sys
+
+def verificar_elevacao():
+    def is_admin():
+        try:
+            return ctypes.windll.shell32.IsUserAnAdmin()
+        except:
+            return False
+
+    ## Se o app não foi elevado vai abrir a janela para solicita as credinciais de administrador.
+    if not is_admin():
+        ctypes.windll.shell32.ShellExecuteW(
+            None,  # handle (não usado)
+            "runas",  # O verbo que força o UAC
+            sys.executable,  # O arquivo a ser executado (o interpretador Python)
+            " ".join(sys.argv),  # Os argumentos (o nome do seu script)
+            None,  # diretório de trabalho
+            1  # mostra a janela
+        )
+        sys.exit(0)  # Sai do script original
+    return True
 
 class GeranciadorDePacotes:
     def __init__(self):
@@ -53,10 +75,10 @@ class GeranciadorDePacotes:
             ['powershell', '-Command', comando_shell],
             text=True, capture_output=True
         )
-
         print(response_powershell.stdout)
 
     def removendo_config_anydesk(self):
+        print('Removendo Configuração do Anydesk')
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
 
         os.rmdir(caminho_confi_anydesk)
@@ -65,8 +87,13 @@ class GeranciadorDePacotes:
 
 
 if __name__ == '__main__':
-    obj_pacote = GeranciadorDePacotes()
 
-    obj_pacote.abrir_processo()
-    sleep(15)
-    obj_pacote.remover_processo()
+    if verificar_elevacao():
+        obj_pacote = GeranciadorDePacotes()
+
+        obj_pacote.removendo_config_anydesk()
+        # sleep(15)
+        # obj_pacote.remover_processo()
+
+        print('Finalizando o processo.')
+        sleep(5)
