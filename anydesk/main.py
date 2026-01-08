@@ -41,10 +41,17 @@ class GeranciadorDePacotes:
 
     def abrir_app(self):
         caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
-        os.startfile(caminho_app)
+        comando_shell = f'Start-Process "{caminho_app}"'
 
+        response_powershell = subprocess.run(
+            ['powershell', '-Command', comando_shell],
+            text=True, capture_output=True
+        )
+
+        print(response_powershell.stdout)
 
 if __name__ == '__main__':
     obj_pacote = GeranciadorDePacotes()
 
     obj_pacote.abrir_app()
+    # obj_pacote.get_Processos()
