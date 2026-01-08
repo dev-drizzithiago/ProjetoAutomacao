@@ -29,9 +29,17 @@ class GeranciadorDePacotes:
 
     def get_Processos(self):
         comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
+        # comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue"
+
+        response_powershell = subprocess.run(
+            ['powershell', '-Command', comando_shell],
+            text=True, capture_output=True
+        )
+
+        print(response_powershell.stdout)
 
 
 if __name__ == '__main__':
     obj_pacote = GeranciadorDePacotes()
 
-    obj_pacote.desinstalar_pocotes()
+    obj_pacote.get_Processos()
