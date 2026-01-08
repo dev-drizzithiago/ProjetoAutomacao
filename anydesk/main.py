@@ -1,3 +1,4 @@
+import os
 import subprocess
 from pathlib import Path
 
@@ -39,11 +40,11 @@ class GeranciadorDePacotes:
         print(response_powershell.stdout)
 
     def abrir_app(self):
-        caminho_app = ""
-
+        caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
+        os.startfile(caminho_app)
 
 
 if __name__ == '__main__':
     obj_pacote = GeranciadorDePacotes()
 
-    obj_pacote.get_Processos()
+    obj_pacote.abrir_app()
