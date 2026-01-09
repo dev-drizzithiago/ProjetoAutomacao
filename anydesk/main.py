@@ -76,14 +76,13 @@ class GeranciadorDePacotes:
         print(response_powershell.stdout)
 
     def procurando_processo_anydsk(self):
-        comando_shell = rf'Get-Process | Where-Object {{ $_.ProcessName -like "*AnyDesk*" }}'
+        comando_shell = rf'Get-Process | Where-Object {{ $_.ProcessName -like "*AnyDesk*" }}; exit 0'
 
         response_powershell = subprocess.run(
             ['powershell', '-Command', comando_shell],
             text=True, capture_output=True
         )
         resultado_busca = response_powershell.stdout
-
         print(resultado_busca)
 
     def abrir_processo(self):
