@@ -108,7 +108,6 @@ class GeranciadorDePacotes:
             shutil.rmtree(caminho_confi_anydesk)
 
 
-
 if __name__ == '__main__':
 
     if verificar_elevacao():
