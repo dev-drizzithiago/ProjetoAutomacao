@@ -11,3 +11,4 @@ teste_velocidade_v1/.~lock.data.csv\#
 *.txt
 *.exe
 *.pdf
+/anydesk/build
