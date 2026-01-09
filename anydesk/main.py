@@ -76,7 +76,7 @@ class GeranciadorDePacotes:
         print(response_powershell.stdout)
 
     def procurando_processo_anydsk(self):
-        comando_shell = 'winget search anydesk'
+        comando_shell = rf'Get-Process | Where-Object {{ $_.ProcessName -like "*AnyDesk*" }}'
 
         response_powershell = subprocess.run(
             ['powershell', '-Command', comando_shell],
