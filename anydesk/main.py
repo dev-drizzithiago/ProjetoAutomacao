@@ -134,8 +134,10 @@ if __name__ == '__main__':
         input('Aperte ENTER para continuar...')
         os.system('cls')
 
-        for contagem in range(5, 1, -1):
-            print('Finalizando em ', end=' ')
+        for contagem in range(5, 0, -1):
+            print()
+            print()
+            print('Finalizando em:', end=' ')
             print(contagem)
             sleep(1)
             os.system('cls')
