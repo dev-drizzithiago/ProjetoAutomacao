@@ -48,8 +48,9 @@ class GeranciadorDePacotes:
             ['powershell', '-Command', comando_shell],
             text=True, capture_output=True
         )
+        resultado_busca = response_powershell.stdout
 
-        print(response_powershell.stdout)
+        print(resultado_busca)
 
     def instalar_pacote_anydesk(self):
         comando_shell = (
@@ -73,6 +74,17 @@ class GeranciadorDePacotes:
         )
 
         print(response_powershell.stdout)
+
+    def procurando_processo_anydsk(self):
+        comando_shell = 'winget search anydesk'
+
+        response_powershell = subprocess.run(
+            ['powershell', '-Command', comando_shell],
+            text=True, capture_output=True
+        )
+        resultado_busca = response_powershell.stdout
+
+        print(resultado_busca)
 
     def abrir_processo(self):
         print('Abrindo pacote')
@@ -113,7 +125,7 @@ if __name__ == '__main__':
     if verificar_elevacao():
         obj_pacote = GeranciadorDePacotes()
 
-        obj_pacote.removendo_config_anydesk()
+        obj_pacote.procurando_processo_anydsk()
         input('Aperte ENTER para continuar...')
         # # obj_pacote.remover_processo()
         #
