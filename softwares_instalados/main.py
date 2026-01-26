@@ -74,17 +74,32 @@ class RelatorioSoftwareInstalados:
             # .strip(): reforça a limpeza de borda (por segurança).
             linha = (row or '').strip()
 
+            # Ignora linhas vazia
             if not linha:
+                # Pula linhas vazias.
                 continue
 
+            # Ignora cabeçalho ("DisplayName DisplayVersion") e linha de separadores ("----- -----")
+            # "set(linha) <= {'-', ' '}" significa: a linha contém SOMENTE hifens e/ou espaços.
             if linha.startswith('DisplayName') or set(linha) <= {'-', ' '}:
                 continue
 
+            # Procura uma versão no FINAL da linha, como 1.2.3 ou 64.76.37566
+            # (\d+(?:\.\d+)+)\s*$  => um ou mais números seguidos de um ou mais ".número", até o fim da linha
+            # \d+ = número; (?:\.\d+)+ = um ou mais grupos de “.número”.
+            # \s*$ = permite espaços e vai até o fim da linha. Ex.: “Git 2.45.1”, “WinRAR (64-bit) 7.10.0”.
             regex_result = re.search(r'(\d+(?:\.\d+)+)\s*$', linha)
 
             if regex_result:
+                # Captura o texto da versão
+                # Se achou a versão: extrai o grupo capturado (a versão).
                 versao = regex_result.group(1).strip()
+
+                # Tudo que vem antes do início da versão é considerado o "nome do app"
+                # O nome do app é o texto antes da versão
                 nome_app = linha[:start()].rstrip()
+
+
                 partes = nome_app.split()
 
                 if partes and partes[-1] == versao:
