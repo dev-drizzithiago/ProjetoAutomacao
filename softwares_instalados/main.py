@@ -29,14 +29,28 @@ class RelatorioSoftwareInstalados:
     )
 
     def __init__(self):
+
+        # Armazena as linhas "cruas" (normalizadas) vindas do PowerShell
         self.lista_itens = []
 
 
     def scan_software(self):
+
+        # Lista final de dicionários: {"DisplayName": "...", "DisplayVersion": "..."}
+        # Cria resultado, a lista que vamos retornar, formada por dicionários com as chaves DisplayName e
+        # DisplayVersion.
         resultado = []
+
+        # Executa PowerShell sem carregar perfis do usuário (-NoProfile) e sem travar por política
+        # (-ExecutionPolicy Bypass)
+        # -Command recebe o script a executar (aqui usamos o comando "simples")
+        # -NoProfile: não carrega perfis do usuário (evita ruídos e lentidão).
+        # -ExecutionPolicy Bypass: evita que políticas de execução bloqueiem o comando.
+        # -Command <script>: executa o conteúdo da constante COMANDO_SCAN_SOFTWARE.
         response_scan = run(
-            ["powershell", "-Command", self.COMANDO_SCAN_SOFTWARE],
-            text=True,  stdout=PIPE
+            ["powershell", "NoProfile", "-ExecutionPolicy", "Bypass", "-Command", self.COMANDO_SCAN_SOFTWARE],
+            text=True,   # retorna stdout como str (não bytes)  faz o stdout vir já como string.
+            stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
         )
 
         # Separa o resultado por linhas e adiciona em uma lista
