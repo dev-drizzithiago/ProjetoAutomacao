@@ -70,6 +70,8 @@ class RelatorioSoftwareInstalados:
         for row in self.lista_itens:
 
             # Garante que "linha" é string e remove espaços periféricos
+            # (row or ""): evita None.
+            # .strip(): reforça a limpeza de borda (por segurança).
             linha = (row or '').strip()
 
             if not linha:
