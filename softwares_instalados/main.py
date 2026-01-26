@@ -1,8 +1,11 @@
 import re
+import getpass
 from subprocess import (
     PIPE, # sinaliza que queremos capturar a saída do processo (em vez de deixar ela ir para o console).
     run,  # executa um comando externo (no nosso caso, o PowerShell) e retorna um objeto com a saída (stdout)
 )
+
+import socket
 
 class RelatorioSoftwareInstalados:
 
@@ -30,10 +33,12 @@ class RelatorioSoftwareInstalados:
 
         # Armazena as linhas "cruas" (normalizadas) vindas do PowerShell
         self.lista_itens = []
+        self.host_name = socket.gethostname()
+        self.user_logado = getpass.getuser()
 
 
     def scan_software(self):
-
+        print(self.user_logado)
         # Lista final de dicionários: {"DisplayName": "...", "DisplayVersion": "..."}
         # Cria resultado, a lista que vamos retornar, formada por dicionários com as chaves DisplayName e
         # DisplayVersion.
