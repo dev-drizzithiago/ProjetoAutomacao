@@ -1,18 +1,14 @@
 import re
-from subprocess import PIPE, run
-from turtledemo.penrose import start
+from subprocess import (
+    PIPE, # sinaliza que queremos capturar a saída do processo (em vez de deixar ela ir para o console).
+    run,  # executa um comando externo (no nosso caso, o PowerShell) e retorna um objeto com a saída (stdout)
+)
 
+from turtledemo.penrose import start
 
 class RelatorioSoftwareInstalados:
 
-    CAMANDO_SCAN_SOFTWARE_MICROSOFT = (
-        r"Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* , "
-        r"HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | "
-        r"Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | "
-        r"Where-Object { $_.DisplayName } | "
-        r"Sort-Object DisplayName "
-    )
-
+    # Comando PowerShell "simples": lê somente HKLM 64-bit (Uninstall) e escolhe DisplayName + DisplayVersion
     COMANDO_SCAN_SOFTWARE = (
         r"""
             Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
@@ -21,6 +17,7 @@ class RelatorioSoftwareInstalados:
         """
     )
 
+    # (Opcional) Versão mais completa do comando, cobrindo 64-bit e 32-bit (Wow6432Node) e com mais colunas.
     COMANDO_SCAN_SOFTWARE_COMPLETO = (
         r"""            
             Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* ,
