@@ -21,7 +21,8 @@ class RelatorioSoftwareInstalados:
     )
 
     def __init__(self):
-        pass
+        self.lista_itens = []
+
 
     def scan_software(self):
         response_scan = run(
@@ -29,10 +30,9 @@ class RelatorioSoftwareInstalados:
             text=True,  stdout=PIPE
         )
         for item in response_scan.stdout.splitlines():
-            print(len(item.strip()))
-            if not len(item) == 0:
-                print(item)
+            self.lista_itens.append(item)
 
+        print(self.lista_itens)
 
 if __name__ == '__main__':
     obj_scan_software = RelatorioSoftwareInstalados()
