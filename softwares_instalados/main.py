@@ -4,8 +4,6 @@ from subprocess import (
     run,  # executa um comando externo (no nosso caso, o PowerShell) e retorna um objeto com a saída (stdout)
 )
 
-from turtledemo.penrose import start
-
 class RelatorioSoftwareInstalados:
 
     # Comando PowerShell "simples": lê somente HKLM 64-bit (Uninstall) e escolhe DisplayName + DisplayVersion
@@ -48,7 +46,7 @@ class RelatorioSoftwareInstalados:
         # -ExecutionPolicy Bypass: evita que políticas de execução bloqueiem o comando.
         # -Command <script>: executa o conteúdo da constante COMANDO_SCAN_SOFTWARE.
         response_scan = run(
-            ["powershell", "NoProfile", "-ExecutionPolicy", "Bypass", "-Command", self.COMANDO_SCAN_SOFTWARE],
+            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", self.COMANDO_SCAN_SOFTWARE],
             text=True,   # retorna stdout como str (não bytes)  faz o stdout vir já como string.
             stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
         )
@@ -97,17 +95,26 @@ class RelatorioSoftwareInstalados:
 
                 # Tudo que vem antes do início da versão é considerado o "nome do app"
                 # O nome do app é o texto antes da versão
-                nome_app = linha[:start()].rstrip()
+                # regex_result.start() dá o índice onde a versão começa; fatiamos até ali.
+                nome_app = linha[:regex_result.start()].rstrip()
 
-
+                # Algumas saídas repetem a versão duas vezes (ex.: "... 8.0.61000 8.0.61000").
+                # Se a "palavra" anterior já era igual à versão, removemos a duplicata.
+                # Ex.: "Microsoft Visual C++ ... 8.0.61000 8.0.61000"
+                # Aqui verificamos se a “palavra” anterior já era a mesma versão e removemos a duplicata.
                 partes = nome_app.split()
-
                 if partes and partes[-1] == versao:
                     nome_app = ' '.join(partes[:-1]).rstrip()
+
+                # Adiciona o par nome/versão ao resultado
+                # Guarda no formato limpo: {"DisplayName": <nome>, "DisplayVersion": <versão>}.
                 resultado.append({'DisplayName': nome_app, 'DisplayVersion': versao})
             else:
+                # Se não encontrou uma versão no fim, guarda só o nome
+                # Se a linha não termina com um padrão de versão, guardamos só o nome e deixamos a versão vazia.
                 resultado.append({'DisplayName': linha, 'DisplayVersion': ''})
 
+        # Retorna a lista pronta para consumo (impressão, CSV, etc.)
         return resultado
 
 
