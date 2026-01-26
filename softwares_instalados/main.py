@@ -53,13 +53,23 @@ class RelatorioSoftwareInstalados:
             stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
         )
 
-        # Separa o resultado por linhas e adiciona em uma lista
+        # Quebra a saída em linhas e normaliza espaços:
+        # - re.sub(r"\s+", " ", item) substitui blocos de espaços/tabs por um espaço simples
+        # - .strip() remove espaços no início/fim
+        # .strip(): remove espaços no início e no fim.
+        # splitlines(): divide a saída em linhas.
         for item in response_scan.stdout.splitlines():
+
+            # re.sub(r"\s+", " ", item): colapsa múltiplos espaços/tabs em um único espaço (ajuda a padronizar).
             formatacao_item = re.sub(r"\s+", " ", item)
+
+            # Guarda cada linha normalizada em self.lista_itens.
             self.lista_itens.append(formatacao_item)
 
-        # Processo os dados e separa entre nome e versões.
+        # Para cada linha, tenta separar NOME e VERSÃO (quando a versão está no fim da linha)
         for row in self.lista_itens:
+
+            # Garante que "linha" é string e remove espaços periféricos
             linha = (row or '').strip()
 
             if not linha:
