@@ -21,6 +21,16 @@ class RelatorioSoftwareInstalados:
         """
     )
 
+    COMANDO_SCAN_SOFTWARE_COMPLETO = (
+        r"""            
+            Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* ,
+            HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* |
+            Select-Object DisplayName, DisplayVersion, Publisher, InstallDate |
+            Where-Object { $_.DisplayName } |
+            Sort-Object DisplayName
+        """
+    )
+
     def __init__(self):
         self.lista_itens = []
 
