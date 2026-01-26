@@ -38,44 +38,6 @@ class GeranciadorDePacotes:
     def __init__(self):
         pass
 
-    # def procurar_pacote_anydesk(self):
-    #
-    #     print('Procurando por um pacote AnyDesk instalado')
-    #
-    #     pacote = 'anydesk'
-    #     comando_shell = f"winget search {pacote}"
-    #
-    #     response_powershell = subprocess.run(
-    #         ['powershell', '-Command', comando_shell],
-    #         text=True, capture_output=True
-    #     )
-    #     resultado_busca = response_powershell.stdout
-    #
-    #     print(resultado_busca)
-    #
-    # def instalar_pacote_anydesk(self):
-    #     comando_shell = (
-    #         f'Start-Process "{path_file_name}" --silent'
-    #     )
-    #
-    #     response_powershell = subprocess.run(
-    #         ['powershell', '-Command', comando_shell],
-    #         text=True, capture_output=True
-    #     )
-    #
-    #     print(response_powershell.stdout)
-    #
-    # def desinstalar_pocotes(self):
-    #     pacote = 'AnyDesk.AnyDesk'
-    #     comando_shell = f"winget uninstall --id {pacote} --silent"
-    #
-    #     response_powershell = subprocess.run(
-    #         ['powershell', '-Command', comando_shell],
-    #         text=True, capture_output=True
-    #     )
-    #
-    #     print(response_powershell.stdout)
-
     def remover_processo(self):
         os.system('cls')
         print()
