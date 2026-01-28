@@ -7,6 +7,9 @@ from subprocess import (
 
 import socket
 
+# 
+from app_planilha_excel import CreaterPlanilha
+
 class RelatorioSoftwareInstalados:
 
     # Comando PowerShell "simples": lê somente HKLM 64-bit (Uninstall) e escolhe DisplayName + DisplayVersion
@@ -121,16 +124,6 @@ class RelatorioSoftwareInstalados:
 
         # Retorna a lista pronta para consumo (impressão, CSV, etc.)
         return resultado
-
-
-class CreaterPlanilha:
-    def __init__(self):
-        pass
-
-    def criar_planilha_dados_app(self, dados_entrada):
-        for item in dados_entrada:
-            print(f"{item['DisplayName']} => {item['DisplayVersion']}")
-        pass
 
 if __name__ == '__main__':
     obj_scan_software = RelatorioSoftwareInstalados()
