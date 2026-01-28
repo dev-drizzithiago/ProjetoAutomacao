@@ -126,5 +126,6 @@ class RelatorioSoftwareInstalados:
 if __name__ == '__main__':
     obj_scan_software = RelatorioSoftwareInstalados()
     response_resultado = obj_scan_software.scan_software()
+    print(response_resultado)
     for item in response_resultado:
         print(f"{item['DisplayName']} => {item['DisplayVersion']}")
