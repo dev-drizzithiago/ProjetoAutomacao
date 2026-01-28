@@ -123,9 +123,18 @@ class RelatorioSoftwareInstalados:
         return resultado
 
 
+class CreaterPlanilha:
+    def __init__(self):
+        pass
+
+    def criar_planilha_dados_app(self, dados_entrada):
+        for item in dados_entrada:
+            print(f"{item['DisplayName']} => {item['DisplayVersion']}")
+        pass
+
 if __name__ == '__main__':
     obj_scan_software = RelatorioSoftwareInstalados()
     response_resultado = obj_scan_software.scan_software()
-    print(response_resultado)
-    for item in response_resultado:
-        print(f"{item['DisplayName']} => {item['DisplayVersion']}")
+
+    init_obj_creater_planilha = CreaterPlanilha()
+    init_obj_creater_planilha.criar_planilha_dados_app(response_resultado)
