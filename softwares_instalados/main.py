@@ -41,11 +41,14 @@ class RelatorioSoftwareInstalados:
 
 
     def scan_software(self):
-        print(self.user_logado)
+
         # Lista final de dicionários: {"DisplayName": "...", "DisplayVersion": "..."}
         # Cria resultado, a lista que vamos retornar, formada por dicionários com as chaves DisplayName e
         # DisplayVersion.
         resultado = []
+
+        # Adiciona o usuário que esta logado.
+        resultado.append({'DisplayName': 'Usuário Logado', 'DisplayVersion': self.user_logado})
 
         # Executa PowerShell sem carregar perfis do usuário (-NoProfile) e sem travar por política
         # (-ExecutionPolicy Bypass)
@@ -121,9 +124,6 @@ class RelatorioSoftwareInstalados:
                 # Se não encontrou uma versão no fim, guarda só o nome
                 # Se a linha não termina com um padrão de versão, guardamos só o nome e deixamos a versão vazia.
                 resultado.append({'DisplayName': linha, 'DisplayVersion': ''})
-
-        resultado.append({'Usuário': self.user_logado})
-        print(resultado)
         # Retorna a lista pronta para consumo (impressão, CSV, etc.)
         return resultado
 
@@ -133,3 +133,4 @@ if __name__ == '__main__':
 
     init_obj_creater_planilha = CreaterPlanilha()
     init_obj_creater_planilha.dados_to_pandas(response_resultado)
+    init_obj_creater_planilha.criar_planilha_dados_app()
