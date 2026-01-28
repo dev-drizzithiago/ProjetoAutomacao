@@ -9,9 +9,9 @@ class CreaterPlanilha:
 
 
     def dados_to_pandas(self, dados_entrada):
-        self.CAMINHO_ABS_PLANILHA = f"{
-        dados_entrada['DisplayName'] - str(dados_entrada['DisplayVersion']).replace('.', '-')
-        }"
+        self.CAMINHO_ABS_PLANILHA = (f"{dados_entrada[0]['DisplayName']} - "
+                                     f"{str(dados_entrada[0]['DisplayVersion']).replace('.', '-')}.xlsx")
+
         self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
 
     def criar_planilha_dados_app(self):
