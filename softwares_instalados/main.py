@@ -7,7 +7,7 @@ from subprocess import (
 
 import socket
 
-# 
+#
 from app_planilha_excel import CreaterPlanilha
 
 class RelatorioSoftwareInstalados:
@@ -122,6 +122,8 @@ class RelatorioSoftwareInstalados:
                 # Se a linha não termina com um padrão de versão, guardamos só o nome e deixamos a versão vazia.
                 resultado.append({'DisplayName': linha, 'DisplayVersion': ''})
 
+        resultado.append({'Usuário': self.user_logado})
+        print(resultado)
         # Retorna a lista pronta para consumo (impressão, CSV, etc.)
         return resultado
 
@@ -130,4 +132,4 @@ if __name__ == '__main__':
     response_resultado = obj_scan_software.scan_software()
 
     init_obj_creater_planilha = CreaterPlanilha()
-    init_obj_creater_planilha.criar_planilha_dados_app(response_resultado)
+    init_obj_creater_planilha.dados_to_pandas(response_resultado)
