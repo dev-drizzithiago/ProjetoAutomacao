@@ -15,10 +15,13 @@ class CreaterPlanilha:
         self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
 
     def criar_planilha_dados_app(self):
+        print('Criando a Planilha!')
 
-        print('Criando a planilha!')
-
-        print()
+        # Abre um ExcelWriter apontando para o caminho absoluto
+        # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
         with pd.ExcelWriter(self.CAMINHO_ABS_PLANILHA, engine='xlsxwriter') as writer:
+            # sheet: nome da planilha na aba.
             sheet = 'Relatório APPs'
+
+            # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
             self.DATA_FRAME_APP.to_excel(writer, sheet_name=sheet, index=False)
