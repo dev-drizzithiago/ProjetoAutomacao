@@ -28,7 +28,20 @@ class CreaterPlanilha:
 
             work_sheet = writer.sheets[sheet]
 
-            work_sheet.set_column("A:A", 600)
-            work_sheet.set_column("B:B", 180)
+            work_sheet.set_column("A:A", 80)
+            work_sheet.set_column("B:B", 25)
 
             rows, cols = self.DATA_FRAME_APP.shape
+
+            work_sheet.add_table(0, 0, rows, cols - 1, {
+                "name": "TabelaSoftware",
+
+                # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
+                "style": "TableStyleMedium9",
+
+                # Define o texto do cabeçalho de cada coluna a partir de df.columns.
+                "columns": [{"header": c} for c in self.DATA_FRAME_APP.columns]
+            })
+
+            work_sheet.freeze_panes(1, 0)
+            work_sheet.freeze_panes(2, 0)
