@@ -33,7 +33,7 @@ class CreaterPlanilha:
             bold = wb.add_format({'bold': True})
 
             work_sheet.set_column("A:A", 80, bold)
-            work_sheet.set_column("B:B", 25, bold)
+            work_sheet.set_column("B:B", 25)
 
             rows, cols = self.DATA_FRAME_APP.shape
 
