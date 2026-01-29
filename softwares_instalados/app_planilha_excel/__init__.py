@@ -32,8 +32,10 @@ class CreaterPlanilha:
                 {"bold": True, "bg_color": "#D9E1F2", "align": "center", "border": 1, 'font_color': '#000'}
             )
 
-            fmt_header.set_row(0, 20, fmt_header)
-            
+            work_sheet.set_row(0, 30, fmt_header)
+
             work_sheet.set_column("A:A", 25)
             work_sheet.set_column("B:B", 25)
             work_sheet.set_column("C:C", 25)
+
+            rows, cols = self.DATA_FRAME_APP.shape
