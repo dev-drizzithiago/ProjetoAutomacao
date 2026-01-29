@@ -27,3 +27,13 @@ class CreaterPlanilha:
             self.DATA_FRAME_APP.to_excel(writer, sheet_name=sheet, index=False)
 
             work_sheet = writer.sheets[sheet]
+
+            fmt_header = work_sheet.add_format(
+                {"bold": True, "bg_color": "#D9E1F2", "align": "center", "border": 1, 'font_color': '#000'}
+            )
+
+            fmt_header.set_row(0, 20, fmt_header)
+            
+            work_sheet.set_column("A:A", 25)
+            work_sheet.set_column("B:B", 25)
+            work_sheet.set_column("C:C", 25)
