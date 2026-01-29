@@ -9,8 +9,10 @@ class CreaterPlanilha:
 
 
     def dados_to_pandas(self, dados_entrada):
-        self.CAMINHO_ABS_PLANILHA = (f"{dados_entrada[0]['DisplayName']} - "
-                                     f"{str(dados_entrada[0]['DisplayVersion']).replace('.', '-')}.xlsx")
+        self.CAMINHO_ABS_PLANILHA = (
+            f"{dados_entrada[0]['DisplayName']} - "
+            f"{str(dados_entrada[0]['DisplayVersion']).replace('.', '-')}.xlsx"
+        )
 
         self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
 
@@ -32,6 +34,7 @@ class CreaterPlanilha:
             work_sheet = writer.sheets[sheet]
             bold = wb.add_format({'bold': True})
 
+            work_sheet.set_column(2, 0, bold)
             work_sheet.set_column("A:A", 80, bold)
             work_sheet.set_column("B:B", 25)
 
