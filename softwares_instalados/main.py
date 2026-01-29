@@ -131,8 +131,6 @@ if __name__ == '__main__':
     obj_scan_software = RelatorioSoftwareInstalados()
     response_resultado = obj_scan_software.scan_software()
 
-    print(response_resultado)
-
     init_obj_creater_planilha = CreaterPlanilha()
     init_obj_creater_planilha.dados_to_pandas(response_resultado)
     init_obj_creater_planilha.criar_planilha_dados_app()
