@@ -25,3 +25,5 @@ class CreaterPlanilha:
 
             # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
             self.DATA_FRAME_APP.to_excel(writer, sheet_name=sheet, index=False)
+
+            work_sheet = writer.sheets[sheet]
