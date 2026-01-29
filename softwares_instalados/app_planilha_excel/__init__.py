@@ -20,16 +20,20 @@ class CreaterPlanilha:
         # Abre um ExcelWriter apontando para o caminho absoluto
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
         with pd.ExcelWriter(self.CAMINHO_ABS_PLANILHA, engine='xlsxwriter') as writer:
+
             # sheet: nome da planilha na aba.
             sheet = 'Relatório APPs'
+
+            wb = writer.book
 
             # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
             self.DATA_FRAME_APP.to_excel(writer, sheet_name=sheet, index=False)
 
             work_sheet = writer.sheets[sheet]
+            bold = wb.add_format({'bold': True})
 
-            work_sheet.set_column("A:A", 80)
-            work_sheet.set_column("B:B", 25)
+            work_sheet.set_column("A:A", 80, bold)
+            work_sheet.set_column("B:B", 25, bold)
 
             rows, cols = self.DATA_FRAME_APP.shape
 
