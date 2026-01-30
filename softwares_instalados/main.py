@@ -1,4 +1,5 @@
 import re
+import os
 import getpass
 from subprocess import (
     PIPE, # sinaliza que queremos capturar a saída do processo (em vez de deixar ela ir para o console).
@@ -7,8 +8,11 @@ from subprocess import (
 
 import socket
 
-# Chama o modulo. 
+# Chama o modulo.
 from app_planilha_excel import CreaterPlanilha
+
+CAMINHO_ABS_ARQUIVO = os.path.join(__file__)
+
 
 class RelatorioSoftwareInstalados:
 
@@ -32,7 +36,6 @@ class RelatorioSoftwareInstalados:
         """
     )
 
-    CAMINHO_ABS_ARQUIVO = os.path.join(__file__)
 
     def __init__(self):
 
@@ -135,4 +138,4 @@ if __name__ == '__main__':
 
     init_obj_creater_planilha = CreaterPlanilha()
     init_obj_creater_planilha.dados_to_pandas(response_resultado)
-    init_obj_creater_planilha.criar_planilha_dados_app()
+    return_caminho_abs_planilha = init_obj_creater_planilha.criar_planilha_dados_app()
