@@ -11,7 +11,7 @@ class CreaterPlanilha:
     def dados_to_pandas(self, dados_entrada):
         self.CAMINHO_ABS_PLANILHA = (
 
-            f"{dados_entrada[0]['DisplayName']} - "
+            f"software_instalados_"
             f"{str(dados_entrada[0]['DisplayVersion']).replace('.', '-')}.xlsx"
 
         )
