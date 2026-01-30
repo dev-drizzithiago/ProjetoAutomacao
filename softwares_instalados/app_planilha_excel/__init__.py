@@ -34,7 +34,6 @@ class CreaterPlanilha:
             work_sheet = writer.sheets[sheet]
             bold = wb.add_format({'bold': True})
 
-            work_sheet.set_column(2, 0, bold)
             work_sheet.set_column("A:A", 80, bold)
             work_sheet.set_column("B:B", 25)
 
