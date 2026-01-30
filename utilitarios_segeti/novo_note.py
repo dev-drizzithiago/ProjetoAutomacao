@@ -48,10 +48,10 @@ class ConfigNovoNote:
         )
 
         SCRIPT_CONCEDENDO_ACESSO = (
-             "Grant-SmbShareAccess "
-             "-Name $NomeCompartilhamento "
-             "-AccountName $contaLocal "
-             "-AccessRight Change -Force"
+             rf"Grant-SmbShareAccess "
+             rf"-Name {PASTA_COMPARTILHADA} "
+             rf"-AccountName '.\ti' "
+             rf"-AccessRight Change -Force"
         )
         print('Concedendo acesso ao usuário...')
 
@@ -61,7 +61,7 @@ class ConfigNovoNote:
             "-ExecutionPolicy",
             "Bypass",
             "-Command",
-            SCRIPT_COMPARTILHAMENTO
+            SCRIPT_CONCEDENDO_ACESSO
         ], text=True,  # retorna stdout como str (não bytes)  faz o stdout vir já como string.
             stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
         )
@@ -72,6 +72,6 @@ class ConfigNovoNote:
 
 if __name__ == '__main__':
     init_obj_config = ConfigNovoNote()
-    init_obj_config.criar_usuario_adm_local()
+    init_obj_config.conf_pasta_scan()
 
     # init_obj_config.conf_pasta_scan()
