@@ -12,23 +12,6 @@ class ConfigNovoNote:
     def __init__(self):
         pass
 
-    def criar_usuario_adm_local(self):
-        script_criar_user = (
-            rf'Get-Credential -Message "Defina a senha para .\ti" -UserName ".\ti" | '
-            rf'Export-Clixml -Path "C:\Creds\cred_local_ti.clixml"'
-        )
-
-        run([
-            "powershell",
-            "-NoProfile",
-            "-ExecutionPolicy",
-            "Bypass",
-            "-Command",
-            script_criar_user
-        ], text=True,  # retorna stdout como str (não bytes)  faz o stdout vir já como string.
-            stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
-        )
-
     def conf_pasta_scan(self):
         SCRIPT_CRIAR_PASTA = rf"""
             New-Item -ItemType Directory -Path {PASTA_COMPARTILHADA} -Force | Out-Null
@@ -47,12 +30,11 @@ class ConfigNovoNote:
 
         SCRIPT_COMPARTILHAMENTO = rf"""
             New-SmbShare -Name {PASTA_COMPARTILHADA} 
-            -Path $Pasta -Description "Compartilhamento restrito para .\ti" \
+            -Path {PASTA_COMPARTILHADA} -Description "Compartilhamento restrito para .\ti" \
             -CachingMode None | Out-Null
         """
 
         print(f'Configurando compartilhamento da pasta: "{PASTA_COMPARTILHADA}"')
-        sleep(5)
 
         run([
             "powershell",
@@ -65,6 +47,24 @@ class ConfigNovoNote:
             stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
         )
 
+        SCRIPT_CONCEDENDO_ACESSO = (
+             "Grant-SmbShareAccess "
+             "-Name $NomeCompartilhamento "
+             "-AccountName $contaLocal "
+             "-AccessRight Change -Force"
+        )
+        print('Concedendo acesso ao usuário...')
+
+        run([
+            "powershell",
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-Command",
+            SCRIPT_COMPARTILHAMENTO
+        ], text=True,  # retorna stdout como str (não bytes)  faz o stdout vir já como string.
+            stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
+        )
 
     def conf_dominio(self):
         pass
@@ -72,4 +72,6 @@ class ConfigNovoNote:
 
 if __name__ == '__main__':
     init_obj_config = ConfigNovoNote()
-    init_obj_config.conf_pasta_scan()
+    init_obj_config.criar_usuario_adm_local()
+
+    # init_obj_config.conf_pasta_scan()
