@@ -1,15 +1,16 @@
 import pandas as pd
 
+CAMINHO_ABS_SERVIDOR = R'\\192.168.0.10\PLANILHAS_EXCEL_APPS'
 
 class CreaterPlanilha:
 
     def __init__(self):
         self.DATA_FRAME_APP = None
-        self.CAMINHO_ABS_PLANILHA = None
+        self.NOME_PLANILHA = None
 
 
     def dados_to_pandas(self, dados_entrada):
-        self.CAMINHO_ABS_PLANILHA = (
+        self.NOME_PLANILHA = (
 
             f"software_instalados_"
             f"{str(dados_entrada[0]['DisplayVersion']).replace('.', '-')}.xlsx"
@@ -21,9 +22,11 @@ class CreaterPlanilha:
     def criar_planilha_dados_app(self):
         print('Criando a Planilha...!')
 
+        self_local_save_planilha = os.path.join(CAMINHO_ABS_SERVIDOR, self.NOME_PLANILHA )
+
         # Abre um ExcelWriter apontando para o caminho absoluto
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
-        with pd.ExcelWriter(self.CAMINHO_ABS_PLANILHA, engine='xlsxwriter') as writer:
+        with pd.ExcelWriter(self.NOME_PLANILHA, engine='xlsxwriter') as writer:
 
             # sheet: nome da planilha na aba.
             sheet = 'Relatório APPs'
@@ -54,4 +57,4 @@ class CreaterPlanilha:
             work_sheet.freeze_panes(1, 0)
             work_sheet.freeze_panes(2, 0)
 
-        return self.CAMINHO_ABS_PLANILHA
+        return self.NOME_PLANILHA
