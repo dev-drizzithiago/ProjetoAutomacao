@@ -10,14 +10,16 @@ class CreaterPlanilha:
 
     def dados_to_pandas(self, dados_entrada):
         self.CAMINHO_ABS_PLANILHA = (
+
             f"{dados_entrada[0]['DisplayName']} - "
             f"{str(dados_entrada[0]['DisplayVersion']).replace('.', '-')}.xlsx"
+
         )
 
         self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
 
     def criar_planilha_dados_app(self):
-        print('Criando a Planilha!')
+        print('Criando a Planilha...!')
 
         # Abre um ExcelWriter apontando para o caminho absoluto
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
@@ -51,3 +53,5 @@ class CreaterPlanilha:
 
             work_sheet.freeze_panes(1, 0)
             work_sheet.freeze_panes(2, 0)
+
+        return self.CAMINHO_ABS_PLANILHA
