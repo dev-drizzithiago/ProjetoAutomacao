@@ -11,9 +11,6 @@ import socket
 # Chama o modulo.
 from app_planilha_excel import CreaterPlanilha
 
-CAMINHO_ABS_ARQUIVO = os.path.join(__file__)
-
-
 class RelatorioSoftwareInstalados:
 
     # Comando PowerShell "simples": lê somente HKLM 64-bit (Uninstall) e escolhe DisplayName + DisplayVersion
@@ -138,6 +135,4 @@ if __name__ == '__main__':
 
     init_obj_creater_planilha = CreaterPlanilha()
     init_obj_creater_planilha.dados_to_pandas(response_resultado)
-    return_caminho_abs_planilha = init_obj_creater_planilha.criar_planilha_dados_app()
-
-    print(return_caminho_abs_planilha)
+    init_obj_creater_planilha.criar_planilha_dados_app()
