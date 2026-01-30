@@ -7,7 +7,7 @@ from subprocess import (
 
 import socket
 
-#
+# Chama o modulo. 
 from app_planilha_excel import CreaterPlanilha
 
 class RelatorioSoftwareInstalados:
@@ -31,6 +31,8 @@ class RelatorioSoftwareInstalados:
             Sort-Object DisplayName
         """
     )
+
+    CAMINHO_ABS_ARQUIVO = os.path.join(__file__)
 
     def __init__(self):
 
