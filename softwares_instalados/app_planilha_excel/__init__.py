@@ -6,20 +6,26 @@ from pathlib import Path
 
 HOME_USUARIO = Path.home()
 PASTA_DOWNLOAD_WIN = 'Downloads'
-CAMINHO_ABS_SERVIDOR = R'\\192.168.0.10\PLANILHAS_EXCEL_APPS'
+CAMINHO_ABS_SERVIDOR = r'\\192.168.0.10\Programas ADM\PLANILHAS_EXCEL_APPS'
 
 class CreaterPlanilha:
 
     def __init__(self):
+
         self.DATA_FRAME_APP = None
         self.NOME_PLANILHA = None
         self.local_save_planilha = None
 
+        self.local_path = os.path.join(HOME_USUARIO, PASTA_DOWNLOAD_WIN)
 
+        print(self.local_path)
     def dados_to_pandas(self, dados_entrada):
         self.NOME_PLANILHA = (
             f"software_instalados_"
-            f"{str(dados_entrada[0]['DisplayVersion']).replace('.', '-')}.xlsx"
+            f"{
+            str(dados_entrada[0]['DisplayVersion'])
+            .replace('.', '-')
+            }.xlsx"
         )
 
         self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
@@ -32,14 +38,16 @@ class CreaterPlanilha:
         try:
             print()
             print('---' * 10)
-            print('Testando acesso ao servidor...')
+            print('Enviando relatório ao servidor...')
             os.listdir(CAMINHO_ABS_SERVIDOR)
             self.local_save_planilha = os.path.join(CAMINHO_ABS_SERVIDOR, self.NOME_PLANILHA)
+            print(self.local_save_planilha)
         except:
             print()
             print('---' * 10)
             print('Servidor não respondeu, arquivo sendo salvo no computador local...')
-            self.local_save_planilha = os.path.join(HOME_USUARIO, PASTA_DOWNLOAD_WIN)
+            print('Pasta Local: ', self.local_save_planilha)
+            self.local_save_planilha = self.local_path
 
         # Abre um ExcelWriter apontando para o caminho absoluto
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
