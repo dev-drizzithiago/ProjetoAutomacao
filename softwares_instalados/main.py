@@ -1,5 +1,6 @@
 import ctypes
 import re
+import os
 import sys
 import getpass
 from subprocess import (
@@ -160,6 +161,7 @@ if __name__ == '__main__':
         init_obj_creater_planilha.dados_to_pandas(response_resultado)
         init_obj_creater_planilha.criar_planilha_dados_app()
 
+    os.system('cls')
     print()
     print('---' * 10)
     input('Aperta ENTER para finalizar!')
