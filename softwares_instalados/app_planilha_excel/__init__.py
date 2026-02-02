@@ -3,10 +3,9 @@ import os
 
 from pathlib import Path
 
-
 HOME_USUARIO = Path.home()
 PASTA_DOWNLOAD_WIN = 'Downloads'
-CAMINHO_ABS_SERVIDOR = r'\\192.168.0.10\Programas ADM\PLANILHAS_EXCEL_APPS'
+CAMINHO_ABS_SERVIDOR = r'\\192.168.0.10\APP Login\PLANILHAS_EXCEL_APPS'
 
 class CreaterPlanilha:
 
