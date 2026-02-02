@@ -18,7 +18,6 @@ class CreaterPlanilha:
 
         self.local_path = os.path.join(HOME_USUARIO, PASTA_DOWNLOAD_WIN)
 
-        print(self.local_path)
     def dados_to_pandas(self, dados_entrada):
         self.NOME_PLANILHA = (
             f"software_instalados_"
