@@ -1,3 +1,4 @@
+import ctypes
 import re
 import os
 import getpass
@@ -10,6 +11,26 @@ import socket
 
 # Chama o modulo.
 from app_planilha_excel import CreaterPlanilha
+
+def verificar_elevacao():
+    def is_admin():
+        try:
+            return ctypes.windll.shell32.IsUserAnAdmin()
+        except:
+            return False
+
+    ## Se o app não foi elevado vai abrir a janela para solicita as credinciais de administrador.
+    if not is_admin():
+        ctypes.windll.shell32.ShellExecuteW(
+            None,  # handle (não usado)
+            "runas",  # O verbo que força o UAC
+            sys.executable,  # O arquivo a ser executado (o interpretador Python)
+            " ".join(sys.argv),  # Os argumentos (o nome do seu script)
+            None,  # diretório de trabalho
+            1  # mostra a janela
+        )
+        sys.exit(0)  # Sai do script original
+    return True
 
 class RelatorioSoftwareInstalados:
 
@@ -130,9 +151,11 @@ class RelatorioSoftwareInstalados:
         return resultado
 
 if __name__ == '__main__':
-    obj_scan_software = RelatorioSoftwareInstalados()
-    response_resultado = obj_scan_software.scan_software()
 
-    init_obj_creater_planilha = CreaterPlanilha()
-    init_obj_creater_planilha.dados_to_pandas(response_resultado)
-    init_obj_creater_planilha.criar_planilha_dados_app()
+    if verificar_elevacao():
+        obj_scan_software = RelatorioSoftwareInstalados()
+        response_resultado = obj_scan_software.scan_software()
+
+        init_obj_creater_planilha = CreaterPlanilha()
+        init_obj_creater_planilha.dados_to_pandas(response_resultado)
+        init_obj_creater_planilha.criar_planilha_dados_app()
