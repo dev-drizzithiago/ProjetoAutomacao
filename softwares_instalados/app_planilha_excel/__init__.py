@@ -36,8 +36,10 @@ class CreaterPlanilha:
         try:
             print()
             print('---' * 10)
-            print('Enviando relatório ao servidor...')
+            print('Enviando relatório ao servidor, testando conexão...')
+
             os.listdir(self.CAMINHO_ABS_SERVIDOR)
+
             print(self.local_save_planilha)
             self.local_save_planilha = os.path.join(self.CAMINHO_ABS_SERVIDOR, self.NOME_PLANILHA)
         except:
