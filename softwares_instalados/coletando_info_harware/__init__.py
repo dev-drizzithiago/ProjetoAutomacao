@@ -21,7 +21,7 @@ class InfoHardWareScan:
         result_busca_processador = self.conn_hardware.Win32_Processor()
         result_busca_memoria = self.conn_hardware.Win32_PhysicalMemory()
         result_busca_placa_mae = self.conn_hardware.Win32_BaseBoard()
-        result_busca_placa_disk = self.conn_disk_local
+        result_busca_placa_disk = self.conn_hardware.Win32_LogicalDisk()
 
         # for listagem in result_busca_processador:
         #     self.dict_info_hardware['Processador']= listagem.Name
@@ -44,7 +44,11 @@ class InfoHardWareScan:
         #     self.dict_info_hardware['Versao'] = listagem.Version
 
         for listagem in result_busca_placa_disk:
-            print(listagem)
+            if listagem.DeviceID == "C:":
+                self.dict_info_hardware['Disco Local'] = listagem.Description
+                self.dict_info_hardware['Capacidade'] = str(int(listagem.Size) / 10243).split('.')[]
+                self.dict_info_hardware['Espaço Livre'] = listagem.FreeSpace
+                self.dict_info_hardware['Numero de Serie'] = listagem.VolumeSerialNumber
 
         print(self.dict_info_hardware)
 
