@@ -82,12 +82,12 @@ class RelatorioSoftwareInstalados:
         # -NoProfile: não carrega perfis do usuário (evita ruídos e lentidão).
         # -ExecutionPolicy Bypass: evita que políticas de execução bloqueiem o comando.
         # -Command <script>: executa o conteúdo da constante COMANDO_SCAN_SOFTWARE.
-        # response_scan = run(
-        #     ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", self.COMANDO_SCAN_SOFTWARE],
-        #     text=True,   # retorna stdout como str (não bytes)  faz o stdout vir já como string.
-        #     stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
-        # )
-        response_scan = _run_spinner(self.COMANDO_SCAN_SOFTWARE, 'Buscando apps instalados...')
+        response_scan = run(
+             ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", self.COMANDO_SCAN_SOFTWARE],
+             text=True,   # retorna stdout como str (não bytes)  faz o stdout vir já como string.
+             stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
+        )
+        # response_scan = _run_spinner(self.COMANDO_SCAN_SOFTWARE, 'Buscando apps instalados...')
         # Quebra a saída em linhas e normaliza espaços:
         # - re.sub(r"\s+", " ", item) substitui blocos de espaços/tabs por um espaço simples
         # - .strip() remove espaços no início/fim
@@ -168,4 +168,3 @@ if __name__ == '__main__':
     print('---' * 10)
     print('Relatório finalizado!')
     sleep(10)
-    
