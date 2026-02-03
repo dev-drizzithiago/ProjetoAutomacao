@@ -30,8 +30,7 @@ class InfoHardWareScan:
             self.dict_info_hardware['Números Cores'] = listagem.NumberOfCores
             self.dict_info_hardware['Número de Threads'] = listagem.NumberOfLogicalProcessors
 
-        self.dict_geral_hardware['Processadores'] = self.dict_info_hardware
-        self.lista_info_hardware.append(self.dict_geral_hardware)
+        self.lista_info_hardware.append({'Processador': self.dict_info_hardware})
 
         for listagem in result_busca_memoria:
 
@@ -61,7 +60,6 @@ class InfoHardWareScan:
                 self.dict_info_hardware['Capacidade'] =  str(int(listagem.Size) / 10243).split('.')[0]
                 self.dict_info_hardware['Espaço Livre'] = f"{porcetangem_espaco_livre:.2f}"
                 self.dict_info_hardware['Numero de Serie'] = listagem.VolumeSerialNumber
-
 
         self.lista_info_hardware.append({'Unidade': self.dict_info_hardware})
 
