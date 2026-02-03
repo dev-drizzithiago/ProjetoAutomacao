@@ -87,7 +87,10 @@ class RelatorioSoftwareInstalados:
              text=True,   # retorna stdout como str (não bytes)  faz o stdout vir já como string.
              stdout=PIPE  # captura a saída padrão para uso no Python  captura a saída do comando dentro do Python.
         )
+
+        # chama o modula para mostrar o spinner
         # response_scan = _run_spinner(self.COMANDO_SCAN_SOFTWARE, 'Buscando apps instalados...')
+
         # Quebra a saída em linhas e normaliza espaços:
         # - re.sub(r"\s+", " ", item) substitui blocos de espaços/tabs por um espaço simples
         # - .strip() remove espaços no início/fim
