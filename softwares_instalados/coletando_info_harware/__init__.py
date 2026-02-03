@@ -42,8 +42,7 @@ class InfoHardWareScan:
             self.dict_info_hardware['Parte Number'] = listagem.PartNumber
             self.dict_info_hardware['Serial Number'] = listagem.SerialNumber
 
-        self.dict_geral_hardware['RAM'] = self.dict_info_hardware
-        self.lista_info_hardware.append(self.dict_geral_hardware)
+        self.lista_info_hardware.append({'Memoria': self.dict_info_hardware})
 
         for listagem in result_busca_placa_mae:
 
@@ -53,8 +52,7 @@ class InfoHardWareScan:
             self.dict_info_hardware['Numero Produto'] = listagem.Product
             self.dict_info_hardware['Versao'] = listagem.Version
 
-        self.dict_geral_hardware['MainBoard'] = self.dict_info_hardware
-        self.lista_info_hardware.append(self.dict_geral_hardware)
+        self.lista_info_hardware.append({'MainBoard': self.dict_info_hardware})
 
         for listagem in result_busca_disk:
             if listagem.DeviceID == "C:":
@@ -65,8 +63,7 @@ class InfoHardWareScan:
                 self.dict_info_hardware['Numero de Serie'] = listagem.VolumeSerialNumber
 
 
-        self.dict_geral_hardware['Unidade'] = self.dict_info_hardware
-        self.lista_info_hardware.append(self.dict_geral_hardware)
+        self.lista_info_hardware.append({'Unidade': self.dict_info_hardware})
 
         print('\n')
         for item in self.lista_info_hardware:
