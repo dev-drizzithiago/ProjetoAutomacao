@@ -31,6 +31,7 @@ class InfoHardWareScan:
             self.dict_info_hardware['Número de Threads'] = listagem.NumberOfLogicalProcessors
 
         self.dict_geral_hardware['Processadores'] = self.dict_info_hardware
+        self.lista_info_hardware.append(self.dict_geral_hardware)
 
         for listagem in result_busca_memoria:
 
@@ -42,6 +43,7 @@ class InfoHardWareScan:
             self.dict_info_hardware['Serial Number'] = listagem.SerialNumber
 
         self.dict_geral_hardware['RAM'] = self.dict_info_hardware
+        self.lista_info_hardware.append(self.dict_geral_hardware)
 
         for listagem in result_busca_placa_mae:
 
@@ -52,6 +54,7 @@ class InfoHardWareScan:
             self.dict_info_hardware['Versao'] = listagem.Version
 
         self.dict_geral_hardware['MainBoard'] = self.dict_info_hardware
+        self.lista_info_hardware.append(self.dict_geral_hardware)
 
         for listagem in result_busca_disk:
             if listagem.DeviceID == "C:":
@@ -63,9 +66,11 @@ class InfoHardWareScan:
 
 
         self.dict_geral_hardware['Unidade'] = self.dict_info_hardware
+        self.lista_info_hardware.append(self.dict_geral_hardware)
 
-        for k, v in self.dict_geral_hardware.items():
-            print(f'{k} - {v}')
+        print('\n')
+        for item in self.lista_info_hardware:
+            print(item)
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
