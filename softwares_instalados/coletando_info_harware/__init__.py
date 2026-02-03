@@ -7,13 +7,27 @@ from threading import Event, Thread
 class InfoHardWareScan:
     conn_hardware = wmi.WMI()
     def __init__(self):
-        pass
+        self.lista_info_hardware = []
 
 
     def scan_hardware(self):
 
-        return  self.conn_hardware.Win32_Process()
-        # return  self.conn_hardware.classes
+        result_busca_processador = self.conn_hardware.Win32_Processor()
+        result_busca_memoria = self.conn_hardware.Win32_PhysicalMemory()
+        # for listagem in result_busca_processador:
+        #     self.lista_info_hardware.append({
+        #         'Processador': listagem.Name,
+        #         'Números Cores': listagem.NumberOfCores,
+        #         'Número de Threads': listagem.NumberOfLogicalProcessors,
+        #     })
+
+        for listagem in result_busca_memoria:
+            print(listagem.Name)
+            print(int (listagem.Capacity) / 10243, 'GB')
+            print(listagem.ConfiguredClockSpeed)
+            print(listagem.Speed)
+            print(listagem.PartNumber)
+            print(listagem.SerialNumber)
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
@@ -39,8 +53,4 @@ class InfoHardWareScan:
 
 if __name__ == '__main__':
     inicit_obj_scan = InfoHardWareScan()
-    result_scan = inicit_obj_scan._run_spinner('Buscando informações sobre o hardware...')
-
-    for item in result_scan(name='chrome.exe'):
-        print(item)
-
+    inicit_obj_scan._run_spinner('Buscando informações sobre o hardware...')
