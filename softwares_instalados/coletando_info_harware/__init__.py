@@ -12,7 +12,8 @@ class InfoHardWareScan:
 
     def scan_hardware(self):
 
-        return  self.conn_hardware
+        return  self.conn_hardware.Win32_Process()
+        # return  self.conn_hardware.classes
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
@@ -40,5 +41,6 @@ if __name__ == '__main__':
     inicit_obj_scan = InfoHardWareScan()
     result_scan = inicit_obj_scan._run_spinner('Buscando informações sobre o hardware...')
 
-    print(result_scan)
+    for item in result_scan(name='chrome.exe'):
+        print(item)
 
