@@ -11,8 +11,8 @@ class InfoHardWareScan:
 
 
     def scan_hardware(self):
-        sleep(10)
-        return  self.conn_hardware.classes
+
+        return  self.conn_hardware
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
