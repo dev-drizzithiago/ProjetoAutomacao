@@ -11,6 +11,7 @@ class InfoHardWareScan:
 
 
     def scan_hardware(self):
+        sleep(10)
         return  self.conn_hardware.classes
 
     def _spinner(self, stop_event, prefix='Processando... '):
@@ -37,7 +38,7 @@ class InfoHardWareScan:
 
 if __name__ == '__main__':
     inicit_obj_scan = InfoHardWareScan()
-    result_scan = inicit_obj_scan._run_spinner('Buscando informações sobre o hardware')
+    result_scan = inicit_obj_scan._run_spinner('Buscando informações sobre o hardware...')
 
     print(result_scan)
 
