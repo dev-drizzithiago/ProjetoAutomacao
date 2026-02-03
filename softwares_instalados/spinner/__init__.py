@@ -5,7 +5,6 @@ from threading import Event, Thread
 
 
 def _run_processo_powershell(comando_shell):
-    sleep(10)
     resultado_processo = run(
         ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando_shell],
         shell=True,
