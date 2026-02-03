@@ -1,33 +1,52 @@
 import wmi
+import psutil
 import itertools
 from time import sleep
 from threading import Event, Thread
 
 
 class InfoHardWareScan:
+
     conn_hardware = wmi.WMI()
+
+    conn_disk_local = psutil.disk_partitions()
+
     def __init__(self):
         self.lista_info_hardware = []
+        self.dict_info_hardware = {}
 
 
     def scan_hardware(self):
 
         result_busca_processador = self.conn_hardware.Win32_Processor()
         result_busca_memoria = self.conn_hardware.Win32_PhysicalMemory()
-        # for listagem in result_busca_processador:
-        #     self.lista_info_hardware.append({
-        #         'Processador': listagem.Name,
-        #         'Números Cores': listagem.NumberOfCores,
-        #         'Número de Threads': listagem.NumberOfLogicalProcessors,
-        #     })
+        result_busca_placa_mae = self.conn_hardware.Win32_BaseBoard()
+        result_busca_placa_disk = self.conn_disk_local
 
-        for listagem in result_busca_memoria:
-            print(listagem.Name)
-            print(int (listagem.Capacity) / 10243, 'GB')
-            print(listagem.ConfiguredClockSpeed)
-            print(listagem.Speed)
-            print(listagem.PartNumber)
-            print(listagem.SerialNumber)
+        # for listagem in result_busca_processador:
+        #     self.dict_info_hardware['Processador']= listagem.Name
+        #     self.dict_info_hardware['Números Cores']= listagem.NumberOfCores
+        #     self.dict_info_hardware['Número de Threads']= listagem.NumberOfLogicalProcessors
+        #
+        # for listagem in result_busca_memoria:
+        #     self.dict_info_hardware['Memoria'] = listagem.Name
+        #     self.dict_info_hardware['Capacidade'] = str(int (listagem.Capacity) / 10243).split('.')[0]
+        #     self.dict_info_hardware['Clock Speed'] = listagem.ConfiguredClockSpeed
+        #     self.dict_info_hardware['Velocidade'] = listagem.Speed
+        #     self.dict_info_hardware['Parte Number'] = listagem.PartNumber
+        #     self.dict_info_hardware['Serial Number'] = listagem.SerialNumber
+
+        # for listagem in result_busca_placa_mae:
+        #     self.dict_info_hardware['Placa Mae'] = listagem.Name
+        #     self.dict_info_hardware['Fabricante'] = listagem.Manufacturer
+        #     self.dict_info_hardware['Serial Number'] = listagem.SerialNumber
+        #     self.dict_info_hardware['Numero Produto'] = listagem.Product
+        #     self.dict_info_hardware['Versao'] = listagem.Version
+
+        for listagem in result_busca_placa_disk:
+            print(listagem)
+
+        print(self.dict_info_hardware)
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
