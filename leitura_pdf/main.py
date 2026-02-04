@@ -79,7 +79,7 @@ class LeituraPdf:
         texto = self.texto_completo
         registros = dict()
 
-        # print(texto)
+        print(texto)
 
         periodo = self.buscar_ocorrencia(
             r"Período de Apuração:.*?([0-9]{2}/[0-9]{2}/[0-9]{4}\s*a\s*[0-9]{2}/[0-9]{2}/[0-9]{4})",
@@ -602,8 +602,8 @@ class LeituraPdf:
             }
         }
 
-        for k, v in registros.items():
-            print(k, v)
+        # for k, v in registros.items():
+        #     print(k, v)
 
         # for k, v in registros.items():
         #     print(f'{k} - {v}')
