@@ -26,42 +26,43 @@ class InfoHardWareScan:
 
         for listagem in result_busca_processador:
 
-            self.dict_info_hardware['Modelo'] = listagem.Name
-            self.dict_info_hardware['Números Cores'] = listagem.NumberOfCores
-            self.dict_info_hardware['Número de Threads'] = listagem.NumberOfLogicalProcessors
-
-            self.lista_info_hardware.append({'Processador': self.dict_info_hardware})
+            self.lista_info_hardware.append({'Processador': {
+                'Modelo': listagem.Name,
+                'Números Cores': listagem.NumberOfCores,
+                'Número de Threads': listagem.NumberOfLogicalProcessors,
+            }})
 
         for listagem in result_busca_memoria:
 
-            self.dict_info_hardware['Modelo'] = listagem.Name
-            self.dict_info_hardware['Capacidade'] = str(int (listagem.Capacity) / 10243).split('.')[0]
-            self.dict_info_hardware['Clock Speed'] = listagem.ConfiguredClockSpeed
-            self.dict_info_hardware['Velocidade'] = listagem.Speed
-            self.dict_info_hardware['Parte Number'] = listagem.PartNumber
-            self.dict_info_hardware['Serial Number'] = listagem.SerialNumber
-
-            self.lista_info_hardware.append({'Memoria': self.dict_info_hardware})
+            self.lista_info_hardware.append({'Memoria': {
+                'Modelo':  listagem.Name,
+                'Capacidade':  str(int(listagem.Capacity) / 10243).split('.')[0],
+                'Clock Speed':  listagem.ConfiguredClockSpeed,
+                'Velocidade':  listagem.Speed,
+                'Parte Number':  listagem.PartNumber,
+                'Serial Number':  listagem.SerialNumber,
+            }})
 
         for listagem in result_busca_placa_mae:
 
-            self.dict_info_hardware['Placa Mae'] = listagem.Name
-            self.dict_info_hardware['Fabricante'] = listagem.Manufacturer
-            self.dict_info_hardware['Serial Number'] = listagem.SerialNumber
-            self.dict_info_hardware['Numero Produto'] = listagem.Product
-            self.dict_info_hardware['Versao'] = listagem.Version
-
-            self.lista_info_hardware.append({'MainBoard': self.dict_info_hardware})
+            self.lista_info_hardware.append({'MainBoard': {
+                'Placa Mae': listagem.Name,
+                'Fabricante': listagem.Manufacturer,
+                'Serial Number': listagem.SerialNumber,
+                'Numero Produto': listagem.Product,
+                'Versao': listagem.Version,
+            }})
 
         for listagem in result_busca_disk:
             if listagem.DeviceID == "C:":
                 porcetangem_espaco_livre = 100*float(listagem.FreeSpace) / float(listagem.Size)
-                self.dict_info_hardware['Disco Local'] = listagem.Description
-                self.dict_info_hardware['Capacidade'] =  str(int(listagem.Size) / 10243).split('.')[0]
-                self.dict_info_hardware['Espaço Livre'] = f"{porcetangem_espaco_livre:.2f}"
-                self.dict_info_hardware['Numero de Serie'] = listagem.VolumeSerialNumber
 
-            self.lista_info_hardware.append({'Unidade': self.dict_info_hardware})
+                self.lista_info_hardware.append({'Unidade': {
+                    'Disco Local': listagem.Description,
+                    'Capacidade': str(int(listagem.Size) / 10243).split('.')[0],
+                    'Espaço Livre':f" {porcetangem_espaco_livre:.2f}",
+                    'Numero de Serie': listagem.VolumeSerialNumber,
+                }})
 
         print('\n')
         for item in self.lista_info_hardware:
