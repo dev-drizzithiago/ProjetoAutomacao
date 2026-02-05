@@ -160,21 +160,38 @@ class RelatorioSoftwareInstalados:
 if __name__ == '__main__':
 
     if verificar_elevacao():
-        obj_scan_software = RelatorioSoftwareInstalados()
-        response_resultado = obj_scan_software.scan_software()
 
+        # Objeto será utilizado por todos os modulos.
+        init_obj_creater_planilha = CreaterPlanilha()
+
+        # scan para informações sobre os hardware
         obj_scan_hardware = InfoHardWareScan()
         response_hardware = obj_scan_hardware.run_spinner('Buscando informações sobre o hardware...')
-        # init_obj_creater_planilha.dados_to_pandas(response_hardware)
-        # init_obj_creater_planilha.criar_planilha_dados_app()
+
+        json_dados_entrada = {
+            'tipoDados': 'hardware',
+            'dados_entrada': response_hardware,
+        }
+
+        init_obj_creater_planilha.dados_to_pandas(json_dados_entrada)
+        init_obj_creater_planilha.criar_planilha_dados_app()
 
         print()
         print('---' * 10)
         print('Buscando pelos softwares, aguarde...')
         sleep(5)
+
+
         # # Cria o obj para buscar pelos softwares.
-        # init_obj_creater_planilha = CreaterPlanilha()
-        # init_obj_creater_planilha.dados_to_pandas(response_resultado)
+        # obj_scan_software = RelatorioSoftwareInstalados()
+        # response_software = obj_scan_software.scan_software()
+
+        # json_dados_entrada = {
+        #     'tipoDados': 'software',
+        #     'dados_entrada': response_software,
+        # }
+
+        # init_obj_creater_planilha.dados_to_pandas(json_dados_entrada)
         # init_obj_creater_planilha.criar_planilha_dados_app()
 
     os.system('cls')
