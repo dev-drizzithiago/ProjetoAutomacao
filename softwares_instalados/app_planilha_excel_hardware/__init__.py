@@ -51,14 +51,14 @@ class CreaterPlanilhaHardware:
             self.df_mb = pd.DataFrame(grupo_componentes['MainBoard'])
         else:
             self.df_mb = pd.DataFrame(columns=['Placa Mae','Fabricante','Serial Number','Numero Produto','Versao'])
-        print(self.df_mb)
+        # print(self.df_mb)
 
         # Verificar se possui mais de 1 processador. Caso tenha mais é criado linhas adicionais;
         if grupo_componentes['Processador']:
             self.df_cpu = pd.DataFrame(grupo_componentes['Processador'])
         else:
-            self.df_main = pd.DataFrame(columns=['Modelo', 'Números Cores', 'Número de Threads'])
-        print(self.df_main)
+            self.df_cpu = pd.DataFrame(columns=['Modelo', 'Números Cores', 'Número de Threads'])
+        # print(self.df_cpu)
 
         # Verificar se possui mais de 1 modulo de RAM. Caso tenha mais é criado linhas adicionais;
         if grupo_componentes['Memoria']:
@@ -72,7 +72,7 @@ class CreaterPlanilhaHardware:
                          'Parte Number',
                          'Serial Number']
             )
-        print(self.df_ram)
+        # print(self.df_ram)
 
         if grupo_componentes['HDD_SSD']:
             self.ssd_hdd = pd.DataFrame(grupo_componentes['HDD_SSD'])
@@ -83,7 +83,7 @@ class CreaterPlanilhaHardware:
                 'Espaço Livre',
                 'Numero de Serie',
             ])
-        print(self.ssd_hdd)
+        # print(self.ssd_hdd)
 
         self.dataFrame_hardware = {
             'Placa Mãe': self.df_mb,
@@ -91,6 +91,8 @@ class CreaterPlanilhaHardware:
             'Memória RAM': self.df_ram,
             'Armazenamentos': self.ssd_hdd,
         }
+
+        print(self.dataFrame_hardware)
 
         if self.dados_de_entrada[0]['MainBoard']['Serial Number']:
             self.NOME_PLANILHA = (
@@ -137,7 +139,7 @@ class CreaterPlanilhaHardware:
                 wb = writer.book
 
                 # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-                self.dataFrama_hardware.to_excel(writer, sheet_name=sheet, index=False)
+                self.dataFrame_hardware.to_excel(writer, sheet_name=sheet, index=False)
 
                 work_sheet = writer.sheets[sheet]
                 bold = wb.add_format({'bold': True})
@@ -145,7 +147,7 @@ class CreaterPlanilhaHardware:
                 work_sheet.set_column("A:A", 80, bold)
                 work_sheet.set_column("B:B", 25)
 
-                rows, cols = self.dataFrama_hardware.shape
+                rows, cols = self.dataFrame_hardware.shape
 
                 work_sheet.add_table(0, 0, rows, cols - 1, {
                     "name": "TabelaSoftware",
@@ -154,7 +156,7 @@ class CreaterPlanilhaHardware:
                     "style": "TableStyleMedium9",
 
                     # Define o texto do cabeçalho de cada coluna a partir de df.columns.
-                    "columns": [{"header": c} for c in self.dataFrama_hardware.columns]
+                    "columns": [{"header": c} for c in self.dataFrame_hardware.columns]
                 })
 
                 work_sheet.freeze_panes(1, 0)
