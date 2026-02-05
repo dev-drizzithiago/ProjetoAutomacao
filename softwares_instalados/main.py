@@ -160,7 +160,7 @@ class RelatorioSoftwareInstalados:
 
 if __name__ == '__main__':
 
-    # if verificar_elevacao():
+    if verificar_elevacao():
 
         # scan para informações sobre os ‘hardware’
         obj_scan_hardware = InfoHardWareScan()
