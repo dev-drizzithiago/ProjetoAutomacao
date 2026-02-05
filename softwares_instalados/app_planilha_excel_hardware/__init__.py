@@ -13,7 +13,7 @@ class CreaterPlanilhaHardware:
         self.NOME_PLANILHA = None
         self.local_save_planilha = None
 
-        self.dataFrama_hardware = {}
+        self.dataFrame_hardware = {}
 
         self.NOME_PLANILHA = (
             f"hardwares"
@@ -21,7 +21,7 @@ class CreaterPlanilhaHardware:
         )
 
         self.df_mb = None
-        self.df_main = None
+        self.df_cpu = None
         self.df_ram = None
         self.ssd_hdd = None
 
@@ -54,12 +54,11 @@ class CreaterPlanilhaHardware:
             self.df_mb = pd.DataFrame(grupo_componentes['MainBoard'])
         else:
             self.df_mb = pd.DataFrame(columns=['Placa Mae','Fabricante','Serial Number','Numero Produto','Versao'])
-            # self.dataFrama_hardware = pd.DataFrame(componente)
         print(self.df_mb)
 
         # Verificar se possui mais de 1 processador. Caso tenha mais é criado linhas adicionais;
         if grupo_componentes['Processador']:
-            self.df_main = pd.DataFrame(grupo_componentes['Processador'])
+            self.df_cpu = pd.DataFrame(grupo_componentes['Processador'])
         else:
             self.df_main = pd.DataFrame(columns=['Modelo', 'Números Cores', 'Número de Threads'])
         print(self.df_main)
@@ -88,6 +87,13 @@ class CreaterPlanilhaHardware:
                 'Numero de Serie',
             ])
         print(self.ssd_hdd)
+
+        self.dataFrame_hardware = {
+            'Placa Mãe': self.df_mb,
+            'Processador': self.df_cpu,
+            'Memória RAM': self.df_ram,
+            'Armazenamentos': self.ssd_hdd
+        }
 
     def criar_planilha_dados_app(self):
         os.system('cls')
