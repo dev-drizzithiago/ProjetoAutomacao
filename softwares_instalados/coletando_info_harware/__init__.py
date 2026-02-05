@@ -77,7 +77,7 @@ class InfoHardWareScan:
 
         # limpa linha ao finalizar
         print('\n' + ' ' * 60 + '\r', end='', flush=True)
-    
+
     @staticmethod
     def _to_gib(value):
         try:
