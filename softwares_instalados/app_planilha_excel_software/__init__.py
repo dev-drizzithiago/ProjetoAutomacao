@@ -92,6 +92,8 @@ class CreaterPlanilhaSoftware:
             print('Planilha criada com sucesso!')
             sleep(5)
             return self.NOME_PLANILHA
+
+
         except Exception as error:
             os.system('cls')
 
