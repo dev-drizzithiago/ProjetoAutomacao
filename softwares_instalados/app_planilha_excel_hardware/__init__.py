@@ -143,8 +143,7 @@ class CreaterPlanilhaHardware:
         with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
 
             wb = writer.book
-            titulo_fmt = wb.add_format({'bold': True, 'font_size': 12})
-            bold = wb.add_format({'bold': True})
+
 
             # print(self.dataFrame_hardware)
             #
@@ -162,8 +161,7 @@ class CreaterPlanilhaHardware:
                 # Adiciona tabela com cabeçalho
                 rows, cols = df.shape
 
-                ws.write(0,0, aba, titulo_fmt)
-
+                # Cria a tabela do documento
                 ws.add_table(0, 0, rows, cols - 1, {
                     "name": f"TabelaHardware{indice}",
 
