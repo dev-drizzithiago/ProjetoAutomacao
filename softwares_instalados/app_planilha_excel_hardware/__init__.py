@@ -77,8 +77,8 @@ class CreaterPlanilhaHardware:
             )
         print(self.df_ram)
 
-        if grupo_componentes['HDD/SSD']:
-            self.ssd_hdd = pd.DataFrame(grupo_componentes['HDD/SSD'])
+        if grupo_componentes['HDD_SSD']:
+            self.ssd_hdd = pd.DataFrame(grupo_componentes['HDD_SSD'])
         else:
             self.ssd_hdd = pd.DataFrame([
                 'Disco Local',
@@ -86,8 +86,7 @@ class CreaterPlanilhaHardware:
                 'Espaço Livre',
                 'Numero de Serie',
             ])
-
-
+        print(self.ssd_hdd)
 
     def criar_planilha_dados_app(self):
         os.system('cls')
