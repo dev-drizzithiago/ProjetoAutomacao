@@ -45,7 +45,7 @@ class InfoHardWareScan:
 
             self.lista_info_hardware.append({'Memoria': {
                 'Modelo':  listagem.Name,
-                'Capacidade':  str(int(listagem.Capacity) / 10243).split('.')[0],
+                'Capacidade':  f'{self._to_gib(listagem.Capacity)}GB',
                 'Clock Speed':  listagem.ConfiguredClockSpeed,
                 'Velocidade':  listagem.Speed,
                 'Parte Number':  listagem.PartNumber,
