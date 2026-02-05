@@ -20,28 +20,15 @@ class CreaterPlanilhaSoftware:
 
     def dados_to_pandas(self, dados_entrada):
 
-        print(dados_entrada['dados_entrada'])
-        input()
+        self.NOME_PLANILHA = (
+            f"softwares_"
+            f"{
+            str(dados_entrada[0]['DisplayVersion'])
+            .replace('.', '-')
+            }.xlsx"
+        )
 
-        if dados_entrada['tipoDados'] == 'hardware':
-            self.NOME_PLANILHA = (
-                f"hardwares_"
-                f"{
-                dados_entrada['dados_entrada']
-                [0]['Placa Mae']
-                ['Serial Number'].replace("/", '_')
-                }.xlsx"
-            )
-        elif dados_entrada['tipoDados'] == 'software':
-            self.NOME_PLANILHA = (
-                f"softwares_"
-                f"{
-                str(dados_entrada[0]['DisplayVersion'])
-                .replace('.', '-')
-                }.xlsx"
-            )
-
-        self.DATA_FRAME_APP = pd.DataFrame(dados_entrada['dados_entrada'])
+        self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
 
     def criar_planilha_dados_app(self):
         os.system('cls')
