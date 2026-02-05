@@ -20,6 +20,8 @@ class CreaterPlanilhaHardware:
             f"{self.dados_de_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
         )
 
+        self.df_mb = None
+
         try:
             os.mkdir(self.LOCAL_PATH_RELATORIO)
         except FileExistsError:
@@ -45,11 +47,11 @@ class CreaterPlanilhaHardware:
                     grupo_componentes[componente].append(payload)
 
         if grupo_componentes['MainBoard']:
-            df_mb = pd.DataFrame(grupo_componentes['MainBoard'])
+            self.df_mb = pd.DataFrame(grupo_componentes['MainBoard'])
         else:
-            df_mb = pd.DataFrame(columns=['Placa Mae','Fabricante','Serial Number','Numero Produto','Versao'])
+            self.df_mb = pd.DataFrame(columns=['Placa Mae','Fabricante','Serial Number','Numero Produto','Versao'])
             # self.dataFrama_hardware = pd.DataFrame(componente)
-            # print(self.dataFrama_hardware)
+        print(self.df_mb)
 
     def criar_planilha_dados_app(self):
         os.system('cls')
