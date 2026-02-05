@@ -20,16 +20,14 @@ class CreaterPlanilhaHardware:
 
     def dados_to_pandas(self, dados_entrada):
 
-        print(dados_entrada['dados_entrada'])
+        print(dados_entrada[0]['Serial Number'])
         input()
 
         if dados_entrada['tipoDados'] == 'hardware':
             self.NOME_PLANILHA = (
                 f"hardwares_"
                 f"{
-                dados_entrada['dados_entrada']
-                [0]['Placa Mae']
-                ['Serial Number'].replace("/", '_')
+                dados_entrada[0]['Serial Number']
                 }.xlsx"
             )
 
