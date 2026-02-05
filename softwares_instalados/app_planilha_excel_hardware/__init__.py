@@ -29,11 +29,13 @@ class CreaterPlanilhaHardware:
             }.xlsx"
         )
 
-        print( self.NOME_PLANILHA)
+        print(self.NOME_PLANILHA)
+        print(len(dados_entrada))
 
-        self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
-
-        print(self.DATA_FRAME_APP)
+        for componente in dados_entrada:
+            self.DATA_FRAME_APP = pd.DataFrame(componente)
+            print(self.DATA_FRAME_APP)
+            print()
         input()
 
     def criar_planilha_dados_app(self):
