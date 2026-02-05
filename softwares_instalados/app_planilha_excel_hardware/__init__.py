@@ -140,56 +140,59 @@ class CreaterPlanilhaHardware:
 
         # Abre um ExcelWriter apontando para o caminho absoluto
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
-        try:
-            with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
-                sheet = 'Relatório de Hardware'
+        # try:
+        with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
+            sheet = 'Relatório de Hardware'
 
-                wb = writer.book
-                titulo_fmt = wb.add_format({'bold': True, 'font_size': 12})
-                bold = wb.add_format({'bold': True})
+            wb = writer.book
+            titulo_fmt = wb.add_format({'bold': True, 'font_size': 12})
+            bold = wb.add_format({'bold': True})
 
-                for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
+            print(self.dataFrame_hardware)
 
-                    # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-                    df.to_excel(writer, sheet_name=sheet, index=False, startrow=0, startcol=0)
+            for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
 
-                    ws = writer.sheets[aba]
+                print('indice:' , indice, ' aba: ', aba, ' df: ', df)
+                # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
+                df.to_excel(writer, sheet_name=sheet, index=False, startrow=0, startcol=0)
 
-                    # Adiciona tabela com cabeçalho
-                    rows, cols = df.shape
-                    if cols == 0:
-                        ws(0, 0, 'sem dados')
-                        continue
+                ws = writer.sheets[aba]
 
-                    ws.add_table(0, 0, rows, cols - 1, {
-                        "name": f"TabelaHardware{indice}_{
-                        aba.replace('(', '').replace(')', '')
-                        }",
+                # Adiciona tabela com cabeçalho
+                rows, cols = df.shape
+                if cols == 0:
+                    ws(0, 0, 'sem dados')
+                    continue
 
-                        # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
-                        "style": "TableStyleMedium9",
+                ws.add_table(0, 0, rows, cols - 1, {
+                    "name": f"TabelaHardware{indice}_{
+                    aba.replace('(', '').replace(')', '')
+                    }",
 
-                        # Define o texto do cabeçalho de cada coluna a partir de df.columns.
-                        "columns": [{"header": c} for c in df.columns]
-                    })
+                    # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
+                    "style": "TableStyleMedium9",
 
-                    ws.freeze_panes(1, 0)
-                    self._ajusta_larguras(ws, df, startrow=0, startcol=0)
+                    # Define o texto do cabeçalho de cada coluna a partir de df.columns.
+                    "columns": [{"header": c} for c in df.columns]
+                })
 
-            os.system('cls')
-            print()
-            print('---' * 10)
-            print('Planilha criada com sucesso!')
-            sleep(5)
-            return self.NOME_PLANILHA
+                ws.freeze_panes(1, 0)
+                self._ajusta_larguras(ws, df, startrow=0, startcol=0)
 
-        except Exception as error:
-            os.system('cls')
+        os.system('cls')
+        print()
+        print('---' * 10)
+        print('Planilha criada com sucesso!')
+        sleep(5)
+        return self.NOME_PLANILHA
 
-            print()
-            print('---' * 10)
-            print('Erro ao criar a planilha: ', error)
-
-            print()
-            print('---' * 10)
-            input('Aperta ENTER para finalizar!')
+        # except Exception as error:
+        #     os.system('cls')
+        #
+        #     print()
+        #     print('---' * 10)
+        #     print('Erro ao criar a planilha: ', error)
+        #
+        #     print()
+        #     print('---' * 10)
+        #     input('Aperta ENTER para finalizar!')
