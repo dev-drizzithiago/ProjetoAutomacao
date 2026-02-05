@@ -35,7 +35,6 @@ class InfoHardWareScan:
             }})
 
         for listagem in result_busca_processador:
-
             self.lista_info_hardware.append({'Processador': {
                 'Modelo': listagem.Name,
                 'Números Cores': listagem.NumberOfCores,
@@ -63,6 +62,7 @@ class InfoHardWareScan:
                     'Capacidade': f'{str(int(listagem.Size) / (1024 ** 3)).split('.')[0]}GB',
                     'Espaço Livre': f"{porcetangem_espaco_livre:.2f}%",
                     'Numero de Serie': listagem.VolumeSerialNumber,
+                    'Nome do Sistema': listagem.SystemName,
                 }})
 
         return self.lista_info_hardware
