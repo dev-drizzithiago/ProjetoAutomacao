@@ -59,7 +59,7 @@ class InfoHardWareScan:
 
                 self.lista_info_hardware.append({'HDD_SSD': {
                     'Disco Local': listagem.Description,
-                    'Capacidade': f'{str(int(listagem.Size) / (1024 ** 3)).split('.')[0]}GB',
+                    'Capacidade': f'{self._to_gib(listagem.Size)}GB',
                     'Espaço Livre': f"{porcetangem_espaco_livre:.2f}%",
                     'Numero de Serie': listagem.VolumeSerialNumber,
                     'Nome do Sistema': listagem.SystemName,
@@ -77,6 +77,14 @@ class InfoHardWareScan:
 
         # limpa linha ao finalizar
         print('\n' + ' ' * 60 + '\r', end='', flush=True)
+    
+    @staticmethod
+    def _to_gib(value):
+        try:
+            return int(int(value) / (1024 ** 3))
+        except:
+            return None
+
 
     def run_spinner(self, texto_spinner):
         stop_event = Event()
