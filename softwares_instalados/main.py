@@ -13,6 +13,7 @@ from time import sleep
 
 # Chama o modulo.
 from app_planilha_excel import CreaterPlanilha
+from coletando_info_harware import InfoHardWareScan
 from spinner import _run_spinner
 
 def verificar_elevacao():
