@@ -12,7 +12,8 @@ import socket
 from time import sleep
 
 # Chama o modulo.
-from app_planilha_excel import CreaterPlanilha
+from app_planilha_excel_software import CreaterPlanilhaSoftware
+from app_planilha_excel_hardware import CreaterPlanilhaHardware
 from coletando_info_harware import InfoHardWareScan
 from spinner import _run_spinner
 
@@ -161,20 +162,14 @@ if __name__ == '__main__':
 
     if verificar_elevacao():
 
-        # Objeto será utilizado por todos os modulos.
-        init_obj_creater_planilha = CreaterPlanilha()
+        init_obj_creater_planilha_hardware = CreaterPlanilhaHardware()
 
-        # scan para informações sobre os hardware
+        # scan para informações sobre os ‘hardware’
         obj_scan_hardware = InfoHardWareScan()
         response_hardware = obj_scan_hardware.run_spinner('Buscando informações sobre o hardware...')
 
-        json_dados_entrada = {
-            'tipoDados': 'hardware',
-            'dados_entrada': response_hardware,
-        }
-
-        init_obj_creater_planilha.dados_to_pandas(json_dados_entrada)
-        init_obj_creater_planilha.criar_planilha_dados_app()
+        init_obj_creater_planilha_hardware.dados_to_pandas(response_hardware)
+        init_obj_creater_planilha_hardware.criar_planilha_dados_app()
 
         print()
         print('---' * 10)
@@ -186,13 +181,9 @@ if __name__ == '__main__':
         # obj_scan_software = RelatorioSoftwareInstalados()
         # response_software = obj_scan_software.scan_software()
 
-        # json_dados_entrada = {
-        #     'tipoDados': 'software',
-        #     'dados_entrada': response_software,
-        # }
-
-        # init_obj_creater_planilha.dados_to_pandas(json_dados_entrada)
-        # init_obj_creater_planilha.criar_planilha_dados_app()
+        # init_obj_creater_planilha_software = CreaterPlanilhaHardware()
+        # init_obj_creater_planilha_software.dados_to_pandas(response_software)
+        # init_obj_creater_planilha_software.criar_planilha_dados_app()
 
     os.system('cls')
     print()
