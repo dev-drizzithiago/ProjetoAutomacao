@@ -36,11 +36,18 @@ class CreaterPlanilhaHardware:
 
         # Faz o loop dos dados de entrada.
         for item in self.dados_de_entrada:
+
+            # Faz o loop os dicionários dentro da lista de entrada.
             for componente, payload in item.items():
+
+                # Verificar se existe o componente e adiciona a na lista conforma o componente.
                 if componente in grupo_componentes:
                     grupo_componentes[componente].append(payload)
 
-        print(grupo_componentes)
+        if grupo_componentes['MainBoard']:
+            df_mb = pd.DataFrame(grupo_componentes['MainBoard'])
+        else:
+            df_mb = pd.DataFrame(columns=['Placa Mae','Fabricante','Serial Number','Numero Produto','Versao'])
             # self.dataFrama_hardware = pd.DataFrame(componente)
             # print(self.dataFrama_hardware)
 
