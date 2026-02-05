@@ -9,9 +9,11 @@ class CreaterPlanilhaHardware:
 
     def __init__(self, dados_entrada):
         self.dados_de_entrada = dados_entrada
-        self.DATA_FRAME_APP = None
+
         self.NOME_PLANILHA = None
         self.local_save_planilha = None
+
+        self.dataFrama_hardware = {}
 
         print(dados_entrada[0]['MainBoard']['Serial Number'])
 
@@ -27,9 +29,15 @@ class CreaterPlanilhaHardware:
 
     def dados_to_pandas(self):
 
+        grupo_componentes = {
+            'MainBoard': [],
+            'Processador': [],
+            'Memoria': [],
+            'Unidade': [],
+        }
         for componente in self.dados_de_entrada:
-            self.DATA_FRAME_APP = pd.DataFrame(componente)
-            print(self.DATA_FRAME_APP)
+            self.dataFrama_hardware = pd.DataFrame(componente)
+            print(self.dataFrama_hardware)
 
     def criar_planilha_dados_app(self):
         os.system('cls')
@@ -103,3 +111,10 @@ class CreaterPlanilhaHardware:
             print()
             print('---' * 10)
             input('Aperta ENTER para finalizar!')
+
+    @staticmethod
+    def _to_gib(value):
+        try:
+            return int(int(value) / (1024 ** 3))
+        except:
+            return None
