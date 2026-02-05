@@ -142,43 +142,44 @@ class CreaterPlanilhaHardware:
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
         # try:
         with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
-            sheet = 'Relatório de Hardware'
 
             wb = writer.book
             titulo_fmt = wb.add_format({'bold': True, 'font_size': 12})
             bold = wb.add_format({'bold': True})
 
-            for i, (k, v) in enumerate(self.dataFrame_hardware.items()):
-                print(i, k, v)
+            # print(self.dataFrame_hardware)
+            #
+            # for i, (k, v) in enumerate(self.dataFrame_hardware.items()):
+            #     print(i, k, v)
 
-            # for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
-            #
-            #     print('indice:' , indice, ' aba: ', aba, ' df: ', df)
-            #     # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-            #     df.to_excel(writer, sheet_name=sheet, index=False, startrow=0, startcol=0)
-            #
-            #     ws = writer.sheets[aba]
-            #
-            #     # Adiciona tabela com cabeçalho
-            #     rows, cols = df.shape
-            #     if cols == 0:
-            #         ws(0, 0, 'sem dados')
-            #         continue
-            #
-            #     ws.add_table(0, 0, rows, cols - 1, {
-            #         "name": f"TabelaHardware{indice}_{
-            #         aba.replace('(', '').replace(')', '')
-            #         }",
-            #
-            #         # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
-            #         "style": "TableStyleMedium9",
-            #
-            #         # Define o texto do cabeçalho de cada coluna a partir de df.columns.
-            #         "columns": [{"header": c} for c in df.columns]
-            #     })
-            #
-            #     ws.freeze_panes(1, 0)
-            #     self._ajusta_larguras(ws, df, startrow=0, startcol=0)
+            # Realize um loop para o dicionário dos dataFrames
+            for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
+
+                # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
+                df.to_excel(writer, sheet_name=aba, index=False, startrow=0, startcol=0)
+
+                ws = writer.sheets[aba]
+
+                # Adiciona tabela com cabeçalho
+                rows, cols = df.shape
+                if cols == 0:
+                    ws(0, 0, 'sem dados')
+                    continue
+
+                ws.add_table(0, 0, rows, cols - 1, {
+                    "name": f"TabelaHardware{indice}_{
+                    aba.replace('(', '').replace(')', '')
+                    }",
+
+                    # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
+                    "style": "TableStyleMedium9",
+
+                    # Define o texto do cabeçalho de cada coluna a partir de df.columns.
+                    "columns": [{"header": c} for c in df.columns]
+                })
+
+                ws.freeze_panes(1, 0)
+                # self._ajusta_larguras(ws, df, startrow=0, startcol=0)
 
         os.system('cls')
         print()
