@@ -177,7 +177,6 @@ if __name__ == '__main__':
     print('Buscando pelos softwares, aguarde...')
     sleep(5)
 
-
         # # Cria o obj para buscar pelos softwares.
         # obj_scan_software = RelatorioSoftwareInstalados()
         # response_software = obj_scan_software.scan_software()
