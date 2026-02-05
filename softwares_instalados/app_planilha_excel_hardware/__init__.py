@@ -31,6 +31,7 @@ class CreaterPlanilhaHardware:
             pass
 
     def dados_to_pandas(self):
+        print(self.dados_de_entrada)
 
         grupo_componentes = {
             'MainBoard': [],
