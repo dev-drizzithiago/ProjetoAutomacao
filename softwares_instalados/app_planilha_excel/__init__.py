@@ -19,7 +19,8 @@ class CreaterPlanilha:
             pass
 
     def dados_to_pandas(self, dados_entrada):
-        print(dados_entrada)
+
+        print(dados_entrada['dados_entrada'])
         input()
 
         if dados_entrada['tipoDados'] == 'hardware':
