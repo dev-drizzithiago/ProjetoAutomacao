@@ -13,6 +13,7 @@ class CreaterPlanilhaHardware:
         self.NOME_PLANILHA = None
         self.local_save_planilha = None
 
+        self.dict_dados_planilha = None
         self.dataFrame_hardware = {}
 
         self.NOME_PLANILHA = None
@@ -85,14 +86,12 @@ class CreaterPlanilhaHardware:
             ])
         # print(self.ssd_hdd)
 
-        self.dataFrame_hardware = {
+        self.dict_dados_planilha = {
             'Placa Mãe': self.df_mb,
             'Processador': self.df_cpu,
             'Memória RAM': self.df_ram,
             'Armazenamentos': self.ssd_hdd,
         }
-
-        print(self.dataFrame_hardware)
 
         if self.dados_de_entrada[0]['MainBoard']['Serial Number']:
             self.NOME_PLANILHA = (
@@ -133,34 +132,31 @@ class CreaterPlanilhaHardware:
         try:
             with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
 
-                # sheet: nome da planilha na aba.
-                sheet = 'Relatório APPs'
-
                 wb = writer.book
 
-                # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-                self.dataFrame_hardware.to_excel(writer, sheet_name=sheet, index=False)
+                for indice, (aba, df) in enumerate(self.dataFrame_hardware):
 
-                work_sheet = writer.sheets[sheet]
-                bold = wb.add_format({'bold': True})
+                    # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
+                    self.dict_dados_planilha.to_excel(writer, sheet_name=aba, index=False, starttrow=0, startcol=0)
 
-                work_sheet.set_column("A:A", 80, bold)
-                work_sheet.set_column("B:B", 25)
+                    work_sheet = writer.sheets[aba]
+                    
 
-                rows, cols = self.dataFrame_hardware.shape
+                    rows, cols = self.dict_dados_planilha.shape
 
-                work_sheet.add_table(0, 0, rows, cols - 1, {
-                    "name": "TabelaSoftware",
+                    work_sheet.add_table(0, 0, rows, cols - 1, {
+                        "name": "TabelaSoftware",
 
-                    # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
-                    "style": "TableStyleMedium9",
+                        # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
+                        "style": "TableStyleMedium9",
 
-                    # Define o texto do cabeçalho de cada coluna a partir de df.columns.
-                    "columns": [{"header": c} for c in self.dataFrame_hardware.columns]
-                })
+                        # Define o texto do cabeçalho de cada coluna a partir de df.columns.
+                        "columns": [{"header": c} for c in self.dataFrame_hardware.columns]
+                    })
 
-                work_sheet.freeze_panes(1, 0)
-                work_sheet.freeze_panes(2, 0)
+                    work_sheet.freeze_panes(1, 0)
+                    work_sheet.freeze_panes(2, 0)
+
             os.system('cls')
             print()
             print('---' * 10)
