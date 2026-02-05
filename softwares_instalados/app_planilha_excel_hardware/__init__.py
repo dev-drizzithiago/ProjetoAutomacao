@@ -23,6 +23,7 @@ class CreaterPlanilhaHardware:
         self.df_mb = None
         self.df_main = None
         self.df_ram = None
+        self.ssd_hdd = None
 
         try:
             os.mkdir(self.LOCAL_PATH_RELATORIO)
@@ -55,38 +56,38 @@ class CreaterPlanilhaHardware:
             # self.dataFrama_hardware = pd.DataFrame(componente)
         print(self.df_mb)
 
+        # Verificar se possui mais de 1 processador. Caso tenha mais é criado linhas adicionais;
         if grupo_componentes['Processador']:
             self.df_main = pd.DataFrame(grupo_componentes['Processador'])
         else:
             self.df_main = pd.DataFrame(columns=['Modelo', 'Números Cores', 'Número de Threads'])
         print(self.df_main)
 
-        print(grupo_componentes['Memoria'])
+        # Verificar se possui mais de 1 modulo de RAM. Caso tenha mais é criado linhas adicionais;
+        if grupo_componentes['Memoria']:
+            self.df_ram = pd.DataFrame(grupo_componentes['Memoria'])
+        else:
+            self.df_ram = pd.DataFrame(
+                columns=['Modelo',
+                         'Capacidade',
+                         'Clock Speed',
+                         'Velocidade',
+                         'Parte Number',
+                         'Serial Number']
+            )
+        print(self.df_ram)
 
-        if len(grupo_componentes['Memoria']) == 1:
-            if grupo_componentes['Memoria']:
-                self.df_ram = pd.DataFrame(grupo_componentes['Memoria'])
-            else:
-                self.df_ram = pd.DataFrame(
-                    columns=['Modelo',
-                             'Capacidade', 
-                             'Clock Speed',
-                             'Velocidade',
-                             'Parte Number',
-                             'Serial Number']
-                )
-        elif len(grupo_componentes['Memoria']) == 2:
-            if grupo_componentes['Memoria']:
-                self.df_ram = pd.DataFrame(grupo_componentes['Memoria'])
-            else:
-                self.df_ram = pd.DataFrame(
-                    columns=['Modelo',
-                             'Capacidade',
-                             'Clock Speed',
-                             'Velocidade',
-                             'Parte Number',
-                             'Serial Number']
-                )
+        if grupo_componentes['HDD/SSD']:
+            self.ssd_hdd = pd.DataFrame(grupo_componentes['HDD/SSD'])
+        else:
+            self.ssd_hdd = pd.DataFrame([
+                'Disco Local',
+                'Capacidade',
+                'Espaço Livre',
+                'Numero de Serie',
+            ])
+
+
 
     def criar_planilha_dados_app(self):
         os.system('cls')
