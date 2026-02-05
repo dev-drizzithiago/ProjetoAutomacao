@@ -93,6 +93,7 @@ class CreaterPlanilhaHardware:
             'Armazenamentos': self.ssd_hdd,
         }
 
+    def _decidir_local_save(self):
         if self.dados_de_entrada[0]['MainBoard']['Serial Number']:
             self.NOME_PLANILHA = (
                 f"hardwares"
@@ -102,12 +103,6 @@ class CreaterPlanilhaHardware:
             self.NOME_PLANILHA = (
                 'hardwares_'
             )
-
-    def criar_planilha_dados_app(self):
-        os.system('cls')
-        print()
-        print('---' * 10)
-        print('Criando a Planilha...!')
 
         try:
             print()
@@ -126,30 +121,32 @@ class CreaterPlanilhaHardware:
             print('Pasta Local: ', self.LOCAL_PATH_RELATORIO)
             self.local_save_planilha = os.path.join(self.LOCAL_PATH_RELATORIO, self.NOME_PLANILHA)
 
+
+    def criar_planilha_dados_app(self):
+
+        self._decidir_local_save()
+
+        os.system('cls')
+        print()
+        print('---' * 10)
+        print('Criando a Planilha...!')
+
         # Abre um ExcelWriter apontando para o caminho absoluto
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
         try:
             with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
                 sheet = 'Relatório de Hardware'
 
-                startrow = 0
-                startcol = 0
-
-                primeiro = True
                 wb = writer.book
                 titulo_fmt = wb.add_format({'bold': True, 'font_size': 12})
                 bold = wb.add_format({'bold': True})
 
                 for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
-                    if primeiro:
-                        df.head(0).to_excel(writer, sheet_name=sheet, index=False)
-                        ws = writer.sheets[sheet]
-                        primeiro = False
+
+                    ws = writer.sheets[aba]
 
                     # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-                    df.to_excel(writer, sheet_name=sheet, index=False, startrow=startrow, startcol=startcol)
-                    ws.write(startrow, startcol, indice, titulo_fmt)
-                    startrow += 1
+                    df.to_excel(writer, sheet_name=sheet, index=False, startrow=0, startcol=0)
 
                     # Adiciona tabela com cabeçalho
                     rows, cols = df.shape
@@ -157,7 +154,7 @@ class CreaterPlanilhaHardware:
                         ws(0, 0, 'sem dados')
                         continue
 
-                    ws.add_table(startrow, startcol, startrow + rows, startcol + cols - 1, {
+                    ws.add_table(0, 0, rows, cols - 1, {
                         "name": f"TabelaHardware{indice}_{aba.replace(' ', '_')}",
 
                         # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
@@ -168,8 +165,6 @@ class CreaterPlanilhaHardware:
                     })
 
                     ws.freeze_panes(1, 0)
-
-                    startrow += rows + 3
 
             os.system('cls')
             print()
@@ -188,4 +183,3 @@ class CreaterPlanilhaHardware:
             print()
             print('---' * 10)
             input('Aperta ENTER para finalizar!')
-
