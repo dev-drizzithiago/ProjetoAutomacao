@@ -31,7 +31,8 @@ class CreaterPlanilhaHardware:
             pass
 
     def dados_to_pandas(self):
-        print(self.dados_de_entrada)
+        for item in self.dados_de_entrada:
+            print(item)
 
         grupo_componentes = {
             'MainBoard': [],
@@ -55,14 +56,14 @@ class CreaterPlanilhaHardware:
         else:
             self.df_mb = pd.DataFrame(columns=['Placa Mae','Fabricante','Serial Number','Numero Produto','Versao'])
             # self.dataFrama_hardware = pd.DataFrame(componente)
-        print(self.df_mb)
+        # print(self.df_mb)
 
         # Verificar se possui mais de 1 processador. Caso tenha mais é criado linhas adicionais;
         if grupo_componentes['Processador']:
             self.df_main = pd.DataFrame(grupo_componentes['Processador'])
         else:
             self.df_main = pd.DataFrame(columns=['Modelo', 'Números Cores', 'Número de Threads'])
-        print(self.df_main)
+        # print(self.df_main)
 
         # Verificar se possui mais de 1 modulo de RAM. Caso tenha mais é criado linhas adicionais;
         if grupo_componentes['Memoria']:
@@ -76,7 +77,7 @@ class CreaterPlanilhaHardware:
                          'Parte Number',
                          'Serial Number']
             )
-        print(self.df_ram)
+        # print(self.df_ram)
 
         if grupo_componentes['HDD_SSD']:
             self.ssd_hdd = pd.DataFrame(grupo_componentes['HDD_SSD'])
