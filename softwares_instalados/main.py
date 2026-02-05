@@ -160,20 +160,20 @@ class RelatorioSoftwareInstalados:
 
 if __name__ == '__main__':
 
-    if verificar_elevacao():
+    # if verificar_elevacao():
 
-        # scan para informações sobre os ‘hardware’
-        obj_scan_hardware = InfoHardWareScan()
-        response_hardware = obj_scan_hardware.run_spinner('Buscando informações sobre o hardware...')
+    # scan para informações sobre os ‘hardware’
+    obj_scan_hardware = InfoHardWareScan()
+    response_hardware = obj_scan_hardware.run_spinner('Buscando informações sobre o hardware...')
 
-        # Chama o obj para criar uma planilha com as informações do scan
-        init_obj_creater_planilha_hardware = CreaterPlanilhaHardware(response_hardware)
-        init_obj_creater_planilha_hardware.dados_to_pandas()
-        init_obj_creater_planilha_hardware.criar_planilha_dados_app()
+    # Chama o obj para criar uma planilha com as informações do scan
+    init_obj_creater_planilha_hardware = CreaterPlanilhaHardware(response_hardware)
+    init_obj_creater_planilha_hardware.dados_to_pandas()
+    init_obj_creater_planilha_hardware.criar_planilha_dados_app()
 
-        print()
-        print('---' * 10)
-        print('Buscando pelos softwares, aguarde...')
+        # print()
+        # print('---' * 10)
+        # print('Buscando pelos softwares, aguarde...')
 
         # # Cria o obj para buscar pelos softwares.
         # obj_scan_software = RelatorioSoftwareInstalados()
