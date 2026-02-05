@@ -81,7 +81,7 @@ class InfoHardWareScan:
         # limpa linha ao finalizar
         print('\n' + ' ' * 60 + '\r', end='', flush=True)
 
-    def _run_spinner(self, texto_spinner):
+    def run_spinner(self, texto_spinner):
         stop_event = Event()
         _thread = Thread(target=self._spinner, args=(stop_event, texto_spinner), daemon=True)
         _thread.start()
@@ -94,4 +94,4 @@ class InfoHardWareScan:
 
 if __name__ == '__main__':
     inicit_obj_scan = InfoHardWareScan()
-    result_scan = inicit_obj_scan._run_spinner('Buscando informações sobre o hardware...')
+    result_scan = inicit_obj_scan.run_spinner('Buscando informações sobre o hardware...')
