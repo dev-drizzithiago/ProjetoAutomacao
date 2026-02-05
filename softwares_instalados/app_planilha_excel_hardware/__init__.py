@@ -13,15 +13,15 @@ class CreaterPlanilhaHardware:
         self.NOME_PLANILHA = None
         self.local_save_planilha = None
 
-        self.dict_dados_planilha = None
         self.dataFrame_hardware = {}
-
         self.NOME_PLANILHA = None
 
         self.df_mb = None
         self.df_cpu = None
         self.df_ram = None
         self.ssd_hdd = None
+
+        self.work_sheet = None
 
         try:
             os.mkdir(self.LOCAL_PATH_RELATORIO)
@@ -86,7 +86,7 @@ class CreaterPlanilhaHardware:
             ])
         # print(self.ssd_hdd)
 
-        self.dict_dados_planilha = {
+        self.dataFrame_hardware = {
             'Placa Mãe': self.df_mb,
             'Processador': self.df_cpu,
             'Memória RAM': self.df_ram,
@@ -131,31 +131,46 @@ class CreaterPlanilhaHardware:
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
         try:
             with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
+                sheet = 'Relatório de Hardware'
 
+                startrow = 0
+                startcol = 0
+
+                primeiro = True
                 wb = writer.book
+                titulo_fmt = wb.add_format({'bold': True, 'font_size': 12})
+                bold = wb.add_format({'bold': True})
 
                 for indice, (aba, df) in enumerate(self.dataFrame_hardware):
+                    if primeiro:
+                        df.head(0).to_excel(writer, sheet_name=sheet, index=False)
+                        ws = writer.sheets[sheet]
+                        primeiro = False
 
                     # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-                    self.dict_dados_planilha.to_excel(writer, sheet_name=aba, index=False, starttrow=0, startcol=0)
+                    df.to_excel(writer, sheet_name=aba, index=False, starttrow=startrow, startcol=startcol)
+                    ws.writer(startrow, startcol, indice, titulo_fmt)
+                    startrow += 1
 
-                    work_sheet = writer.sheets[aba]
-                    
+                    # Adiciona tabela com cabeçalho
+                    rows, cols = df.shape
+                    if cols == 0:
+                        ws(0, 0, 'sem dados')
+                        continue
 
-                    rows, cols = self.dict_dados_planilha.shape
-
-                    work_sheet.add_table(0, 0, rows, cols - 1, {
-                        "name": "TabelaSoftware",
+                    ws.add_table(startrow, startcol, startrow + rows, startcol + cols - 1, {
+                        "name": f"TabelaHardware{indice}_{aba.replace(' ', '_')}",
 
                         # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
                         "style": "TableStyleMedium9",
 
                         # Define o texto do cabeçalho de cada coluna a partir de df.columns.
-                        "columns": [{"header": c} for c in self.dataFrame_hardware.columns]
+                        "columns": [{"header": c} for c in df.columns]
                     })
 
-                    work_sheet.freeze_panes(1, 0)
-                    work_sheet.freeze_panes(2, 0)
+                    ws.freeze_panes(1, 0)
+
+                    startrow += rows + 3
 
             os.system('cls')
             print()
@@ -163,6 +178,7 @@ class CreaterPlanilhaHardware:
             print('Planilha criada com sucesso!')
             sleep(5)
             return self.NOME_PLANILHA
+
         except Exception as error:
             os.system('cls')
 
