@@ -121,10 +121,9 @@ class CreaterPlanilhaHardware:
             print('Pasta Local: ', self.LOCAL_PATH_RELATORIO)
             self.local_save_planilha = os.path.join(self.LOCAL_PATH_RELATORIO, self.NOME_PLANILHA)
 
-
-    def _ajusta_larguras(self, ws, df, startrow=0, startcol=0, max_width=50):
+    def _ajusta_larguras(self, ws, df, startrow=0, startcol=0, max_width=100):
         for i, col in enumerate(df.columns):
-            indice = df[col.astype(str).fillna('')]
+            indice = df[col].astype(str).fillna('')
             max_len = max(indice.map(len).max(), len(str(col))) + 2
             width = min(max_len, max_width)
             ws.set_column(startcol + i, startrow + i, width)
@@ -163,20 +162,21 @@ class CreaterPlanilhaHardware:
                 # Adiciona tabela com cabeçalho
                 rows, cols = df.shape
 
+                ws.write(0,0, aba, titulo_fmt)
+
                 ws.add_table(0, 0, rows, cols - 1, {
-                    "name": f"TabelaHardware{indice}_{
-                    aba.replace('(', '').replace(')', '')
-                    }",
+                    "name": f"TabelaHardware{indice}",
 
                     # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
-                    "style": "TableStyleMedium9",
+                    "style": "Table Style Medium 2",
 
                     # Define o texto do cabeçalho de cada coluna a partir de df.columns.
                     "columns": [{"header": c} for c in df.columns]
                 })
 
                 ws.freeze_panes(1, 0)
-                # self._ajusta_larguras(ws, df, startrow=0, startcol=0)
+                self._ajusta_larguras(ws, df, startrow=0, startcol=0)
+
 
         os.system('cls')
         print()
