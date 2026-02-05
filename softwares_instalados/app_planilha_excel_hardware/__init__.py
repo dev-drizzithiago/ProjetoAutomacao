@@ -100,8 +100,7 @@ class CreaterPlanilhaHardware:
             )
         else:
             self.NOME_PLANILHA = (
-                'hardwares_',
-
+                'hardwares_'
             )
 
     def criar_planilha_dados_app(self):
@@ -141,15 +140,15 @@ class CreaterPlanilhaHardware:
                 titulo_fmt = wb.add_format({'bold': True, 'font_size': 12})
                 bold = wb.add_format({'bold': True})
 
-                for indice, (aba, df) in enumerate(self.dataFrame_hardware):
+                for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
                     if primeiro:
                         df.head(0).to_excel(writer, sheet_name=sheet, index=False)
                         ws = writer.sheets[sheet]
                         primeiro = False
 
                     # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-                    df.to_excel(writer, sheet_name=aba, index=False, starttrow=startrow, startcol=startcol)
-                    ws.writer(startrow, startcol, indice, titulo_fmt)
+                    df.to_excel(writer, sheet_name=sheet, index=False, startrow=startrow, startcol=startcol)
+                    ws.write(startrow, startcol, indice, titulo_fmt)
                     startrow += 1
 
                     # Adiciona tabela com cabeçalho
@@ -190,9 +189,3 @@ class CreaterPlanilhaHardware:
             print('---' * 10)
             input('Aperta ENTER para finalizar!')
 
-    @staticmethod
-    def _to_gib(value):
-        try:
-            return int(int(value) / (1024 ** 3))
-        except:
-            return None
