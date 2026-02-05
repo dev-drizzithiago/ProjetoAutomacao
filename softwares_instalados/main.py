@@ -164,10 +164,15 @@ if __name__ == '__main__':
         response_resultado = obj_scan_software.scan_software()
 
         obj_scan_hardware = InfoHardWareScan()
-        response_hardware = obj_scan_hardware.scan_hardware()
-        print(response_hardware)
+        response_hardware = obj_scan_hardware.run_spinner('Buscando informações sobre o hardware...')
+        # init_obj_creater_planilha.dados_to_pandas(response_hardware)
+        # init_obj_creater_planilha.criar_planilha_dados_app()
 
-
+        print()
+        print('---' * 10)
+        print('Buscando pelos softwares, aguarde...')
+        sleep(5)
+        # # Cria o obj para buscar pelos softwares.
         # init_obj_creater_planilha = CreaterPlanilha()
         # init_obj_creater_planilha.dados_to_pandas(response_resultado)
         # init_obj_creater_planilha.criar_planilha_dados_app()
