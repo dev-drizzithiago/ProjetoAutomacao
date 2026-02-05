@@ -64,10 +64,6 @@ class InfoHardWareScan:
                     'Numero de Serie': listagem.VolumeSerialNumber,
                 }})
 
-        print('\n')
-        for item in self.lista_info_hardware:
-            print(item)
-
         return self.lista_info_hardware
 
     def _spinner(self, stop_event, prefix='Processando... '):
