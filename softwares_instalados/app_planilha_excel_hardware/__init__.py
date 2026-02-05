@@ -15,8 +15,6 @@ class CreaterPlanilhaHardware:
 
         self.dataFrama_hardware = {}
 
-        print(self.dados_de_entrada[0]['MainBoard']['Serial Number'])
-
         self.NOME_PLANILHA = (
             f"hardwares"
             f"{self.dados_de_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
@@ -36,10 +34,13 @@ class CreaterPlanilhaHardware:
             'Unidade': [],
         }
 
+        # Faz o loop dos dados de entrada.
         for item in self.dados_de_entrada:
             for componente, payload in item.items():
-                print(componente, payload)
+                if componente in grupo_componentes:
+                    grupo_componentes[componente].append(payload)
 
+        print(grupo_componentes)
             # self.dataFrama_hardware = pd.DataFrame(componente)
             # print(self.dataFrama_hardware)
 
