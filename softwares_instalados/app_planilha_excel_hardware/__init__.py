@@ -15,10 +15,7 @@ class CreaterPlanilhaHardware:
 
         self.dataFrame_hardware = {}
 
-        self.NOME_PLANILHA = (
-            f"hardwares"
-            f"{self.dados_de_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
-        )
+        self.NOME_PLANILHA = None
 
         self.df_mb = None
         self.df_cpu = None
@@ -92,8 +89,19 @@ class CreaterPlanilhaHardware:
             'Placa Mãe': self.df_mb,
             'Processador': self.df_cpu,
             'Memória RAM': self.df_ram,
-            'Armazenamentos': self.ssd_hdd
+            'Armazenamentos': self.ssd_hdd,
         }
+
+        if self.dados_de_entrada[0]['MainBoard']['Serial Number']:
+            self.NOME_PLANILHA = (
+                f"hardwares"
+                f"{self.dados_de_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
+            )
+        else:
+            self.NOME_PLANILHA = (
+                'hardwares_',
+
+            )
 
     def criar_planilha_dados_app(self):
         os.system('cls')
