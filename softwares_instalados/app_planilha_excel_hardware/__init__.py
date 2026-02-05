@@ -38,7 +38,7 @@ class CreaterPlanilhaHardware:
             'MainBoard': [],
             'Processador': [],
             'Memoria': [],
-            'Unidade': [],
+            'HDD_SSD': [],
         }
 
         # Faz o loop dos dados de entrada.
@@ -50,6 +50,8 @@ class CreaterPlanilhaHardware:
                 # Verificar se existe o componente e adiciona a na lista conforma o componente.
                 if componente in grupo_componentes:
                     grupo_componentes[componente].append(payload)
+
+        # print(grupo_componentes)
 
         if grupo_componentes['MainBoard']:
             self.df_mb = pd.DataFrame(grupo_componentes['MainBoard'])
