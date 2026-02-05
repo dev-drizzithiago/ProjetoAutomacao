@@ -122,6 +122,13 @@ class CreaterPlanilhaHardware:
             self.local_save_planilha = os.path.join(self.LOCAL_PATH_RELATORIO, self.NOME_PLANILHA)
 
 
+    def _ajusta_larguras(self, ws, df, startrow=0, startcol=0, max_width=50):
+        for i, col in enumerate(df.columns):
+            indice = df[col.astype(str).fillna('')]
+            max_len = max(indice.map(len).max(), len(str(col))) + 2
+            width = min(max_len, max_width)
+            ws.set_column(startcol + i, startrow + i, width)
+
     def criar_planilha_dados_app(self):
 
         self._decidir_local_save()
@@ -143,10 +150,10 @@ class CreaterPlanilhaHardware:
 
                 for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
 
-                    ws = writer.sheets[aba]
-
                     # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
                     df.to_excel(writer, sheet_name=sheet, index=False, startrow=0, startcol=0)
+
+                    ws = writer.sheets[aba]
 
                     # Adiciona tabela com cabeçalho
                     rows, cols = df.shape
@@ -155,7 +162,9 @@ class CreaterPlanilhaHardware:
                         continue
 
                     ws.add_table(0, 0, rows, cols - 1, {
-                        "name": f"TabelaHardware{indice}_{aba.replace(' ', '_')}",
+                        "name": f"TabelaHardware{indice}_{
+                        aba.replace('(', '').replace(')', '')
+                        }",
 
                         # Define um estilo de tabela (TableStyleMedium9) — dá zebra e filtros nativos.
                         "style": "TableStyleMedium9",
@@ -165,6 +174,7 @@ class CreaterPlanilhaHardware:
                     })
 
                     ws.freeze_panes(1, 0)
+                    self._ajusta_larguras(ws, df, startrow=0, startcol=0)
 
             os.system('cls')
             print()
