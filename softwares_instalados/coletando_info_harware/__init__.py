@@ -60,7 +60,7 @@ class InfoHardWareScan:
 
                 self.lista_info_hardware.append({'HDD_SSD': {
                     'Disco Local': listagem.Description,
-                    'Capacidade': str(int(listagem.Size) / (1024 ** 3)).split('.')[0],
+                    'Capacidade': f'{str(int(listagem.Size) / (1024 ** 3)).split('.')[0]}GB',
                     'Espaço Livre': f"{porcetangem_espaco_livre:.2f}%",
                     'Numero de Serie': listagem.VolumeSerialNumber,
                 }})
