@@ -162,9 +162,6 @@ class CreaterPlanilhaHardware:
 
                 # Adiciona tabela com cabeçalho
                 rows, cols = df.shape
-                if cols == 0:
-                    ws(0, 0, 'sem dados')
-                    continue
 
                 ws.add_table(0, 0, rows, cols - 1, {
                     "name": f"TabelaHardware{indice}_{
