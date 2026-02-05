@@ -15,11 +15,11 @@ class CreaterPlanilhaHardware:
 
         self.dataFrama_hardware = {}
 
-        print(dados_entrada[0]['MainBoard']['Serial Number'])
+        print(self.dados_de_entrada[0]['MainBoard']['Serial Number'])
 
         self.NOME_PLANILHA = (
             f"hardwares"
-            f"{dados_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
+            f"{self.dados_de_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
         )
 
         try:
@@ -35,9 +35,13 @@ class CreaterPlanilhaHardware:
             'Memoria': [],
             'Unidade': [],
         }
-        for componente in self.dados_de_entrada:
-            self.dataFrama_hardware = pd.DataFrame(componente)
-            print(self.dataFrama_hardware)
+
+        for item in self.dados_de_entrada:
+            for componente, payload in item.items():
+                print(componente, payload)
+
+            # self.dataFrama_hardware = pd.DataFrame(componente)
+            # print(self.dataFrama_hardware)
 
     def criar_planilha_dados_app(self):
         os.system('cls')
