@@ -20,18 +20,21 @@ class CreaterPlanilhaHardware:
 
     def dados_to_pandas(self, dados_entrada):
 
-        print(dados_entrada[0]['Serial Number'])
+        print(dados_entrada[0]['MainBoard']['Serial Number'])
+
+        self.NOME_PLANILHA = (
+            f"hardwares"
+            f"{
+            dados_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')
+            }.xlsx"
+        )
+
+        print( self.NOME_PLANILHA)
+
+        self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
+
+        print(self.DATA_FRAME_APP)
         input()
-
-        if dados_entrada['tipoDados'] == 'hardware':
-            self.NOME_PLANILHA = (
-                f"hardwares_"
-                f"{
-                dados_entrada[0]['Serial Number']
-                }.xlsx"
-            )
-
-        self.DATA_FRAME_APP = pd.DataFrame(dados_entrada['dados_entrada'])
 
     def criar_planilha_dados_app(self):
         os.system('cls')
