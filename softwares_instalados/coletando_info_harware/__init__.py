@@ -58,10 +58,10 @@ class InfoHardWareScan:
             if listagem.DeviceID == "C:":
                 porcetangem_espaco_livre = 100 * float(listagem.FreeSpace) / float(listagem.Size)
 
-                self.lista_info_hardware.append({'Unidade': {
+                self.lista_info_hardware.append({'HDD/SSD': {
                     'Disco Local': listagem.Description,
                     'Capacidade': str(int(listagem.Size) / (1024 ** 3)).split('.')[0],
-                    'Espaço Livre':f" {porcetangem_espaco_livre:.2f}%",
+                    'Espaço Livre': f"{porcetangem_espaco_livre:.2f}%",
                     'Numero de Serie': listagem.VolumeSerialNumber,
                 }})
 
