@@ -77,7 +77,7 @@ class CreaterPlanilhaHardware:
                 wb = writer.book
 
                 # Escreve os dados do DataFrame no arquivo Excel, sem a coluna de índice.
-                self.DATA_FRAME_APP.to_excel(writer, sheet_name=sheet, index=False)
+                self.dataFrama_hardware.to_excel(writer, sheet_name=sheet, index=False)
 
                 work_sheet = writer.sheets[sheet]
                 bold = wb.add_format({'bold': True})
@@ -85,7 +85,7 @@ class CreaterPlanilhaHardware:
                 work_sheet.set_column("A:A", 80, bold)
                 work_sheet.set_column("B:B", 25)
 
-                rows, cols = self.DATA_FRAME_APP.shape
+                rows, cols = self.dataFrama_hardware.shape
 
                 work_sheet.add_table(0, 0, rows, cols - 1, {
                     "name": "TabelaSoftware",
@@ -94,7 +94,7 @@ class CreaterPlanilhaHardware:
                     "style": "TableStyleMedium9",
 
                     # Define o texto do cabeçalho de cada coluna a partir de df.columns.
-                    "columns": [{"header": c} for c in self.DATA_FRAME_APP.columns]
+                    "columns": [{"header": c} for c in self.dataFrama_hardware.columns]
                 })
 
                 work_sheet.freeze_panes(1, 0)
