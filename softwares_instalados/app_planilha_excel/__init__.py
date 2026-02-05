@@ -26,8 +26,9 @@ class CreaterPlanilha:
             self.NOME_PLANILHA = (
                 f"hardwares_"
                 f"{
-                    str(dados_entrada[0]['DisplayVersion'])
-                    .replace('.', '-')
+                dados_entrada['dados_entrada']
+                [0]['Placa Mae']
+                ['Serial Number'].replace("/", '_')
                 }.xlsx"
             )
         elif dados_entrada['tipoDados'] == 'software':
@@ -39,7 +40,7 @@ class CreaterPlanilha:
                 }.xlsx"
             )
 
-        self.DATA_FRAME_APP = pd.DataFrame(dados_entrada)
+        self.DATA_FRAME_APP = pd.DataFrame(dados_entrada['dados_entrada'])
 
     def criar_planilha_dados_app(self):
         os.system('cls')
