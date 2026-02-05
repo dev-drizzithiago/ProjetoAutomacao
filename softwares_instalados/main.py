@@ -163,9 +163,14 @@ if __name__ == '__main__':
         obj_scan_software = RelatorioSoftwareInstalados()
         response_resultado = obj_scan_software.scan_software()
 
-        init_obj_creater_planilha = CreaterPlanilha()
-        init_obj_creater_planilha.dados_to_pandas(response_resultado)
-        init_obj_creater_planilha.criar_planilha_dados_app()
+        obj_scan_hardware = InfoHardWareScan()
+        response_hardware = obj_scan_hardware.scan_hardware()
+        print(response_hardware)
+
+
+        # init_obj_creater_planilha = CreaterPlanilha()
+        # init_obj_creater_planilha.dados_to_pandas(response_resultado)
+        # init_obj_creater_planilha.criar_planilha_dados_app()
 
     os.system('cls')
     print()
