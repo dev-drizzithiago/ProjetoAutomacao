@@ -7,36 +7,29 @@ class CreaterPlanilhaHardware:
     CAMINHO_ABS_SERVIDOR = r'\\192.168.0.10\APP Login\PLANILHAS_EXCEL_APPS'
     LOCAL_PATH_RELATORIO = r"c:\PLANILHAS_EXCEL_APPS_LOCAL"
 
-    def __init__(self):
-
+    def __init__(self, dados_entrada):
+        self.dados_de_entrada = dados_entrada
         self.DATA_FRAME_APP = None
         self.NOME_PLANILHA = None
         self.local_save_planilha = None
+
+        print(dados_entrada[0]['MainBoard']['Serial Number'])
+
+        self.NOME_PLANILHA = (
+            f"hardwares"
+            f"{dados_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
+        )
 
         try:
             os.mkdir(self.LOCAL_PATH_RELATORIO)
         except FileExistsError:
             pass
 
-    def dados_to_pandas(self, dados_entrada):
+    def dados_to_pandas(self):
 
-        print(dados_entrada[0]['MainBoard']['Serial Number'])
-
-        self.NOME_PLANILHA = (
-            f"hardwares"
-            f"{
-            dados_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')
-            }.xlsx"
-        )
-
-        print(self.NOME_PLANILHA)
-        print(len(dados_entrada))
-
-        for componente in dados_entrada:
+        for componente in self.dados_de_entrada:
             self.DATA_FRAME_APP = pd.DataFrame(componente)
             print(self.DATA_FRAME_APP)
-            print()
-        input()
 
     def criar_planilha_dados_app(self):
         os.system('cls')
