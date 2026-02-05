@@ -24,6 +24,16 @@ class InfoHardWareScan:
         result_busca_placa_mae = self.conn_hardware.Win32_BaseBoard()
         result_busca_disk = self.conn_hardware.Win32_LogicalDisk()
 
+        for listagem in result_busca_placa_mae:
+
+            self.lista_info_hardware.append({'MainBoard': {
+                'Placa Mae': listagem.Name,
+                'Fabricante': listagem.Manufacturer,
+                'Serial Number': listagem.SerialNumber,
+                'Numero Produto': listagem.Product,
+                'Versao': listagem.Version,
+            }})
+
         for listagem in result_busca_processador:
 
             self.lista_info_hardware.append({'Processador': {
@@ -43,17 +53,8 @@ class InfoHardWareScan:
                 'Serial Number':  listagem.SerialNumber,
             }})
 
-        for listagem in result_busca_placa_mae:
-
-            self.lista_info_hardware.append({'MainBoard': {
-                'Placa Mae': listagem.Name,
-                'Fabricante': listagem.Manufacturer,
-                'Serial Number': listagem.SerialNumber,
-                'Numero Produto': listagem.Product,
-                'Versao': listagem.Version,
-            }})
-
         for listagem in result_busca_disk:
+
             if listagem.DeviceID == "C:":
                 porcetangem_espaco_livre = 100*float(listagem.FreeSpace) / float(listagem.Size)
 
