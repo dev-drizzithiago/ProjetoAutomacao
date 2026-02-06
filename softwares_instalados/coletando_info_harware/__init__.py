@@ -89,8 +89,10 @@ class InfoHardWareScan:
 
     def run_spinner(self, texto_spinner):
         stop_event = Event()
+
         _thread = Thread(target=self._spinner, args=(stop_event, texto_spinner), daemon=True)
         _thread.start()
+
         try:
             result = self.scan_hardware()
             return result
