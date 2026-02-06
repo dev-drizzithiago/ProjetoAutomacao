@@ -171,17 +171,17 @@ if __name__ == '__main__':
     init_obj_creater_planilha_hardware.dados_to_pandas()
     init_obj_creater_planilha_hardware.criar_planilha_dados_app()
 
-        # print()
-        # print('---' * 10)
-        # print('Buscando pelos softwares, aguarde...')
+    print()
+    print('---' * 10)
+    print('Buscando pelos softwares, aguarde...')
 
-        # # Cria o obj para buscar pelos softwares.
-        # obj_scan_software = RelatorioSoftwareInstalados()
-        # response_software = obj_scan_software.scan_software()
+    # Cria o obj para buscar pelos softwares.
+    obj_scan_software = RelatorioSoftwareInstalados()
+    response_software = obj_scan_software.scan_software()
 
-        # init_obj_creater_planilha_software = CreaterPlanilhaHardware()
-        # init_obj_creater_planilha_software.dados_to_pandas(response_software)
-        # init_obj_creater_planilha_software.criar_planilha_dados_app()
+    init_obj_creater_planilha_software = CreaterPlanilhaSoftware()
+    init_obj_creater_planilha_software.dados_to_pandas(response_software)
+    init_obj_creater_planilha_software.criar_planilha_dados_app()
 
     os.system('cls')
     print()
