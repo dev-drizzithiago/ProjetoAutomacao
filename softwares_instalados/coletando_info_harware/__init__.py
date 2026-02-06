@@ -25,10 +25,9 @@ class InfoHardWareScan:
 
         for listagem in result_busca_placa_mae:
 
-            print(listagem)
-
             self.lista_info_hardware.append({'MainBoard': {
                 'Placa Mae': listagem.Name,
+                'Opção de configuração': listagem.ConfigOptions,
                 'Fabricante': listagem.Manufacturer,
                 'Serial Number': listagem.SerialNumber,
                 'Numero Produto': listagem.Product,
@@ -36,6 +35,7 @@ class InfoHardWareScan:
             }})
 
         for listagem in result_busca_disk:
+            print(listagem)
 
             if listagem.DeviceID == "C:":
                 porcetangem_espaco_livre = 100 * float(listagem.FreeSpace) / float(listagem.Size)
