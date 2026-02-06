@@ -42,8 +42,6 @@ class CreaterPlanilhaSoftware:
             print('Enviando relatório ao servidor, testando conexão...')
 
             os.listdir(self.CAMINHO_ABS_SERVIDOR)
-
-            print(self.local_save_planilha)
             self.local_save_planilha = os.path.join(self.CAMINHO_ABS_SERVIDOR, self.NOME_PLANILHA)
         except:
             os.system('cls')
@@ -86,13 +84,8 @@ class CreaterPlanilhaSoftware:
 
                 work_sheet.freeze_panes(1, 0)
                 work_sheet.freeze_panes(2, 0)
-            os.system('cls')
-            print()
-            print('---' * 10)
-            print('Planilha criada com sucesso!')
-            sleep(5)
-            return self.NOME_PLANILHA
 
+            return self.NOME_PLANILHA
 
         except Exception as error:
             os.system('cls')
