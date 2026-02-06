@@ -97,14 +97,16 @@ class CreaterPlanilhaHardware:
         if self.dados_de_entrada[0]['MainBoard']['Serial Number']:
             self.NOME_PLANILHA = (
                 f"hardwares"
+                f"{self.dados_de_entrada[1]['HDD_SSD']['Nome do Sistema']}"
                 f"{self.dados_de_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
             )
         else:
             self.NOME_PLANILHA = (
-                'hardwares_'
+                f'hardwares_{self.dados_de_entrada[1]['HDD_SSD']['Nome do Sistema']}'
             )
 
         try:
+            os.system('cls')
             print()
             print('---' * 10)
             print('Enviando relatório ao servidor, testando conexão...')
@@ -115,6 +117,7 @@ class CreaterPlanilhaHardware:
             self.local_save_planilha = os.path.join(self.CAMINHO_ABS_SERVIDOR, self.NOME_PLANILHA)
         except:
             os.system('cls')
+
             print()
             print('---' * 10)
             print('Servidor não respondeu, arquivo sendo salvo no computador local...')
@@ -141,13 +144,6 @@ class CreaterPlanilhaHardware:
         # engine='xlsxwriter': usa o motor xlsxwriter (excelente para formatação rica).
         try:
             with pd.ExcelWriter(self.local_save_planilha, engine='xlsxwriter') as writer:
-
-                wb = writer.book
-
-                # print(self.dataFrame_hardware)
-                #
-                # for i, (k, v) in enumerate(self.dataFrame_hardware.items()):
-                #     print(i, k, v)
 
                 # Realize um loop para o dicionário dos dataFrames
                 for indice, (aba, df) in enumerate(self.dataFrame_hardware.items()):
