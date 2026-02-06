@@ -96,7 +96,7 @@ class CreaterPlanilhaHardware:
     def _decidir_local_save(self):
         if self.dados_de_entrada[0]['MainBoard']['Serial Number']:
             self.NOME_PLANILHA = (
-                f"hardwares"
+                f"hardwares_"
                 f"{self.dados_de_entrada[1]['HDD_SSD']['Nome do Sistema']}"
                 f"{self.dados_de_entrada[0]['MainBoard']['Serial Number'].replace("/", '_')}.xlsx"
             )
