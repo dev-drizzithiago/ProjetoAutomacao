@@ -35,7 +35,6 @@ class InfoHardWareScan:
             }})
 
         for listagem in result_busca_disk:
-            print(listagem)
 
             if listagem.DeviceID == "C:":
                 porcetangem_espaco_livre = 100 * float(listagem.FreeSpace) / float(listagem.Size)
@@ -56,6 +55,8 @@ class InfoHardWareScan:
             }})
 
         for listagem in result_busca_memoria:
+
+            print(listagem)
 
             self.lista_info_hardware.append({'Memoria': {
                 'Modelo':  listagem.Name,
