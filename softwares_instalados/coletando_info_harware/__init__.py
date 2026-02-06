@@ -56,13 +56,13 @@ class InfoHardWareScan:
 
         for listagem in result_busca_memoria:
 
-            print(listagem)
-
             self.lista_info_hardware.append({'Memoria': {
                 'Modelo':  listagem.Name,
                 'Capacidade':  f'{self._to_gib(listagem.Capacity)}GB',
                 'Clock Speed':  listagem.ConfiguredClockSpeed,
                 'Velocidade':  listagem.Speed,
+                'Local Slot': listagem.DeviceLocator,
+                'Fabicação': listagem.Manufacturer,
                 'Parte Number':  listagem.PartNumber,
                 'Serial Number':  listagem.SerialNumber,
             }})
