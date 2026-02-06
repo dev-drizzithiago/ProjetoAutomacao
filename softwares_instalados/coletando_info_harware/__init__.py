@@ -16,7 +16,6 @@ class InfoHardWareScan:
         self.dict_info_hardware = {}
         self.dict_geral_hardware = {}
 
-
     def scan_hardware(self):
 
         result_busca_processador = self.conn_hardware.Win32_Processor()
@@ -100,3 +99,6 @@ class InfoHardWareScan:
 if __name__ == '__main__':
     inicit_obj_scan = InfoHardWareScan()
     result_scan = inicit_obj_scan.run_spinner('Buscando informações sobre o hardware...')
+
+    for item in result_scan:
+        print(item)
