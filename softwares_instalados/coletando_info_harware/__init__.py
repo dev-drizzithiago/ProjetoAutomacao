@@ -34,6 +34,19 @@ class InfoHardWareScan:
                 'Versao': listagem.Version,
             }})
 
+        for listagem in result_busca_disk:
+
+            if listagem.DeviceID == "C:":
+                porcetangem_espaco_livre = 100 * float(listagem.FreeSpace) / float(listagem.Size)
+
+                self.lista_info_hardware.append({'HDD_SSD': {
+                    'Disco Local': listagem.Description,
+                    'Capacidade': f'{self._to_gib(listagem.Size)}GB',
+                    'Espaço Livre': f"{porcetangem_espaco_livre:.2f}%",
+                    'Numero de Serie': listagem.VolumeSerialNumber,
+                    'Nome do Sistema': listagem.SystemName,
+                }})
+
         for listagem in result_busca_processador:
             self.lista_info_hardware.append({'Processador': {
                 'Modelo': listagem.Name,
@@ -51,19 +64,6 @@ class InfoHardWareScan:
                 'Parte Number':  listagem.PartNumber,
                 'Serial Number':  listagem.SerialNumber,
             }})
-
-        for listagem in result_busca_disk:
-
-            if listagem.DeviceID == "C:":
-                porcetangem_espaco_livre = 100 * float(listagem.FreeSpace) / float(listagem.Size)
-
-                self.lista_info_hardware.append({'HDD_SSD': {
-                    'Disco Local': listagem.Description,
-                    'Capacidade': f'{self._to_gib(listagem.Size)}GB',
-                    'Espaço Livre': f"{porcetangem_espaco_livre:.2f}%",
-                    'Numero de Serie': listagem.VolumeSerialNumber,
-                    'Nome do Sistema': listagem.SystemName,
-                }})
 
         return self.lista_info_hardware
 
