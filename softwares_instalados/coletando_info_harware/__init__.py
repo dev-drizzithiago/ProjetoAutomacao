@@ -25,6 +25,8 @@ class InfoHardWareScan:
 
         for listagem in result_busca_placa_mae:
 
+            print(listagem)
+
             self.lista_info_hardware.append({'MainBoard': {
                 'Placa Mae': listagem.Name,
                 'Fabricante': listagem.Manufacturer,
