@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-from time import sleep
 
 class CreaterPlanilhaSoftware:
 
