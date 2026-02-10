@@ -36,12 +36,12 @@ class GerarCertificado:
 
     def salvar_certificado(self):
         # Salvar certificado
-        with open("public_cert.cer", "wb") as f:
+        with open("../public_cert.cer", "wb") as f:
             f.write(self.cert.public_bytes(serialization.Encoding.DER))
 
     def salvar_chave_privada(self):
         # Salvar chave privada
-        with open("private_key.pem", "wb") as f:
+        with open("../private_key.pem", "wb") as f:
             f.write(
                 self.key.private_bytes(
                     encoding=serialization.Encoding.PEM,
