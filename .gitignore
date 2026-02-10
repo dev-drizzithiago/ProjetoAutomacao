@@ -16,3 +16,5 @@ teste_velocidade_v1/.~lock.data.csv\#
 *.xlsx
 *.xlsx
 /softwares_instalados/build
+*.pem
+*.cer
