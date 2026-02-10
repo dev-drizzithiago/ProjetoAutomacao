@@ -8,9 +8,8 @@ class AlterarPermissaoReunioes:
         self.init_conectar_exchange = ConexaoExchangeOnline()
         self.init_conectar_exchange.install_modulo_exchange()
         self.init_conectar_exchange.importando_modulo()
-        self.init_conectar_exchange.conectando_exchange()
+        self.init_conectar_exchange.conectando_exchange('thiago.pinheiro@segeticonsultoria.com')
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
     init_obj_calendar.chamando_obj_conexao()
-    
