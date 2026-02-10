@@ -1,16 +1,18 @@
 from conectando_exechange_online import ProcessoRun
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
 
 class AlterarPermissaoReunioes:
     def __init__(self):
-        self.cmd = """        
-            Import-Module ExchangeOnlineManagement 
-            Connect-ExchangeOnline -AppId  
-              -CertificateThumbprint "" 
-              -Organization "segeticonsultoria.onmicrosoft.com" 
-            
-            Get-EXOMailbox -ResultSize 1
-            Disconnect-ExchangeOnline -Confirm:$false            
-        """
+        self.cmd = (
+            f'Import-Module ExchangeOnlineManagement '
+            f'Connect-ExchangeOnline -AppId "{getenv('AppId')}" '
+            f'  -CertificateThumbprint "{getenv('CertificateThumbprint')}" '
+            f'  -Organization "{getenv('Organization')}" '
+        )
+
         self.init_conectar_exchange = ProcessoRun()
 
     def chamando_obj_conexao(self):
