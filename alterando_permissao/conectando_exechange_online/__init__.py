@@ -8,7 +8,7 @@ class ProcessoRun:
     def _run_processo_powershell(self, comando_shell):
         resultado_processo = run(
             ["powershell", "-Command", comando_shell],
-            stdout=PIPE, text=True, capture_output=True
+            text=True, capture_output=True
         )
 
         return resultado_processo
