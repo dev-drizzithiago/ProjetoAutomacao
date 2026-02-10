@@ -20,7 +20,7 @@ class AlterarPermissaoReunioes:
         resultado = self.init_conectar_exchange.run_spinner(self.cmd, 'Conectando... ')
         print()
         print('---' * 20)
-        print(resultado.returncode)
+        print(resultado)
 
 
 if __name__ == '__main__':
