@@ -5,12 +5,18 @@ from os import getenv
 load_dotenv()
 
 class AlterarPermissaoReunioes:
+
+    AppId = getenv('AppId')
+    CertificateThumbprint = getenv('CertificateThumbprint')
+    Organization = getenv('Organization')
+
     def __init__(self):
+
         self.cmd = (
             f'Import-Module ExchangeOnlineManagement | '
-            f'Connect-ExchangeOnline -AppId "{getenv('AppId')}" '
-            f' -CertificateThumbprint "{getenv('CertificateThumbprint')}" '
-            f' -Organization "{getenv('Organization')}" -ShowBanner:$false | '
+            f'Connect-ExchangeOnline -AppId "{self.AppId}" '
+            f' -CertificateThumbprint "{self.CertificateThumbprint}" '
+            f' -Organization "{self.Organization}" -ShowBanner:$false | '
             f'Get-EXOMailbox -ResultSize 1 | Select-Object DisplayName,PrimarySmtpAddress | '
             f'Disconnect-ExchangeOnline -Confirm:$false '
         )
