@@ -1,4 +1,4 @@
-from subprocess import run, Popen ,PIPE
+from subprocess import run, PIPE
 import itertools
 from time import sleep
 from threading import Event, Thread
@@ -6,7 +6,7 @@ from threading import Event, Thread
 class ConexaoExchangeOnline:
     def __init__(self):
         self.init_obj_spinner = ProcessoRun()
-
+        self.resultado_processo = None
 
     def conectando(self, *credenciais):
         print(credenciais)
@@ -18,7 +18,7 @@ class ConexaoExchangeOnline:
 class ProcessoRun:
 
     def _run_processo_powershell(self, comando_shell):
-        resultado_processo = Popen(
+        resultado_processo = run(
             ["powershell", "-NoExit", "-Command", comando_shell],
             stdin=PIPE,
             stdout=PIPE,
