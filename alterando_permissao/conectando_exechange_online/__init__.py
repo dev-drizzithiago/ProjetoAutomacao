@@ -7,7 +7,7 @@ class ProcessoRun:
 
     def _run_processo_powershell(self, comando_shell):
         resultado_processo = run(
-            ["powershell", "-Command", comando_shell],
+            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando_shell],
             text=True,
             capture_output=True
         )
