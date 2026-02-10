@@ -12,7 +12,12 @@ class AlterarPermissaoReunioes:
 
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
-        self.init_conectar_exchange.run_spinner(self.cmd, 'Conectando... ')
+        resultado = self.init_conectar_exchange.run_spinner(self.cmd, 'Conectando... ')
+        print()
+        print('---' * 20)
+        print(resultado.returncode)
+        print()
+        print(resultado.stdout)
 
 
 if __name__ == '__main__':
