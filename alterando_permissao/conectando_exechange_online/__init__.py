@@ -5,18 +5,26 @@ from threading import Event, Thread
 
 class ConexaoExchangeOnline:
     def __init__(self):
-        pass
+        self.init_obj_spinner = ProcessoRun()
 
     def conectando(self, *credenciais):
         print(credenciais)
 
     def install_modulo_exchange(self):
-        init_obj_spinner = ProcessoRun()
 
         COMANDO_SHELL = """Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"""
-        result_comando = init_obj_spinner.run_spinner(COMANDO_SHELL, 'Instalando o modúlo... ')
+        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, 'Instalando o modúlo... ')
         print(result_comando)
 
+    def importando_modulo(self):
+        COMANDO_SHELL = "Import-Module ExchangeOnlineManagement"
+        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, 'Importando o Modúlo...  ')
+        print(result_comando)
+
+    def conectando_exchange(self, *credenciais):
+        COMANDO_SHELL = f"Connect-ExchangeOnline -UserPrincipalName {credenciais[0]}"
+        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, 'Conectando o Modúlo...  ')
+        print(result_comando)
 
 class ProcessoRun:
     def _run_processo_powershell(self, comando_shell):
