@@ -64,10 +64,28 @@ class AlterarPermissaoReunioes:
 
         return limpa
 
+    def analisando_thumbprint(self):
+        # Liste de forma completa
+        comando_shell = (
+            'Get-ChildItem Cert:\CurrentUser\My |'
+              'Select-Object Subject, Thumbprint, HasPrivateKey |'
+              'Format-List'
+        )
+
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
+        return resultado
+
+    def gerar_pfx(self):
+        comando_shell = 'openssl pkcs12 -export -out automation.pfx -inkey private_key.pem -in public_cert.cer'
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
+        return resultado
+
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
     resultando_comando = init_obj_calendar.chamando_obj_conexao()
+    # resultando_pfx = init_obj_calendar.gerar_pfx()
+    # resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
     # resultando_comando = init_obj_calendar.verificando_modulo()
 
     for item in resultando_comando:
