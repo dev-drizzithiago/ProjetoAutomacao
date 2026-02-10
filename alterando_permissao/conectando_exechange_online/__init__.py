@@ -1,5 +1,4 @@
 from subprocess import run, PIPE
-from ..spinner_run import run_spinner
 
 class ConexaoExchangeOnline:
     def __init__(self):
