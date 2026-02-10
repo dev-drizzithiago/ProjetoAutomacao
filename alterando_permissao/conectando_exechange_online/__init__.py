@@ -1,4 +1,4 @@
-from subprocess import run, PIPE
+from subprocess import run, Popen ,PIPE
 import itertools
 from time import sleep
 from threading import Event, Thread
@@ -7,32 +7,23 @@ class ConexaoExchangeOnline:
     def __init__(self):
         self.init_obj_spinner = ProcessoRun()
 
+
     def conectando(self, *credenciais):
         print(credenciais)
 
-    def install_modulo_exchange(self):
+    def processando_modulo_exchange(self, COMANDO_SHELL, texto_processo):
 
-        COMANDO_SHELL = """Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"""
-        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, 'Instalando o modúlo... ')
-        print(result_comando)
-
-    def importando_modulo(self):
-        COMANDO_SHELL = "Import-Module ExchangeOnlineManagement"
-        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, 'Importando o Modúlo...  ')
-        print(result_comando)
-
-    def conectando_exchange(self, *credenciais):
-        COMANDO_SHELL = f"Connect-ExchangeOnline -UserPrincipalName {credenciais[0]}"
-        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, 'Conectando o Modúlo...  ')
-        print(result_comando)
+        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, texto_processo)
 
 class ProcessoRun:
+
     def _run_processo_powershell(self, comando_shell):
-        resultado_processo = run(
-            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando_shell],
-            shell=True,
-            check=True,
-            capture_output=True
+        resultado_processo = Popen(
+            ["powershell", "-NoExit", "-Command", comando_shell],
+            stdin=PIPE,
+            stdout=PIPE,
+            stderr=PIPE,
+            text=True
         )
 
         return resultado_processo
