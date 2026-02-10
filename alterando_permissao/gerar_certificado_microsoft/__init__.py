@@ -6,12 +6,13 @@ from datetime import datetime, timedelta
 
 class GerarCertificado:
     def __init__(self):
-        pass
 
+        self.key = None
+        self.cert = None
 
     def gerar_chave_privada(self):
         # Gerar chave privada
-        key = rsa.generate_private_key(
+        self.key = rsa.generate_private_key(
             public_exponent=65537,
             key_size=2048
         )
@@ -22,32 +23,40 @@ class GerarCertificado:
             x509.NameAttribute(NameOID.COMMON_NAME, u"ExchangeOnlineAutomation"),
         ])
 
-
-
-
-cert = (
-    x509.CertificateBuilder()
-    .subject_name(subject)
-    .issuer_name(issuer)
-    .public_key(key.public_key())
-    .serial_number(x509.random_serial_number())
-    .not_valid_before(datetime.utcnow())
-    .not_valid_after(datetime.utcnow() + timedelta(days=365 * 5))
-    .sign(key, hashes.SHA256())
-)
-
-# Salvar certificado
-with open("public_cert.cer", "wb") as f:
-    f.write(cert.public_bytes(serialization.Encoding.DER))
-
-# Salvar chave privada
-with open("private_key.pem", "wb") as f:
-    f.write(
-        key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.NoEncryption()
+        self.cert = (
+            x509.CertificateBuilder()
+            .subject_name(subject)
+            .issuer_name(issuer)
+            .public_key(self.key.public_key())
+            .serial_number(x509.random_serial_number())
+            .not_valid_before(datetime.utcnow())
+            .not_valid_after(datetime.utcnow() + timedelta(days=365 * 5))
+            .sign(self.key, hashes.SHA256())
         )
-    )
 
-print("Certificado criado!")
+    def salvar_certificado(self):
+        # Salvar certificado
+        with open("public_cert.cer", "wb") as f:
+            f.write(self.cert.public_bytes(serialization.Encoding.DER))
+
+    def salvar_chave_privada(self):
+        # Salvar chave privada
+        with open("private_key.pem", "wb") as f:
+            f.write(
+                self.key.private_bytes(
+                    encoding=serialization.Encoding.PEM,
+                    format=serialization.PrivateFormat.TraditionalOpenSSL,
+                    encryption_algorithm=serialization.NoEncryption()
+                )
+            )
+
+
+
+if __name__ == '__main__':
+    init_obj_gerar_certificado = GerarCertificado()
+    init_obj_gerar_certificado.gerar_chave_privada()
+    init_obj_gerar_certificado.gerar_certificado_self_signed()
+    init_obj_gerar_certificado.salvar_certificado()
+    init_obj_gerar_certificado.salvar_chave_privada()
+
+    print("Certificado criado!")
