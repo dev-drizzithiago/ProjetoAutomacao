@@ -4,7 +4,6 @@ import itertools
 from time import sleep
 from threading import Event, Thread
 
-
 class InfoHardWareScan:
 
     conn_hardware = wmi.WMI()
