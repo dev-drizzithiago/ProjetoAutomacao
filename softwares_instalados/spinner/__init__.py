@@ -27,7 +27,7 @@ def _spinner(stop_event, prefix='Processando... '):
     print('\n' + ' ' * 60 + '\r', end='', flush=True)
 
 
-def _run_spinner(comando_str, texto_spinner):
+def run_spinner(comando_str, texto_spinner):
     stop_event = Event()
     _thread = Thread(target=_spinner, args=(stop_event, texto_spinner), daemon=True)
     _thread.start()
