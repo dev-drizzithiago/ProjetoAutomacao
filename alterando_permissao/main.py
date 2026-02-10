@@ -16,8 +16,6 @@ class AlterarPermissaoReunioes:
         print()
         print('---' * 20)
         print(resultado.returncode)
-        print()
-        print(resultado.stdout)
 
 
 if __name__ == '__main__':
