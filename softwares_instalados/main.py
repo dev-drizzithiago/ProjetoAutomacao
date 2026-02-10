@@ -15,7 +15,7 @@ from time import sleep
 from app_planilha_excel_software import CreaterPlanilhaSoftware
 from app_planilha_excel_hardware import CreaterPlanilhaHardware
 from coletando_info_harware import InfoHardWareScan
-from spinner import _run_spinner
+from spinner import run_spinner
 
 def verificar_elevacao():
     def is_admin():
@@ -24,7 +24,7 @@ def verificar_elevacao():
         except:
             return False
 
-    ## Se o app não foi elevado vai abrir a janela para solicita as credinciais de administrador.
+    ## Se o APP não foi elevado vai abrir a janela para solicitar as credinciais de administrador.
     if not is_admin():
         ctypes.windll.shell32.ShellExecuteW(
             None,  # handle (não usado)
