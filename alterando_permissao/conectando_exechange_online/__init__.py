@@ -4,8 +4,11 @@ from time import sleep
 from threading import Event, Thread
 
 class ProcessoRun:
-
     def _run_processo_powershell(self, comando_shell):
+        """
+        -NoProfile ajuda a evitar que perfis do PowerShell alterem o comportamento.
+        -ExecutionPolicy Bypass previne bloqueios de execução em ambientes mais restritivos.
+        """
         resultado_processo = run(
             ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando_shell],
             text=True,
