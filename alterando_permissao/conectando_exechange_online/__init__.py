@@ -3,18 +3,6 @@ import itertools
 from time import sleep
 from threading import Event, Thread
 
-class ConexaoExchangeOnline:
-    def __init__(self):
-        self.init_obj_spinner = ProcessoRun()
-        self.resultado_processo = None
-
-    def conectando(self, *credenciais):
-        print(credenciais)
-
-    def processando_modulo_exchange(self, COMANDO_SHELL, texto_processo):
-
-        result_comando = self.init_obj_spinner.run_spinner(COMANDO_SHELL, texto_processo)
-
 class ProcessoRun:
 
     def _run_processo_powershell(self, comando_shell):
@@ -51,5 +39,5 @@ class ProcessoRun:
             _thread.join()
 
 if __name__ == '__main__':
-    init_obj_conexao_exchange_online = ConexaoExchangeOnline()
-    init_obj_conexao_exchange_online.conectando('thiago', '123')
+    init_obj_conexao_exchange_online = ProcessoRun()
+    init_obj_conexao_exchange_online.run_spinner('thiago', '123')
