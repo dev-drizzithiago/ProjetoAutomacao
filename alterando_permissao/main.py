@@ -7,10 +7,10 @@ load_dotenv()
 class AlterarPermissaoReunioes:
     def __init__(self):
         self.cmd = (
-            f'Import-Module ExchangeOnlineManagement '
+            f'Import-Module ExchangeOnlineManagement | '
             f'Connect-ExchangeOnline -AppId "{getenv('AppId')}" '
             f'  -CertificateThumbprint "{getenv('CertificateThumbprint')}" '
-            f'  -Organization "{getenv('Organization')}" '
+            f'  -Organization "{getenv('Organization')}" -ShowBanner:$false; '
         )
 
         self.init_conectar_exchange = ProcessoRun()
