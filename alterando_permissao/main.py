@@ -44,17 +44,39 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
+    def parse_json(self, linha: str):
+        linha = linha.strip()
+
+        # Tenta achar um bloco JSON {} ou []
+        m = re.search(r'(\{.*\}|\[.*\])', linha, re.S)
+
+        if not m:
+            # Se não achou JSON, retorna vazio
+            return []
+
+        dados = json.loads(m.group(1))
+
+        if isinstance(dados, dict):
+            dados = [dados]
+
+        limpa = []
+
+        for item in dados:
+            limpa.append({
+                'Modulo': str(item.get('ModuleType', '')),
+                'Versao': str(item.get('Version', '')),
+            })
+
+        return limpa
+
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
     # resultando_comando = init_obj_calendar.chamando_obj_conexao()
     resultando_comando = init_obj_calendar.verificando_modulo()
 
-    # Tenta achar um bloco JSON {} ou []
-    m = re.search(r'(\{.*\}|\[.*\])', resultando_comando.strip(), re.S)
-    if not m:
-        # Se não achou JSON, retorna vazio
-        return []
+    for item in resultando_comando:
+        print(item)
 
 
 
