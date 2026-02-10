@@ -9,8 +9,10 @@ class AlterarPermissaoReunioes:
         self.cmd = (
             f'Import-Module ExchangeOnlineManagement | '
             f'Connect-ExchangeOnline -AppId "{getenv('AppId')}" '
-            f'  -CertificateThumbprint "{getenv('CertificateThumbprint')}" '
-            f'  -Organization "{getenv('Organization')}" -ShowBanner:$false; '
+            f' -CertificateThumbprint "{getenv('CertificateThumbprint')}" '
+            f' -Organization "{getenv('Organization')}" -ShowBanner:$false | '
+            f'Get-EXOMailbox -ResultSize 1 | Select-Object DisplayName,PrimarySmtpAddress | '
+            f'Disconnect-ExchangeOnline -Confirm:$false '
         )
 
         self.init_conectar_exchange = ProcessoRun()
