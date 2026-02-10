@@ -28,20 +28,15 @@ class AlterarPermissaoReunioes:
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
         resultado = self.init_conectar_exchange.run_spinner(self.cmd, 'Conectando... ')
-        print()
-        print('---' * 20)
-        print(resultado)
         return resultado
 
     def verificando_modulo(self):
         comando_shell = (
-            'Get-Module ExchangeOnlineManagement -ListAvailable | ConvertTo-Json -Depth 3'
+            'Get-Module ExchangeOnlineManagement -ListAvailable | '
+            'Select-Object ModuleType, Version | '
+            'ConvertTo-Json -Depth 3 '
         )
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
-        print()
-        print('---' * 20)
-        print(resultado)
-
         return resultado
 
     def parse_json(self, linha: str):
@@ -72,11 +67,15 @@ class AlterarPermissaoReunioes:
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
-    # resultando_comando = init_obj_calendar.chamando_obj_conexao()
-    resultando_comando = init_obj_calendar.verificando_modulo()
+    resultando_comando = init_obj_calendar.chamando_obj_conexao()
+    # resultando_comando = init_obj_calendar.verificando_modulo()
 
     for item in resultando_comando:
         print(item)
+
+    # resultado_parse = init_obj_calendar.parse_json(resultando_comando)
+    # for item in resultado_parse:
+    #     print(item['Modulo'])
 
 
 
