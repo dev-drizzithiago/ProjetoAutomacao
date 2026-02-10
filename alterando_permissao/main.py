@@ -1,5 +1,4 @@
 from conectando_exechange_online import ConexaoExchangeOnline
-import spinner_run
 
 class AlterarPermissaoReunioes:
     def __init__(self, *credenciais):
