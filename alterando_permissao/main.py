@@ -33,7 +33,7 @@ class AlterarPermissaoReunioes:
 
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
-        resultado = self.init_conectar_exchange.run_spinner(self.cmd, 'Conectando... ')
+        resultado = self.init_conectar_exchange.run_spinner(self.cmd, 'Conectando ao office 365... ')
         return resultado
 
     def verificando_modulo(self):
@@ -42,7 +42,7 @@ class AlterarPermissaoReunioes:
             'Select-Object ModuleType, Version | '
             'ConvertTo-Json -Depth 3 '
         )
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Verificando modulo instalado... ')
         return resultado
 
     def parse_json(self, linha: str):
@@ -78,30 +78,36 @@ class AlterarPermissaoReunioes:
               'Format-List'
         )
 
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Analisando o Thumbprint... ')
         return resultado
 
     def gerar_pfx(self):
         comando_shell = (rf'Export-Certificate -Cert "Cert:\CurrentUser\My\{os.getenv('CertificateThumbprint')}" '
-                         rf'-FilePath ""')
-        print(comando_shell, LOCAL_APP)
+                         rf'-FilePath "{LOCAL_CERTIFICADO}"')
 
-        # resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
-        # return resultado
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Exportando a chave publica... ')
+        return resultado
 
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
-    # resultando_comando = init_obj_calendar.chamando_obj_conexao()
     resultando_pfx = init_obj_calendar.gerar_pfx()
-    # resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
-    # resultando_comando = init_obj_calendar.verificando_modulo()
+    resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
+    resultando_modulo = init_obj_calendar.verificando_modulo()
+    resultando_conexao = init_obj_calendar.chamando_obj_conexao()
 
-    # for item in resultando_pfx:
-    #     print(item)
+    for item in resultando_pfx:
+        print(item)
 
-    # for item in resultando_comando:
-    #     print(item)
+    for item in resultando_thumbprint:
+        print(item)
+
+
+    for item in resultando_modulo:
+        print(item)
+
+    for item in resultando_conexao:
+        print(item)
 
     # resultado_parse = init_obj_calendar.parse_json(resultando_comando)
     # for item in resultado_parse:
