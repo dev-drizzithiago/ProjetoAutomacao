@@ -8,7 +8,8 @@ import re
 
 load_dotenv()
 
-LOCAL_APP = os.path.join(__file__)
+LOCAL_APP = os.path.abspath('')
+LOCAL_CERTIFICADO = os.path.join(LOCAL_APP, 'public_cert.cer')
 
 class AlterarPermissaoReunioes:
 
@@ -82,7 +83,7 @@ class AlterarPermissaoReunioes:
 
     def gerar_pfx(self):
         comando_shell = (rf'Export-Certificate -Cert "Cert:\CurrentUser\My\{os.getenv('CertificateThumbprint')}" '
-                         rf'-FilePath "public_cert.cer"')
+                         rf'-FilePath ""')
         print(comando_shell, LOCAL_APP)
 
         # resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
