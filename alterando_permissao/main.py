@@ -1,3 +1,5 @@
+import os
+
 from conectando_exechange_online import ProcessoRun
 from dotenv import load_dotenv
 from os import getenv
@@ -5,6 +7,8 @@ import json
 import re
 
 load_dotenv()
+
+LOCAL_APP = os.path.join(__file__)
 
 class AlterarPermissaoReunioes:
 
@@ -19,6 +23,7 @@ class AlterarPermissaoReunioes:
             f'Connect-ExchangeOnline -AppId "{self.AppId}" '
             f' -CertificateThumbprint "{self.CertificateThumbprint}" '
             f' -Organization "{self.Organization}" -ShowBanner:$false; '
+            
             f'Get-EXOMailbox -ResultSize 1 | Select-Object DisplayName,PrimarySmtpAddress; '
             f'Disconnect-ExchangeOnline -Confirm:$false;'
         )
@@ -76,20 +81,26 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def gerar_pfx(self):
-        comando_shell = 'openssl pkcs12 -export -out automation.pfx -inkey private_key.pem -in public_cert.cer'
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
-        return resultado
+        comando_shell = (rf'Export-Certificate -Cert "Cert:\CurrentUser\My\{os.getenv('CertificateThumbprint')}" '
+                         rf'-FilePath "public_cert.cer"')
+        print(comando_shell, LOCAL_APP)
+
+        # resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando... ')
+        # return resultado
 
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
-    resultando_comando = init_obj_calendar.chamando_obj_conexao()
-    # resultando_pfx = init_obj_calendar.gerar_pfx()
+    # resultando_comando = init_obj_calendar.chamando_obj_conexao()
+    resultando_pfx = init_obj_calendar.gerar_pfx()
     # resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
     # resultando_comando = init_obj_calendar.verificando_modulo()
 
-    for item in resultando_comando:
-        print(item)
+    # for item in resultando_pfx:
+    #     print(item)
+
+    # for item in resultando_comando:
+    #     print(item)
 
     # resultado_parse = init_obj_calendar.parse_json(resultando_comando)
     # for item in resultado_parse:
