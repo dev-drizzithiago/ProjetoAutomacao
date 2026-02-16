@@ -1,8 +1,13 @@
 from cryptography import x509
 from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.serialization import pkcs12
 from cryptography.hazmat.primitives.asymmetric import rsa
 from datetime import datetime, timedelta
+import hashlib
+import subprocess
+import os
+
 
 private_key = 'private_key.pem'
 public_key = 'public_cert.cer'
@@ -10,6 +15,7 @@ public_key = 'public_cert.cer'
 class GerarCertificado:
     def __init__(self):
 
+        self.cn = None
         self.key = None
         self.cert = None
 
@@ -20,11 +26,14 @@ class GerarCertificado:
             key_size=2048,
         )
 
-    def gerar_certificado_self_signed(self):
+    def gerar_certificado_self_signed(self, anos_validade: int = 5):
         # Gerar certificado self-signed
         subject = issuer = x509.Name([
             x509.NameAttribute(NameOID.COMMON_NAME, u"ExchangeOnlineAutomation"),
         ])
+
+        not_before = datetime.utcnow() - timedelta(minutes=5)  # margem
+        not_after = not_before + timedelta(days=365 * anos_validade)
 
         self.cert = (
             x509.CertificateBuilder()
@@ -58,7 +67,7 @@ class GerarCertificado:
 if __name__ == '__main__':
     init_obj_gerar_certificado = GerarCertificado()
     init_obj_gerar_certificado.gerar_chave_privada()
-    init_obj_gerar_certificado.gerar_certificado_self_signed()
+    init_obj_gerar_certificado.gerar_certificado_self_signed(5)
     init_obj_gerar_certificado.salvar_certificado()
     init_obj_gerar_certificado.salvar_chave_privada()
 
