@@ -10,8 +10,8 @@ import shlex
 load_dotenv()
 
 LOCAL_APP = os.path.abspath('')
-LOCAL_CERTIFICADO_PUBLIC = os.path.join(LOCAL_APP, 'certificado_public.cert')
-LOCAL_CERTIFICADO_PRIVATE = os.path.join(LOCAL_APP, 'certificado_private.pfx')
+LOCAL_CERTIFICADO_PUBLIC = os.path.join(LOCAL_APP, 'certificado_public_2.cert')
+LOCAL_CERTIFICADO_PRIVATE = os.path.join(LOCAL_APP, 'certificado_private_2.pfx')
 
 class AlterarPermissaoReunioes:
 
@@ -88,7 +88,7 @@ class AlterarPermissaoReunioes:
         comando_shell = (
             # 1) Criar novo certificado self-signed COM CHAVE EXPORTÁVEL no Current
             rf'$cert = New-SelfSignedCertificate `'
-            rf'-Subject "CN={os.getenv('SubjectCN')}" '
+            rf'-Subject "CN=MeuApp" '
             rf'-CertStoreLocation "Cert:\CurrentUser\My" '
             rf'-KeyAlgorithm RSA -KeyLength 2048 '
             rf'-KeyExportPolicy Exportable '
@@ -135,21 +135,30 @@ if __name__ == '__main__':
         [5] Criar Certificado Privado
         """
     )
+    print('---' * 20)
     resposta = int(input('Escolha uma opção: '))
+
     if resposta == 1:
         resultando_conexao = init_obj_calendar.chamando_obj_conexao()
         for item in resultando_conexao:
             print(item)
+
     elif resposta == 2:
         resultando_modulo = init_obj_calendar.verificando_modulo()
-        for item in resultando_modulo:
+        response = init_obj_calendar.parse_json(resultando_modulo)
+        for item in response:
             print(item)
+
     elif resposta == 3:
         resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
         for item in resultando_thumbprint:
             print(item)
+
     elif resposta == 4:
         resultando_criar_novo_certificado = init_obj_calendar.criar_novo_certificado()
+        for item in resultando_criar_novo_certificado:
+            print(item)
+
     elif resposta == 5:
         resultando_pfx = init_obj_calendar.gerar_pfx()
         for item in resultando_pfx:
