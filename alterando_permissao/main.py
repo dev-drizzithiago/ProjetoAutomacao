@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from os import getenv
 import json
 import re
+import shlex
 
 load_dotenv()
 
@@ -83,7 +84,18 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def criar_novo_certificado(self):
-        pass
+        comando_shell = (
+            rf'$cert = New-SelfSignedCertificate '
+            rf'-Subject "CN=EXO-Automation" '
+            rf'-CertStoreLocation "Cert:\CurrentUser\My" '
+            rf'-KeyAlgorithm RSA -KeyLength 2048 '
+            rf'-KeyExportPolicy Exportable '
+            rf'-KeySpec Signature '
+            rf'-NotAfter (Get-Date).AddYears(5) '
+        rf'$thumb = $cert.Thumbprint '
+        rf'$thumb'
+
+        )
 
     def gerar_pfx(self):
         comando_shell = (
