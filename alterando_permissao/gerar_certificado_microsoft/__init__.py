@@ -4,6 +4,9 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from datetime import datetime, timedelta
 
+private_key = 'private_key.pem'
+public_key = 'public_cert.cer'
+
 class GerarCertificado:
     def __init__(self):
 
@@ -14,7 +17,7 @@ class GerarCertificado:
         # Gerar chave privada
         self.key = rsa.generate_private_key(
             public_exponent=65537,
-            key_size=2048
+            key_size=2048,
         )
 
     def gerar_certificado_self_signed(self):
@@ -36,12 +39,12 @@ class GerarCertificado:
 
     def salvar_certificado(self):
         # Salvar certificado
-        with open("../public_cert.cer", "wb") as f:
+        with open(f"../{public_key}", "wb") as f:
             f.write(self.cert.public_bytes(serialization.Encoding.DER))
 
     def salvar_chave_privada(self):
         # Salvar chave privada
-        with open("../private_key.pem", "wb") as f:
+        with open(f"../{private_key}", "wb") as f:
             f.write(
                 self.key.private_bytes(
                     encoding=serialization.Encoding.PEM,
