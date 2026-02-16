@@ -159,7 +159,7 @@ if __name__ == '__main__':
     g.salvar_pfx(PFX_PATH, PFX_PASSWORD, friendly_name="MeuApp-Autenticacao (Exportable)")
 
     # (Opcional) instalar no store do usuário (Windows)
-    # g.instalar_no_windows_currentuser_my(PFX_PATH, PFX_PASSWORD)
+    g.instalar_no_windows_currentuser_my(PFX_PATH, PFX_PASSWORD)
 
     print("Certificado criado!")
     print("Thumbprint (SHA1):", g.get_thumbprint_sha1())
