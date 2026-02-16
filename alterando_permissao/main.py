@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from os import getenv
 import json
 import re
-import shlex
+from gerar_certificado_microsoft import GerarCertificado
 
 load_dotenv()
 
@@ -85,32 +85,37 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def criar_novo_certificado(self):
-        comando_shell = (
-            # 1) Criar novo certificado self-signed COM CHAVE EXPORTÁVEL no Current
-            rf'$cert = New-SelfSignedCertificate `'
-            rf'-Subject "CN=MeuApp" '
-            rf'-CertStoreLocation "Cert:\CurrentUser\My" '
-            rf'-KeyAlgorithm RSA -KeyLength 2048 '
-            rf'-KeyExportPolicy Exportable '
-            rf'-KeySpec Signature '
-            rf'-NotAfter (Get-Date).AddYears(5) '
-            
-            rf'$thumb = $cert.Thumbprint; '
-            rf'$thumb; '
-            
-            # 2) Exportar a PÚBLICA (.cer) — para cadastrar no App Registrat
-            rf'Export-Certificate -Cert ("Cert:\CurrentUser\My\" + $thumb) -FilePath {LOCAL_CERTIFICADO_PUBLIC} | '
 
-            # 3) Exportar o PFX com senha (para usar em -CertificateFilePath)
-            rf'Export-PfxCertificate '
-            rf'-Cert ("Cert:\CurrentUser\My\" + $thumb) '
-            rf'-FilePath {LOCAL_CERTIFICADO_PRIVATE} '
-            rf'$password = ConvertTo-SecureString "{os.getenv('PASSWORD')}" -AsPlainText -Force'
-            rf'Export-PfxCertificate ... -Password $password'
-        )
+        # Ajuste estes caminhos conforme o seu projeto:
+        OUT_DIR = r"C:\Temp"  # use um diretório existente
+        os.makedirs(OUT_DIR, exist_ok=True)
 
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Criando novo certificado... ')
-        return resultado
+        CER_DER = os.path.join(OUT_DIR, "ExchangeOnlineAutomation.cer")  # DER
+        CER_PEM = os.path.join(OUT_DIR, "ExchangeOnlineAutomation.pem")  # PEM (opcional para upload no Entra ID)
+        KEY_PEM = os.path.join(OUT_DIR, "ExchangeOnlineAutomation.key")  # chave privada (use com proteção/segurança)
+        PFX_PATH = os.path.join(OUT_DIR, "ExchangeOnlineAutomation.pfx")  # PFX para o seu app
+        PFX_PASSWORD = f"{os.getenv('PASSWORD')}"
+
+        g = GerarCertificado(cn="ExchangeOnlineAutomation")
+        g.gerar_chave_privada()
+        g.gerar_certificado_self_signed(anos_validade=5)
+
+        # Exportações
+        g.salvar_certificado_der(CER_DER)  # ✅ suba este .cer no App Registration
+        g.salvar_certificado_pem(CER_PEM)  # (opcional) alternativa em PEM/Base64
+        g.salvar_chave_privada_pem(KEY_PEM)  # (opcional) se precisar em PEM
+        g.salvar_pfx(PFX_PATH, PFX_PASSWORD, friendly_name="MeuApp-Autenticacao (Exportable)")
+
+        # (Opcional) instalar no store do usuário (Windows)
+        # g.instalar_no_windows_currentuser_my(PFX_PATH, PFX_PASSWORD)
+
+        print("Certificado criado!")
+        print("Thumbprint (SHA1):", g.get_thumbprint_sha1())
+        print("Arquivos:")
+        print("  CER (DER):", CER_DER)
+        print("  PEM (cert):", CER_PEM)
+        print("  KEY (privada PEM):", KEY_PEM)
+        print("  PFX:", PFX_PATH)
 
     def gerar_pfx(self):
         comando_shell = (
