@@ -146,7 +146,7 @@ if __name__ == '__main__':
     CER_PEM = os.path.join(OUT_DIR, "ExchangeOnlineAutomation.pem")   # PEM (opcional para upload no Entra ID)
     KEY_PEM = os.path.join(OUT_DIR, "ExchangeOnlineAutomation.key")   # chave privada (use com proteção/segurança)
     PFX_PATH = os.path.join(OUT_DIR, "ExchangeOnlineAutomation.pfx")  # PFX para o seu app
-    PFX_PASSWORD = f"{os.getenv('')}"                              # troque!
+    PFX_PASSWORD = f"{os.getenv('')}"
 
     g = GerarCertificado(cn="ExchangeOnlineAutomation")
     g.gerar_chave_privada()
