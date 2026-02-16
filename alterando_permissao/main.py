@@ -9,7 +9,7 @@ import re
 load_dotenv()
 
 LOCAL_APP = os.path.abspath('')
-LOCAL_CERTIFICADO = os.path.join(LOCAL_APP, 'certificado_privado.pfx')
+LOCAL_CERTIFICADO = os.path.join(LOCAL_APP, 'certificado_public.cert')
 
 class AlterarPermissaoReunioes:
 
@@ -81,9 +81,9 @@ class AlterarPermissaoReunioes:
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Analisando o Thumbprint... ')
         return resultado
+
     def criar_novo_certificado(self):
-
-
+        pass
 
     def gerar_pfx(self):
         comando_shell = (
