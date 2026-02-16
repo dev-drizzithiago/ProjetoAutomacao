@@ -10,7 +10,8 @@ import shlex
 load_dotenv()
 
 LOCAL_APP = os.path.abspath('')
-LOCAL_CERTIFICADO = os.path.join(LOCAL_APP, 'certificado_public.cert')
+LOCAL_CERTIFICADO_PUBLIC = os.path.join(LOCAL_APP, 'certificado_public.cert')
+LOCAL_CERTIFICADO_PRIVATE = os.path.join(LOCAL_APP, 'certificado_private.pfx')
 
 class AlterarPermissaoReunioes:
 
@@ -85,17 +86,31 @@ class AlterarPermissaoReunioes:
 
     def criar_novo_certificado(self):
         comando_shell = (
-            rf'$cert = New-SelfSignedCertificate '
-            rf'-Subject "CN=EXO-Automation" '
+            # 1) Criar novo certificado self-signed COM CHAVE EXPORTÁVEL no Current
+            rf'$cert = New-SelfSignedCertificate `'
+            rf'-Subject "CN={os.getenv('CertificateThumbprint')}" '
             rf'-CertStoreLocation "Cert:\CurrentUser\My" '
             rf'-KeyAlgorithm RSA -KeyLength 2048 '
             rf'-KeyExportPolicy Exportable '
             rf'-KeySpec Signature '
             rf'-NotAfter (Get-Date).AddYears(5) '
-        rf'$thumb = $cert.Thumbprint '
-        rf'$thumb'
+            
+            rf'$thumb = $cert.Thumbprint; '
+            rf'$thumb; '
+            
+            # 2) Exportar a PÚBLICA (.cer) — para cadastrar no App Registrat
+            rf'Export-Certificate -Cert ("Cert:\CurrentUser\My\" + $thumb) -FilePath {LOCAL_CERTIFICADO_PUBLIC} | '
 
+            # 3) Exportar o PFX com senha (para usar em -CertificateFilePath)
+            rf'Export-PfxCertificate '
+            rf'-Cert ("Cert:\CurrentUser\My\" + $thumb) '
+            rf'-FilePath {LOCAL_CERTIFICADO_PRIVATE} '
+            rf'$password = ConvertTo-SecureString "{os.getenv('PASSWORD')}" -AsPlainText -Force'
+            rf'Export-PfxCertificate ... -Password $password'
         )
+
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Criando novo certificado... ')
+        return resultado
 
     def gerar_pfx(self):
         comando_shell = (
@@ -110,14 +125,15 @@ class AlterarPermissaoReunioes:
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
     # resultando_pfx = init_obj_calendar.gerar_pfx()
-    resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
+    # resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
     # resultando_modulo = init_obj_calendar.verificando_modulo()
     # resultando_conexao = init_obj_calendar.chamando_obj_conexao()
+    resultando_criar_novo_certificado = init_obj_calendar.criar_novo_certificado()
 
     # for item in resultando_pfx:
     #     print(item)
     #
-    for item in resultando_thumbprint:
+    for item in resultando_criar_novo_certificado:
         print(item)
     #
     #
