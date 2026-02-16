@@ -17,7 +17,7 @@ class GerarCertificado:
 
         self.cn = None
         self.key = None
-        self.cert = None
+        self.cert = x509.Certificate | None
 
     def gerar_chave_privada(self):
         # Gerar chave privada
@@ -35,7 +35,7 @@ class GerarCertificado:
         not_before = datetime.utcnow() - timedelta(minutes=5)  # margem
         not_after = not_before + timedelta(days=365 * anos_validade)
 
-        self.cert = (
+        builder = (
             x509.CertificateBuilder()
             .subject_name(subject)
             .issuer_name(issuer)
@@ -45,6 +45,40 @@ class GerarCertificado:
             .not_valid_after(datetime.utcnow() + timedelta(days=365 * 5))
             .sign(self.key, hashes.SHA256())
         )
+
+        # Extensões comuns para autenticação de app (não obrigatórias no Entra ID, mas boas práticas)
+        # KeyUsage: digitalSignature + keyEncipherment
+        key_usage = x509.KeyUsage(
+            digital_signature=True,
+            content_commitment=False,
+            key_encipherment=True,
+            data_encipherment=False,
+            key_agreement=False,
+            key_cert_sign=False,
+            crl_sign=False,
+            encipher_only=False,
+            decipher_only=False
+        )
+
+        builder = builder.add_extension(key_usage, critical=True)
+
+        # EKU (opcional; para este cenário geralmente não é exigido)
+        # extended_ku = x509.ExtendedKeyUsage([
+        #     ExtendedKeyUsageOID.CLIENT_AUTH,
+        #     ExtendedKeyUsageOID.SERVER_AUTH
+        # ])
+        # builder = builder.add_extension(extended_ku, critical=False)
+
+        # BasicConstraints (não é CA)
+
+        builder = builder.add_extension(
+            x509.BasicConstraints(ca=False, path_length=None),
+            critical=True
+        )
+
+        # Assinar com SHA25
+        self.cert = builder.sign(private_key=self.key, algorithm=hashes.SHA256())
+
 
     def salvar_certificado(self):
         # Salvar certificado
