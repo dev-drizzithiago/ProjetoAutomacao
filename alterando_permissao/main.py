@@ -24,6 +24,7 @@ class AlterarPermissaoReunioes:
 
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
+
         comando_shell = (f"Import-Module ExchangeOnlineManagement | "
                          f"Connect-ExchangeOnline -UserPrincipalName {os.getenv('MAIL_CONEXAO')} "
                          )
@@ -133,6 +134,16 @@ class AlterarPermissaoReunioes:
         print("  KEY (privada PEM):", KEY_PEM)
         print("  PFX:", PFX_PATH)
 
+    def _verificar_certificados(self):
+        # Verifica o certificado da máquina.
+        # comando_shell = (
+        #     'Get-ChildItem Cert:\LocalMachine\My '
+        # )
+
+        # Verifica o certificado do usuário
+        comando_shell = (
+                'Get - ChildItem Cert:\CurrentUser\My '
+        )
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
