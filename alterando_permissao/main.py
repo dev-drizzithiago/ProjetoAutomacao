@@ -25,9 +25,11 @@ class AlterarPermissaoReunioes:
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
 
-        comando_shell = (f"Import-Module ExchangeOnlineManagement | "
-                         f"Connect-ExchangeOnline -UserPrincipalName {os.getenv('MAIL_CONEXAO')} "
-                         )
+        comando_shell = (
+            rf"Import-Module ExchangeOnlineManagement | "
+            rf"Connect-ExchangeOnline -UserPrincipalName {os.getenv('MAIL_CONEXAO')} | "
+            rf"Get-MailboxFolderPermission -Identity '{os.getenv('MAIL_CONEXAO')}:\Calendário' "
+            )
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
 
