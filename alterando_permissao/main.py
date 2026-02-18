@@ -31,6 +31,8 @@ class AlterarPermissaoReunioes:
             rf"Get-MailboxFolderPermission -Identity '{os.getenv('MAIL_CONEXAO')}:\Calendário' "
             )
 
+        print(comando_shell)
+
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
 
         return resultado
