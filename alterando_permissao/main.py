@@ -27,8 +27,10 @@ class AlterarPermissaoReunioes:
 
         comando_shell = (
             rf"Import-Module ExchangeOnlineManagement | "
-            rf"Connect-ExchangeOnline -UserPrincipalName {os.getenv('MAIL_CONEXAO')} | "
-            rf"Get-MailboxFolderPermission -Identity {os.getenv('MAIL_CONEXAO')}:\Calendário "
+            rf"Connect-ExchangeOnline -UserPrincipalName {os.getenv('MAIL_CONEXAO')}; "
+            
+            rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "
+            rf"-User 'Grupo-Convidados@empresa.com' -AccessRights Editor"
             )
 
         print(comando_shell)
