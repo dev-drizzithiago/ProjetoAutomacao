@@ -65,15 +65,28 @@ class AlterarPermissaoReunioes:
         # Dar acesso de Editor a todos da organização (cuidado!)
         # Isso torna o calendário do organizador editável por qualquer usuário interno.
         # Use apenas se for realmente a intenção:
-        comando_shell = (
-            rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-            rf"-User Default -AccessRights Editor"
-        )
+        # comando_shell = (
+        #     rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+        #     rf"-User Default -AccessRights Editor"
+        # )
 
-        # Crie/Use um grupo de segurança ou de distribuição com os convidados da reunião e conceda Editor
+        # # Crie/Use um grupo de segurança ou de distribuição com os convidados da reunião e conceda Editor
+        # comando_shell = (
+        #     rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+        #     rf"-User 'Grupo-Convidados@empresa.com' -AccessRights Editor"
+        # )
+
+
+        #Tornar alguém delegado com poder de edição Delegados recebem comportamento especial
+        # (encaminhamento de convites, etc.):
+        # comando_shell = (
+        #     "Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+        #     "-User 'assistente@empresa.com' -AccessRights Editor -SharingPermissionFlags Delegate"
+        # )
+
         comando_shell = (
-            rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-            rf"-User 'Grupo-Convidados@empresa.com' -AccessRights Editor"
+            "Set - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+            "-User 'usuario@empresa.com' -AccessRights Editor"
         )
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
@@ -149,54 +162,48 @@ class AlterarPermissaoReunioes:
         print("  KEY (privada PEM):", KEY_PEM)
         print("  PFX:", PFX_PATH)
 
-    def gerar_pfx(self):
-        comando_shell = (
-            rf'Export-Certificate '
-            rf'-Cert "Cert:\CurrentUser\My\{os.getenv('CertificateThumbprint')}" '
-            rf'-FilePath "c:\temp\certificado_public_2.cer"')
-
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Exportando a chave publica... ')
-        return resultado
-
 
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
+    while True:
+        print()
+        print(
+            '[1] Conectar\n'
+            '[2] Verificar Modulo\n'
+            '[3] Analisar ThumpPrint\n'
+            '[4] Criar novo Certificado\n'
 
-    print()
-    print(
-        """
-        [1] Conectar
-        [2] Verificar Modulo
-        [3] Analisar ThumpPrint
-        [4] Criar novo Certificado
-        [5] Criar Certificado Privado
-        """
-    )
-    print('---' * 20)
-    resposta = int(input('Escolha uma opção: '))
+        )
+        print('---' * 20)
+        try:
+            resposta = int(input('Escolha uma opção: '))
+        except ValueError:
+            print()
+            print('---' * 20)
+            print('Valor inválido')
+            continue
 
-    if resposta == 1:
-        resultando_conexao = init_obj_calendar.chamando_obj_conexao()
-        for item in resultando_conexao:
-            print(item)
+        if resposta == 1:
+            resultando_conexao = init_obj_calendar.chamando_obj_conexao()
+            for item in resultando_conexao:
+                print(item)
 
-    elif resposta == 2:
-        resultando_modulo = init_obj_calendar.verificando_modulo()
-        response = init_obj_calendar.parse_json(resultando_modulo)
-        for item in response:
-            print(item)
+        elif resposta == 2:
+            resultando_modulo = init_obj_calendar.verificando_modulo()
+            response = init_obj_calendar.parse_json(resultando_modulo)
+            for item in response:
+                print(item)
 
-    elif resposta == 3:
-        resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
-        for item in resultando_thumbprint:
-            print(item)
+        elif resposta == 3:
+            resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
+            for item in resultando_thumbprint:
+                print(item)
 
-    elif resposta == 4:
-        init_obj_calendar.criar_novo_certificado()
+        elif resposta == 4:
+            init_obj_calendar.criar_novo_certificado()
 
-
-    elif resposta == 5:
-        resultando_pfx = init_obj_calendar.gerar_pfx()
-        for item in resultando_pfx:
-            print(item)
+        else:
+            print()
+            print('---' * 20)
+            input('Opção Invalida. Enter para continuar...')
 
