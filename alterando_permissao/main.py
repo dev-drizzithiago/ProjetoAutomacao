@@ -1,4 +1,3 @@
-
 from conectando_exechange_online import ProcessoRun
 from dotenv import load_dotenv
 from os import getenv
@@ -14,8 +13,8 @@ LOCAL_APP = os.path.abspath('')
 LOCAL_CERTIFICADO_PUBLIC = os.path.join(LOCAL_APP, 'certificado_public_2.cert')
 LOCAL_CERTIFICADO_PRIVATE = os.path.join(LOCAL_APP, 'certificado_private_2.pfx')
 
-class AlterarPermissaoReunioes:
 
+class AlterarPermissaoReunioes:
     AppId = getenv('AppId')
     CertificateThumbprint = getenv('CertificateThumbprint')
     Organization = getenv('Organization')
@@ -27,7 +26,7 @@ class AlterarPermissaoReunioes:
             f'Connect-ExchangeOnline -AppId "{self.AppId}" '
             f' -CertificateThumbprint "{self.CertificateThumbprint}" '
             f' -Organization "{self.Organization}" -ShowBanner:$false; '
-            
+
             f'Get-EXOMailbox -ResultSize 1 | Select-Object DisplayName,PrimarySmtpAddress; '
             f'Disconnect-ExchangeOnline -Confirm:$false;'
         )
@@ -46,6 +45,38 @@ class AlterarPermissaoReunioes:
             'ConvertTo-Json -Depth 3 '
         )
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Verificando modulo instalado... ')
+        return resultado
+
+    def _instalando_modulo(self):
+        comando_shell = rf"Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
+        return resultado
+
+
+    def _verif_calendarios(self):
+
+        comando_shell = rf"Get-MailboxFolderPermission -Identity 'organizador@empresa.com:\Calendário'"
+
+
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
+        return resultado
+
+    def editando_calendario(self):
+        # Dar acesso de Editor a todos da organização (cuidado!)
+        # Isso torna o calendário do organizador editável por qualquer usuário interno.
+        # Use apenas se for realmente a intenção:
+        comando_shell = (
+            rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+            rf"-User Default -AccessRights Editor"
+        )
+
+        # Crie/Use um grupo de segurança ou de distribuição com os convidados da reunião e conceda Editor
+        comando_shell = (
+            rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+            rf"-User 'Grupo-Convidados@empresa.com' -AccessRights Editor"
+        )
+
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
         return resultado
 
     def parse_json(self, linha: str):
@@ -78,8 +109,8 @@ class AlterarPermissaoReunioes:
         # Liste de forma completa
         comando_shell = (
             'Get-ChildItem Cert:\CurrentUser\My |'
-              'Select-Object Subject, Thumbprint, HasPrivateKey |'
-              'Format-List'
+            'Select-Object Subject, Thumbprint, HasPrivateKey |'
+            'Format-List'
         )
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Analisando o Thumbprint... ')
