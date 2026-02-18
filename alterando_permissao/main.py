@@ -79,14 +79,25 @@ class AlterarPermissaoReunioes:
 
         #Tornar alguém delegado com poder de edição Delegados recebem comportamento especial
         # (encaminhamento de convites, etc.):
+        # -SharingPermissionFlags Delegate adiciona como delegado do calendário do usuário.
         # comando_shell = (
         #     "Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
         #     "-User 'assistente@empresa.com' -AccessRights Editor -SharingPermissionFlags Delegate"
         # )
 
+        # Ajustar uma permissão que já existe (em vez de adicionar)
+        # comando_shell = (
+        #     "Set - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+        #     "-User 'usuario@empresa.com' -AccessRights Editor"
+        # )
+
         comando_shell = (
-            "Set - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-            "-User 'usuario@empresa.com' -AccessRights Editor"
+            # Conferir
+            "Get - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "
+            
+            # Remover a permissão de alguém
+            "Remove - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "            
+            "-User 'usuario@empresa.com' - Confirm "
         )
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
