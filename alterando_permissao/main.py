@@ -122,7 +122,7 @@ class AlterarPermissaoReunioes:
         comando_shell = (
             rf'Export-Certificate '
             rf'-Cert "Cert:\CurrentUser\My\{os.getenv('CertificateThumbprint')}" '
-            rf'-FilePath "{LOCAL_CERTIFICADO_PUBLIC}"')
+            rf'-FilePath "c:\temp\certificado_public_2.cer"')
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Exportando a chave publica... ')
         return resultado
@@ -161,9 +161,8 @@ if __name__ == '__main__':
             print(item)
 
     elif resposta == 4:
-        resultando_criar_novo_certificado = init_obj_calendar.criar_novo_certificado()
-        for item in resultando_criar_novo_certificado:
-            print(item)
+        init_obj_calendar.criar_novo_certificado()
+
 
     elif resposta == 5:
         resultando_pfx = init_obj_calendar.gerar_pfx()
