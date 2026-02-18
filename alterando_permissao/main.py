@@ -20,31 +20,15 @@ class AlterarPermissaoReunioes:
     Organization = getenv('Organization')
 
     def __init__(self):
-
-        self.cmd = (
-            f'Import-Module ExchangeOnlineManagement; '
-            f'Connect-ExchangeOnline -AppId "{self.AppId}" '
-            f' -CertificateThumbprint "{self.CertificateThumbprint}" '
-            f' -Organization "{self.Organization}" -ShowBanner:$false; '
-
-            f'Get-EXOMailbox -ResultSize 1 | Select-Object DisplayName,PrimarySmtpAddress; '
-            f'Disconnect-ExchangeOnline -Confirm:$false;'
-        )
-
         self.init_conectar_exchange = ProcessoRun()
 
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
-        resultado = self.init_conectar_exchange.run_spinner(self.cmd, 'Conectando ao office 365... ')
-        return resultado
+        comando_shell = (f"Import-Module ExchangeOnlineManagement | "
+                         f"Connect-ExchangeOnline -UserPrincipalName {os.getenv('MAIL_CONEXAO')}; ")
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
 
-    def verificando_modulo(self):
-        comando_shell = (
-            'Get-Module ExchangeOnlineManagement -ListAvailable | '
-            'Select-Object ModuleType, Version | '
-            'ConvertTo-Json -Depth 3 '
-        )
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Verificando modulo instalado... ')
+
         return resultado
 
     def _instalando_modulo(self):
@@ -52,30 +36,28 @@ class AlterarPermissaoReunioes:
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
         return resultado
 
-
     def _verif_calendarios(self):
 
-        comando_shell = rf"Get-MailboxFolderPermission -Identity 'organizador@empresa.com:\Calendário'"
-
+        comando_shell = rf"Get-MailboxFolderPermission -Identity '{os.getenv('MAIL_CONEXAO')}:\Calendário'"
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
         return resultado
 
     def editando_calendario(self):
+
         # Dar acesso de Editor a todos da organização (cuidado!)
         # Isso torna o calendário do organizador editável por qualquer usuário interno.
         # Use apenas se for realmente a intenção:
-        # comando_shell = (
-        #     rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-        #     rf"-User Default -AccessRights Editor"
-        # )
+        comando_shell = (
+            rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
+            rf"-User Default -AccessRights Editor"
+        )
 
         # # Crie/Use um grupo de segurança ou de distribuição com os convidados da reunião e conceda Editor
         # comando_shell = (
         #     rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
         #     rf"-User 'Grupo-Convidados@empresa.com' -AccessRights Editor"
         # )
-
 
         #Tornar alguém delegado com poder de edição Delegados recebem comportamento especial
         # (encaminhamento de convites, etc.):
@@ -91,43 +73,19 @@ class AlterarPermissaoReunioes:
         #     "-User 'usuario@empresa.com' -AccessRights Editor"
         # )
 
-        comando_shell = (
-            # Conferir
-            "Get - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "
-            
-            # Remover a permissão de alguém
-            "Remove - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "            
-            "-User 'usuario@empresa.com' - Confirm "
-        )
+        # comando_shell = (
+        #     # Conferir
+        #     "Get - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "
+        #
+        #     # Remover a permissão de alguém
+        #     "Remove - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "
+        #     "-User 'usuario@empresa.com' - Confirm "
+        # )
+
+        # comando_shell = "Disconnect-ExchangeOnline"
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
         return resultado
-
-    def parse_json(self, linha: str):
-        # Analisa o texto que chega do powerShell
-        linha = linha.strip()
-
-        # Tenta achar um bloco JSON {} ou []
-        m = re.search(r'(\{.*\}|\[.*\])', linha, re.S)
-
-        if not m:
-            # Se não achou JSON, retorna vazio
-            return []
-
-        dados = json.loads(m.group(1))
-
-        if isinstance(dados, dict):
-            dados = [dados]
-
-        limpa = []
-
-        for item in dados:
-            limpa.append({
-                'Modulo': str(item.get('ModuleType', '')),
-                'Versao': str(item.get('Version', '')),
-            })
-
-        return limpa
 
     def analisando_thumbprint(self):
         # Liste de forma completa
