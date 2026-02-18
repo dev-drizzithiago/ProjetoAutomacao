@@ -158,7 +158,7 @@ if __name__ == '__main__':
             '[2] Verificar Modulo\n'
             '[3] Analisar ThumpPrint\n'
             '[4] Criar novo Certificado\n'
-
+            '[0] Sair\n'
         )
         print('---' * 20)
         try:
