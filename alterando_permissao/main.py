@@ -31,8 +31,8 @@ class AlterarPermissaoReunioes:
               -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
               -ShowBanner:$false;        
            
-            $cal = (Get-MailboxFolderStatistics '{os.getenv('ORGANIZADOR')}' `
-                    Where-Object {{ $_.FolderType -eq 'Calendário' }} `
+            $cal = (Get-MailboxFolderStatistics '{os.getenv('ORGANIZADOR')}' | 
+                    Where-Object {{ $_.FolderType -eq 'Calendário' }} | 
                     Select-Object -First 1 -ExpandProperty Name);
             if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR')}' }}        
             
