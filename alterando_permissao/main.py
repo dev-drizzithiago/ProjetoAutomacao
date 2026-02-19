@@ -26,13 +26,15 @@ class AlterarPermissaoReunioes:
         self.init_conectar_exchange = ProcessoRun()
 
         comando_shell = (
-            rf"Import-Module ExchangeOnlineManagement | "
-            rf"Connect-ExchangeOnline -UserPrincipalName {os.getenv('MAIL_CONEXAO')} | "
-            rf"Get-MailboxFolderPermission -Identity {os.getenv('MAIL_CONEXAO')}:\Calendário "
+            rf'Connect-ExchangeOnline '
+              rf'-AppId "{os.getenv('AppId')}" '
+              rf'-Organization "{os.getenv('Organization')}" '
+              rf'-CertificateFilePath "{os.getenv('PATH_CERTIFICADO')}" '
+              rf'-CertificatePassword (ConvertTo-SecureString "{os.getenv('PASSWORD')}" -AsPlainText -Force) '
+              rf'-ShowBanner:$false'
             )
 
         print(comando_shell)
-
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
 
         return resultado
