@@ -29,14 +29,13 @@ class AlterarPermissaoReunioes:
               -Organization '{os.getenv('Organization')}' `
               -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
               -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
-              -ShowBanner:$false;
-        
-            $mbx = '{os.getenv('ORGANIZADOR')}';
-            $cal = (Get-MailboxFolderStatistics $mbx | Where-Object {{ $_.FolderType -eq 'Calendário' }} |
+              -ShowBanner:$false;        
+           
+            $cal = (Get-MailboxFolderStatistics '{os.getenv('ORGANIZADOR')}' `
+                    Where-Object {{ $_.FolderType -eq 'Calendário' }} `
                     Select-Object -First 1 -ExpandProperty Name);
-            if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR')}' }}
-        
-            $principal = '{os.getenv('grupo_teste')}';
+            if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR')}' }}        
+            
             try {{
               Set-MailboxFolderPermission `
               -Identity '{os.getenv('calendario_organizador')}' `
