@@ -26,15 +26,16 @@ class AlterarPermissaoReunioes:
         self.init_conectar_exchange = ProcessoRun()
 
         comando_shell = (
+            rf''
             rf'Connect-ExchangeOnline '
-              rf'-AppId "{os.getenv('AppId')}" '
-              rf'-Organization "{os.getenv('Organization')}" '
-              rf'-CertificateFilePath "{os.getenv('PATH_CERTIFICADO')}" '
-              rf'-CertificatePassword (ConvertTo-SecureString "{os.getenv('PASSWORD')}" -AsPlainText -Force) '
-              rf'-ShowBanner:$false'
-            )
+            rf'-AppId "{os.getenv('AppId')}" '
+            rf'-Organization "{os.getenv('Organization')}" '
+            rf'-CertificateFilePath "{os.getenv('PATH_CERTIFICADO')}" '
+            rf'-CertificatePassword (ConvertTo-SecureString "{os.getenv('PASSWORD')}" -AsPlainText -Force) '
+            rf'-ShowBanner:$false; '
+            rf'Get-EXOMailbox -ResultSize 1 | Select DisplayName, PrimarySmtpAddress'
+        )
 
-        print(comando_shell)
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
 
         return resultado
