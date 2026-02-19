@@ -26,7 +26,6 @@ class AlterarPermissaoReunioes:
         self.init_conectar_exchange = ProcessoRun()
 
         comando_shell = (
-            rf''
             rf'Connect-ExchangeOnline '
             rf'-AppId "{os.getenv('AppId')}" '
             rf'-Organization "{os.getenv('Organization')}" '
