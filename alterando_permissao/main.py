@@ -30,7 +30,7 @@ class AlterarPermissaoReunioes:
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
               -Organization '{os.getenv('Organization')}' `
               -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
-              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PFX_PASSWORD')}' -AsPlainText -Force) `
+              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
               -ShowBanner:$false;
         
             $mbx = '{os.getenv('calendario_teste')}';
