@@ -25,22 +25,33 @@ class AlterarPermissaoReunioes:
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
 
-        comando_shell = (
-            rf'Connect-ExchangeOnline '
-            rf'-AppId "{os.getenv('AppId')}" '
-            rf'-Organization "{os.getenv('Organization')}" '
-            rf'-CertificateFilePath "{os.getenv('PATH_CERTIFICADO')}" '
-            rf'-CertificatePassword (ConvertTo-SecureString "{os.getenv('PASSWORD')}" -AsPlainText -Force) '
-            rf'-ShowBanner:$false; '
-            # rf'Get-EXOMailbox -ResultSize 1 | Select DisplayName, PrimarySmtpAddress'
-            
-            rf'$cal = (Get-MailboxFolderStatistics {os.getenv('MAIL_CONEXAO')} | '
-            rf'Where-Object {{$_.FolderType -eq "Calendário"}} | '
-            rf'Select-Object -First 1 -ExpandProperty Name)'
-            rf'if (-not $cal) {{ throw "Calendário não encontrado para {os.getenv('MAIL_CONEXAO')}" }}'
-            
-            rf'$id = {os.getenv('MAIL_CONEXAO')}:\$cal"'
-        )
+        comando_shell = rf"""
+            Import-Module ExchangeOnlineManagement;
+            Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+              -Organization '{os.getenv('Organization')}' `
+              -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
+              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PFX_PASSWORD')}' -AsPlainText -Force) `
+              -ShowBanner:$false;
+        
+            $mbx = '{os.getenv('calendario_teste')}';
+            $cal = (Get-MailboxFolderStatistics $mbx | Where-Object {{ $_.FolderType -eq 'Calendar' }} |
+                    Select-Object -First 1 -ExpandProperty Name);
+            if (-not $cal) {{ throw 'Calendário não encontrado para ' + $mbx }}
+            $id = "$mbx:\\$cal";
+        
+            $principal = '{os.getenv('grupo_teste')}';
+            try {{
+              Set-MailboxFolderPermission -Identity $id -User $principal -AccessRights Editor -ErrorAction Stop;
+            }} catch {{
+              Add-MailboxFolderPermission -Identity $id -User $principal -AccessRights Editor;
+            }}
+        
+            Get-MailboxFolderPermission -Identity $id | Format-Table -AutoSize;
+        
+            Disconnect-ExchangeOnline -Confirm:$false;
+        """
+
+
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
 
