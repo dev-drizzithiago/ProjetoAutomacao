@@ -34,24 +34,23 @@ class AlterarPermissaoReunioes:
             $mbx = '{os.getenv('ORGANIZADOR')}';
             $cal = (Get-MailboxFolderStatistics $mbx | Where-Object {{ $_.FolderType -eq 'Calendário' }} |
                     Select-Object -First 1 -ExpandProperty Name);
-            if (-not $cal) {{ throw 'Calendário não encontrado para ' + {os.getenv('ORGANIZADOR')} }}
-            $id = "{os.getenv('calendario_organizador')}";
+            if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR')}' }}
         
             $principal = '{os.getenv('grupo_teste')}';
             try {{
-              Set-MailboxFolderPermission \
-              -Identity {os.getenv('calendario_organizador')} \
-              -User {os.getenv('grupo_teste')} \
-              -AccessRights Editor \
+              Set-MailboxFolderPermission `
+              -Identity '{os.getenv('calendario_organizador')}' `
+              -User '{os.getenv('grupo_teste')}' `
+              -AccessRights Editor `
               -ErrorAction Stop;
             }} catch {{
-              Add-MailboxFolderPermission \
-              -Identity {os.getenv('calendario_organizador')} \
-              -User {os.getenv('grupo_teste')} \
+              Add-MailboxFolderPermission `
+              -Identity '{os.getenv('calendario_organizador')}' `
+              -User '{os.getenv('grupo_teste')}' `
               -AccessRights Editor;
             }}
         
-            Get-MailboxFolderPermission -Identity $id | Format-Table -AutoSize;
+            Get-MailboxFolderPermission -Identity "{os.getenv('calendario_organizador')}" | Format-Table -AutoSize;
         
             Disconnect-ExchangeOnline -Confirm:$false;
         """
