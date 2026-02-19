@@ -15,7 +15,7 @@ class ProcessoRun:
             capture_output=True
         )
         ok = (resultado_processo.returncode == 0)
-        return ok, resultado_processo.stdout.strip(), resultado_processo.stderr.strip()
+        return ok, resultado_processo.stdout, resultado_processo.stderr
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
