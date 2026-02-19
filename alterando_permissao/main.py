@@ -1,8 +1,6 @@
 from conectando_exechange_online import ProcessoRun
 from dotenv import load_dotenv
 from os import getenv
-import json
-import re
 import os
 
 from gerar_certificado_microsoft import GerarCertificado
@@ -33,17 +31,24 @@ class AlterarPermissaoReunioes:
               -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
               -ShowBanner:$false;
         
-            $mbx = '{os.getenv('calendario_teste')}';
-            $cal = (Get-MailboxFolderStatistics $mbx | Where-Object {{ $_.FolderType -eq 'Calendar' }} |
+            $mbx = '{os.getenv('ORGANIZADOR')}';
+            $cal = (Get-MailboxFolderStatistics $mbx | Where-Object {{ $_.FolderType -eq 'Calendário' }} |
                     Select-Object -First 1 -ExpandProperty Name);
-            if (-not $cal) {{ throw 'Calendário não encontrado para ' + $mbx }}
-            $id = "$mbx:\\$cal";
+            if (-not $cal) {{ throw 'Calendário não encontrado para ' + {os.getenv('ORGANIZADOR')} }}
+            $id = "{os.getenv('calendario_organizador')}";
         
             $principal = '{os.getenv('grupo_teste')}';
             try {{
-              Set-MailboxFolderPermission -Identity $id -User $principal -AccessRights Editor -ErrorAction Stop;
+              Set-MailboxFolderPermission \
+              -Identity {os.getenv('calendario_organizador')} \
+              -User {os.getenv('grupo_teste')} \
+              -AccessRights Editor \
+              -ErrorAction Stop;
             }} catch {{
-              Add-MailboxFolderPermission -Identity $id -User $principal -AccessRights Editor;
+              Add-MailboxFolderPermission \
+              -Identity {os.getenv('calendario_organizador')} \
+              -User {os.getenv('grupo_teste')} \
+              -AccessRights Editor;
             }}
         
             Get-MailboxFolderPermission -Identity $id | Format-Table -AutoSize;
@@ -53,7 +58,10 @@ class AlterarPermissaoReunioes:
 
 
 
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
+        resultado = self.init_conectar_exchange.run_spinner(
+            str(comando_shell).strip(),
+            'Conectando ao office 365... '
+        )
 
         return resultado
 
