@@ -32,7 +32,14 @@ class AlterarPermissaoReunioes:
             rf'-CertificateFilePath "{os.getenv('PATH_CERTIFICADO')}" '
             rf'-CertificatePassword (ConvertTo-SecureString "{os.getenv('PASSWORD')}" -AsPlainText -Force) '
             rf'-ShowBanner:$false; '
-            rf'Get-EXOMailbox -ResultSize 1 | Select DisplayName, PrimarySmtpAddress'
+            # rf'Get-EXOMailbox -ResultSize 1 | Select DisplayName, PrimarySmtpAddress'
+            
+            rf'$cal = (Get-MailboxFolderStatistics {os.getenv('MAIL_CONEXAO')} | '
+            rf'Where-Object {{$_.FolderType -eq "Calendário"}} | '
+            rf'Select-Object -First 1 -ExpandProperty Name)'
+            rf'if (-not $cal) {{ throw "Calendário não encontrado para {os.getenv('MAIL_CONEXAO')}" }}'
+            
+            rf'$id = {os.getenv('MAIL_CONEXAO')}:\$cal"'
         )
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
