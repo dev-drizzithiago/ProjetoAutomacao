@@ -36,18 +36,20 @@ class AlterarPermissaoReunioes:
             $cal = (Get-MailboxFolderStatistics -Identity '{os.getenv('ORGANIZADOR_GRUPO')}' |  
                     Where-Object {{ $_.FolderType -eq 'Calendar' }} |  
                     Select-Object -First 1 -ExpandProperty Name); 
-            if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR_GRUPO')}' }} 
-            $id = "{os.getenv('ORGANIZADOR_GRUPO')}:\$cal" 
-            try {{
-              Set-MailboxFolderPermission `
-              -Identity $id `
-              -User '{os.getenv('ORGANIZADOR_GRUPO')}' `
-              -AccessRights Editor `
-              -ErrorAction Stop;
+            if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR_GRUPO')}' }} ` 
+            echo $cal ` 
+            $id = "{os.getenv('ORGANIZADOR_GRUPO')}:\$cal" ` 
+            echo $id 
+            try {{ 
+              Set-MailboxFolderPermission ` 
+              -Identity $id ` 
+              -User '{os.getenv('ORGANIZADOR_GRUPO')}' ` 
+              -AccessRights Editor ` 
+              -ErrorAction Stop; 
             }} catch {{
-              Add-MailboxFolderPermission `
-              -Identity $id `
-              -User '{os.getenv('grupo_teste')}' `
+              Add-MailboxFolderPermission ` 
+              -Identity $id ` 
+              -User '{os.getenv('grupo_teste')}' ` 
               -AccessRights Editor;
             }}
         
