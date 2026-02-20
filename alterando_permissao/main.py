@@ -63,6 +63,13 @@ class AlterarPermissaoReunioes:
             Get-MailboxFolderPermission -Identity $calendarIdentity | Format-Table -AutoSize
         """
 
+        resultado = self.init_conectar_exchange.run_spinner(
+            str(comando_shell).strip(),
+            'Conectando ao office 365... '
+        )
+
+        return resultado
+
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
 
@@ -100,8 +107,6 @@ class AlterarPermissaoReunioes:
         
             Disconnect-ExchangeOnline -Confirm:$false;
         """
-
-
 
         resultado = self.init_conectar_exchange.run_spinner(
             str(comando_shell).strip(),
@@ -243,7 +248,7 @@ if __name__ == '__main__':
             continue
 
         if resposta == 1:
-            resultando_conexao = init_obj_calendar.chamando_obj_conexao()
+            resultando_conexao = init_obj_calendar.conexao_grupo_gti()
             for item in resultando_conexao:
                 print(item)
 
