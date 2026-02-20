@@ -29,27 +29,29 @@ class AlterarPermissaoReunioes:
               -Organization '{os.getenv('Organization')}' `
               -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
               -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
-              -ShowBanner:$false;        
+              -ShowBanner:$false;
+            # ----------------------------------------------------------------------------------------------\
+            # Funcionando
            
             $cal = (Get-MailboxFolderStatistics '{os.getenv('ORGANIZADOR')}' | 
                     Where-Object {{ $_.FolderType -eq 'Calendário' }} | 
                     Select-Object -First 1 -ExpandProperty Name);
             if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR')}' }}        
-            
+            $id = "{os.getenv('ORGANIZADOR')}:\$cal"
             try {{
               Set-MailboxFolderPermission `
-              -Identity '{os.getenv('calendario_organizador')}' `
+              -Identity $id `
               -User '{os.getenv('grupo_teste')}' `
               -AccessRights Editor `
               -ErrorAction Stop;
             }} catch {{
               Add-MailboxFolderPermission `
-              -Identity '{os.getenv('calendario_organizador')}' `
+              -Identity $id `
               -User '{os.getenv('grupo_teste')}' `
               -AccessRights Editor;
             }}
         
-            Get-MailboxFolderPermission -Identity "{os.getenv('calendario_organizador')}" | Format-Table -AutoSize;
+            Get-MailboxFolderPermission -Identity "{os.getenv('ORGANIZADOR')}" | Format-Table -AutoSize;
         
             Disconnect-ExchangeOnline -Confirm:$false;
         """
