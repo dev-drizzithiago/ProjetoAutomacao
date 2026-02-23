@@ -21,73 +21,53 @@ class AlterarPermissaoReunioes:
         self.init_conectar_exchange = ProcessoRun()
 
     def conexao_grupo_gti(self):
-        # comando_shell = rf"""\
-        #     Import-Module ExchangeOnlineManagement -ErrorAction Stop;
-        #         Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
-        #           -Organization '{os.getenv('Organization')}' `
-        #           -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
-        #           -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
-        #           -ShowBanner:$false;
-        #         # Funcionando
-        #         # ----------------------------------------------------------------------------------------------\
-        #
-        #     # Parâmetros
-        #     $groupNameOrSmtp = "{os.getenv('NOME_GRUPO')}"     # pode ser nome do Team ou smtp do grupo
-        #
-        #     # 1) Resolve o Microsoft 365 Group
-        #     $grp = Get-UnifiedGroup -Identity $groupNameOrSmtp -ErrorAction Stop;
-        #
-        #     # 2) Resolve a GroupMailbox por ExternalDirectoryObjectId (forma mais estável)
-        #     $mbx = Get-EXOMailbox `
-        #     -GroupMailbox -Filter "ExternalDirectoryObjectId -eq '$($grp.ExternalDirectoryObjectId)'" `
-        #     -ErrorAction Stop;
-        #
-        #     # Caso queira conferir:
-        #     # $mbx | Format-List DisplayName,PrimarySmtpAddress,RecipientTypeDetails,Languages;
-        #
-        #     # 3) Descobre o nome REAL do calendário padrão, independente do idioma (Calendar/Calendário/etc.)
-        #     $calFolderName = Get-MailboxFolderStatistics -Identity $mbx.PrimarySmtpAddress -FolderScope Calendar |
-        #                      Where-Object {{ $_.FolderType -eq 'Calendar' }} |
-        #                      Select-Object -First 1 -ExpandProperty Name;
-        #
-        #     if (-not $calFolderName) {{
-        #         throw "Não foi possível identificar a pasta padrão de calendário do grupo $($mbx.PrimarySmtpAddress)."
-        #     }}
-        #
-        #     # 4) Monta a identidade completa da pasta de calendário
-        #     $calendarIdentity = "$($mbx.PrimarySmtpAddress):\$calFolderName"
-        #
-        #     Write-Host "Calendário padrão do grupo:" $calendarIdentity -ForegroundColor Cyan
-        #
-        #     # 5) Lista permissões
-        #     Get-MailboxFolderPermission -Identity $calendarIdentity | Format-Table -AutoSize
-        # """
-
         comando_shell = rf"""
-                $principal = "{os.getenv('ORGANIZADOR_GRUPO')}"
+            Import-Module ExchangeOnlineManagement -ErrorAction Stop;
+                Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+                  -Organization '{os.getenv('Organization')}' `
+                  -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
+                  -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
+                  -ShowBanner:$false; 
+                  
+            # Funcionando
+            # ----------------------------------------------------------------------------------------------
+
+            # Parâmetros
+            $groupNameOrSmtp = "{os.getenv('NOME_GRUPO')}"     # pode ser nome do Team ou smtp do grupo
+
+            # Resolve o Microsoft 365 Group
+            $grp = Get-UnifiedGroup -Identity $groupNameOrSmtp -ErrorAction Stop; 
+            
+            # Pegue o SMTP do GroupMailbox
+            $groupSmtp = $grp.PrimarySmtpAddress;
+            
+            Get-EXORecipient -PrimarySmtpAddress $groupSmtp -RecipientTypeDetails GroupMailbox | 
+            Format-Table DisplayName,PrimarySmtpAddress,RecipientTypeDetails
                 
-                try {{
-                    Set-MailboxFolderPermission `
-                    -Identity $calendarIdentity `
-                    -User $principal `
-                    -AccessRights Editor `
-                    -ErrorAction Stop
-                }} catch {{
-                    if ($_.Exception.Message -match "Cannot find an existing permission entry") {{
-                        Add-MailboxFolderPermission `
-                        -Identity $calendarIdentity `
-                        User $principal `
-                        -AccessRights Editor ´
-                        -ErrorAction Stop
-                    }} elseif ($_.Exception.Message -match "already has") {{
-                        # já possui a entrada — segue
-                    }} else {{
-                        throw
-                    }}
-                }}
-                
-                Get-EXOMailboxFolderPermission -Identity $calendarIdentity | Format-Table -AutoSize
-            """
+            # $principal = "{os.getenv('ORGANIZADOR_GRUPO')}" `
+            # $calendarIdentity {os.getenv('ORGANIZADOR_GRUPO')}:\Calendar `
+            # try {{
+            #     Set-MailboxFolderPermission `
+            #     -Identity $calendarIdentity `
+            #     -User $principal `
+            #     -AccessRights Editor `
+            #     -ErrorAction Stop
+            # }} catch {{
+            #     if ($_.Exception.Message -match "Cannot find an existing permission entry") {{
+            #         Add-MailboxFolderPermission `
+            #         -Identity $calendarIdentity `
+            #         User $principal `
+            #         -AccessRights Editor ´
+            #         -ErrorAction Stop
+            #     }} elseif ($_.Exception.Message -match "already has") {{
+            #         # já possui a entrada — segue
+            #     }} else {{
+            #         throw
+            #     }}
+            # }}
+            
+            Get-EXOMailboxFolderPermission -Identity $calendarIdentity | Format-Table -AutoSize
+        """
 
         resultado = self.init_conectar_exchange.run_spinner(
             str(comando_shell).strip(),
