@@ -92,15 +92,15 @@ class AlterarPermissaoReunioes:
             # 2) Criar o mailbox compartilhado (se não existir)
             $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue
             if (-not $shared) {{
-              Write-Host ">> Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')} ..." \
+              Write-Host ">> Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')} ..." `
               -ForegroundColor Cyan `              
-              New-Mailbox -Shared -Name  {os.getenv('NOME_GRUPO')} `
-              -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} ´
+              New-Mailbox -Shared -Name {os.getenv('NOME_GRUPO')} `
+              -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} `
               -ErrorAction Stop
             }} else {{
               Write-Host ">> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} `
               -ForegroundColor Yellow
-            }} `            
+            }}
             
             # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV
             #    CSV simples, uma linha por UPN, sem cabeçalho (ex.:
