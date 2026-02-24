@@ -117,7 +117,11 @@ class AlterarPermissaoReunioes:
             foreach ($upn in $members) {{
               try {{
                 # Full Access (AutoMapping facilita aparecer no Outlook dos usuários)
-                Add-MailboxPermission -Identity $env:SharedSMTP -User $upn -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
+                Add-MailboxPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
+                -User $upn `
+                -AccessRights FullAccess `
+                -AutoMapping:$true `
+                -ErrorAction Stop
                 Write-Host "Concedido FullAccess a $upn" -ForegroundColor Green
               }} catch {{
                 if ($_.Exception.Message -match 'already on the permission entry list') {{
@@ -127,16 +131,18 @@ class AlterarPermissaoReunioes:
             
               try {{
                 # Send As
-                Add-RecipientPermission -Identity $env:SharedSMTP -Trustee $upn -AccessRights SendAs -ErrorAction Stop
-                Write-Host "Concedido SendAs a $upn" -ForegroundColor Green
+                Add-RecipientPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
+                -Trustee $upn `
+                -AccessRights SendAs `
+                -ErrorAction Stop 
+                Write-Host "Concedido SendAs a $upn" `
+                -ForegroundColor Green
               }} catch {{
                 if ($_.Exception.Message -match 'already has SendAs rights') {{
                   Write-Host "SendAs já existia para $upn" -ForegroundColor Yellow
                 }} else {{ Write-Warning "Falha SendAs $upn: $($_.Exception.Message)" }}
               }}
-            }}
-
-            
+            }}            
             
             
 
