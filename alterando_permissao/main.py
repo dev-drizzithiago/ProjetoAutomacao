@@ -98,8 +98,47 @@ class AlterarPermissaoReunioes:
               -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} ´
               -ErrorAction Stop
             }} else {{
-              Write-Host ">> Mailbox compartilhado já existe: $($env:SharedSMTP)" -ForegroundColor Yellow
+              Write-Host ">> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} `
+              -ForegroundColor Yellow
+            }} `            
+            
+            # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV
+            #    CSV simples, uma linha por UPN, sem cabeçalho (ex.:
+            #    maria@dominio.com
+            #    joao@dominio.com)
+            $members = @()
+            if (Test-Path $env:MembersCsv) {{
+              $members = Get-Content -Path $env:MembersCsv | Where-Object {{ $_ -and $_.Trim() -ne '' }} | 
+              ForEach-Object {{ $_.Trim() }}
+            }} else {{
+              Write-Warning "Arquivo de membros não encontrado em $($env:MembersCsv). Pule esta etapa ou atualize a variável."
             }}
+            
+            foreach ($upn in $members) {{
+              try {{
+                # Full Access (AutoMapping facilita aparecer no Outlook dos usuários)
+                Add-MailboxPermission -Identity $env:SharedSMTP -User $upn -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
+                Write-Host "Concedido FullAccess a $upn" -ForegroundColor Green
+              }} catch {{
+                if ($_.Exception.Message -match 'already on the permission entry list') {{
+                  Write-Host "FullAccess já existia para $upn" -ForegroundColor Yellow
+                }} else {{ Write-Warning "Falha FullAccess $upn: $($_.Exception.Message)" }}
+              }}
+            
+              try {{
+                # Send As
+                Add-RecipientPermission -Identity $env:SharedSMTP -Trustee $upn -AccessRights SendAs -ErrorAction Stop
+                Write-Host "Concedido SendAs a $upn" -ForegroundColor Green
+              }} catch {{
+                if ($_.Exception.Message -match 'already has SendAs rights') {{
+                  Write-Host "SendAs já existia para $upn" -ForegroundColor Yellow
+                }} else {{ Write-Warning "Falha SendAs $upn: $($_.Exception.Message)" }}
+              }}
+            }}
+
+            
+            
+            
 
         
             Disconnect-ExchangeOnline -Confirm:$false;
