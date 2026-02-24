@@ -83,7 +83,7 @@ class AlterarPermissaoReunioes:
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
               -Organization '{os.getenv('Organization')}' `
-              -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
+              -CertificateFilePath '{os.getenv('PATH_CERTIFICADO')}' `
               -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
               -ShowBanner:$false;
             # ----------------------------------------------------------------------------------------------\
@@ -107,11 +107,12 @@ class AlterarPermissaoReunioes:
             #    maria@dominio.com
             #    joao@dominio.com)
             $members = @()
-            if (Test-Path $env:MembersCsv) {{
-              $members = Get-Content -Path $env:MembersCsv | Where-Object {{ $_ -and $_.Trim() -ne '' }} | 
-              ForEach-Object {{ $_.Trim() }}
+            if (Test-Path {os.getenv('PATH_MEMBER_CSV')}) {{
+              $members = Get-Content -Path {os.getenv('PATH_MEMBER_CSV')} | `
+              Where-Object {{ $_ -and $_.Trim() -ne '' }} | ForEach-Object {{ $_.Trim() }}
             }} else {{
-              Write-Warning "Arquivo de membros não encontrado em $($env:MembersCsv). Pule esta etapa ou atualize a variável."
+              Write-Warning "Arquivo de membros não encontrado em {os.getenv('PATH_MEMBER_CSV')}. `
+              Pule esta etapa ou atualize a variável."
             }}
             
             foreach ($upn in $members) {{
