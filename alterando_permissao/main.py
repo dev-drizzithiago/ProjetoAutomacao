@@ -142,12 +142,27 @@ class AlterarPermissaoReunioes:
                   Write-Host "SendAs já existia para $upn" -ForegroundColor Yellow
                 }} else {{ Write-Warning "Falha SendAs $upn: $($_.Exception.Message)" }}
               }}
-            }}            
+            }}
             
+            # 4) Validações de saída
+            Write-Host "`n=== VALIDAÇÕES ===" -ForegroundColor Cyan 
+            Write-Host "Mailbox:" -ForegroundColor Cyan 
+            Get-Mailbox -Identity $env:SharedSMTP | `
+            Format-Table DisplayName,PrimarySmtpAddress,RecipientTypeDetails -AutoSize 
             
+            Write-Host "`nFullAccess:" -ForegroundColor Cyan 
+            Get-MailboxPermission -Identity $env:SharedSMTP | 
+              Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
+              Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize 
+            
+            Write-Host "`nSendAs:" -ForegroundColor Cyan 
+            Get-RecipientPermission -Identity $env:SharedSMTP | 
+              Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
+              Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize 
+            
+            # 5) Desconectar
+            Disconnect-ExchangeOnline -Confirm:$false
 
-        
-            Disconnect-ExchangeOnline -Confirm:$false;
         """
 
         resultado = self.init_conectar_exchange.run_spinner(
