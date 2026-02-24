@@ -89,27 +89,15 @@ class AlterarPermissaoReunioes:
             # ----------------------------------------------------------------------------------------------\
             # Funcionando
             
-            $cal = (Get-MailboxFolderStatistics -Identity '{os.getenv('ORGANIZADOR_GRUPO')}' | 
-                    Where-Object {{ $_.FolderType -eq 'Calendar' }} | 
-                    Select-Object -First 1 -ExpandProperty Name) -ErrorAction Stop;
-            if (-not $cal) {{ throw 'Calendário não encontrado para ' + '{os.getenv('ORGANIZADOR_GRUPO')}' }} `
-            echo $cal `
-            $id = "{os.getenv('ORGANIZADOR_GRUPO')}:\$cal" `
-            echo $id
-            try {{
-              Set-MailboxFolderPermission `
-              -Identity $id `
-              -User '{os.getenv('ORGANIZADOR_GRUPO')}' `
-              -AccessRights Editor ` 
-              -ErrorAction Stop; 
-            }} catch {{
-              Add-MailboxFolderPermission `
-              -Identity $id `
-              -User '{os.getenv('ORGANIZADOR_PARTICULAR')}' `
-              -AccessRights Editor;
+            # 2) Criar o mailbox compartilhado (se não existir)
+            $shared = Get-Mailbox -Identity $env:SharedSMTP -ErrorAction SilentlyContinue
+            if (-not $shared) {{
+              Write-Host ">> Criando mailbox compartilhado $($env:SharedSMTP) ..." -ForegroundColor Cyan
+              New-Mailbox -Shared -Name $env:SharedName -PrimarySmtpAddress $env:SharedSMTP -ErrorAction Stop
+            }} else {{
+              Write-Host ">> Mailbox compartilhado já existe: $($env:SharedSMTP)" -ForegroundColor Yellow
             }}
-        
-            Get-MailboxFolderPermission -Identity "{os.getenv('ORGANIZADOR')}" | Format-Table -AutoSize;
+
         
             Disconnect-ExchangeOnline -Confirm:$false;
         """
