@@ -94,7 +94,7 @@ class AlterarPermissaoReunioes:
             if (-not $shared) {{
               Write-Host ">> Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')} ..." \
               -ForegroundColor Cyan `              
-              New-Mailbox -Shared -Name $env:SharedName `
+              New-Mailbox -Shared -Name  {os.getenv('NOME_GRUPO')} `
               -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} ´
               -ErrorAction Stop
             }} else {{
@@ -147,16 +147,16 @@ class AlterarPermissaoReunioes:
             # 4) Validações de saída
             Write-Host "`n=== VALIDAÇÕES ===" -ForegroundColor Cyan 
             Write-Host "Mailbox:" -ForegroundColor Cyan 
-            Get-Mailbox -Identity $env:SharedSMTP | `
+            Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} | `
             Format-Table DisplayName,PrimarySmtpAddress,RecipientTypeDetails -AutoSize 
             
             Write-Host "`nFullAccess:" -ForegroundColor Cyan 
-            Get-MailboxPermission -Identity $env:SharedSMTP | 
+            Get-MailboxPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} | 
               Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize 
             
             Write-Host "`nSendAs:" -ForegroundColor Cyan 
-            Get-RecipientPermission -Identity $env:SharedSMTP | 
+            Get-RecipientPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} | 
               Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize 
             
