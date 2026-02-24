@@ -90,10 +90,13 @@ class AlterarPermissaoReunioes:
             # Funcionando
             
             # 2) Criar o mailbox compartilhado (se não existir)
-            $shared = Get-Mailbox -Identity $env:SharedSMTP -ErrorAction SilentlyContinue
+            $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue
             if (-not $shared) {{
-              Write-Host ">> Criando mailbox compartilhado $($env:SharedSMTP) ..." -ForegroundColor Cyan
-              New-Mailbox -Shared -Name $env:SharedName -PrimarySmtpAddress $env:SharedSMTP -ErrorAction Stop
+              Write-Host ">> Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')} ..." \
+              -ForegroundColor Cyan `              
+              New-Mailbox -Shared -Name $env:SharedName `
+              -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} ´
+              -ErrorAction Stop
             }} else {{
               Write-Host ">> Mailbox compartilhado já existe: $($env:SharedSMTP)" -ForegroundColor Yellow
             }}
