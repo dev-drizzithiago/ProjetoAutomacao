@@ -39,8 +39,6 @@ def verificar_elevacao():
 class GeranciadorDePacotes:
 
     def __init__(self):
-        self.init_spinner_class = None
-
         self.init_spinner_class = ProcessoRun()
 
     def remover_processo(self, mensagem):
@@ -50,12 +48,13 @@ class GeranciadorDePacotes:
             "Stop-Process -Force "
             )
 
+        print()
+        print('---' * 30)
         self.init_spinner_class.run_spinner(comando_shell, mensagem)
-
 
     def removendo_config_anydesk(self):
         print()
-        print('Configurações do Anydesk no sistema sendo removido...')
+        print('Removendo configurações do Anydesk no sistema...')
         print('---' * 30)
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
 
@@ -69,8 +68,15 @@ class GeranciadorDePacotes:
             sleep(5)
 
     def abrir_processo(self, mensagem):
+        # Indica o caminha que o app esta instalado
         caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
+
+        # Cria o comando shell para reabrir o app
         comando_shell = fr'Start-Process "{caminho_app}" -WindowStyle Minimized'
+
+        print()
+        print('---' * 30)
+        # Processa o comando no power shell
         self.init_spinner_class.run_spinner(comando_shell, mensagem)
 
 if __name__ == '__main__':
