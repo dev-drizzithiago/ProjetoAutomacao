@@ -1,8 +1,8 @@
-from conectando_exechange_online import ProcessoRun
 from dotenv import load_dotenv
 from os import getenv
 import os
 
+from conectando_exechange_online import ProcessoRun
 from gerar_certificado_microsoft import GerarCertificado
 
 load_dotenv()
