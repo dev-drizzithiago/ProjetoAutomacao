@@ -54,8 +54,8 @@ class GeranciadorDePacotes:
 
     def removendo_config_anydesk(self):
         print()
-        print('Removendo configurações do Anydesk no sistema...')
         print('---' * 30)
+        print('Removendo configurações do Anydesk no sistema...')
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
 
         # Verifica se a pasta existe, se for True tudo é removido.
