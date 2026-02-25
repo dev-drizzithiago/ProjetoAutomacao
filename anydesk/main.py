@@ -46,14 +46,11 @@ class GeranciadorDePacotes:
         comando_shell = (
             "Get-Process -Name 'AnyDesk*' "
             "-ErrorAction SilentlyContinue | "
-            "Stop-Process -Force"
+            "Stop-Process -Force "
             )
 
         self.init_spinner_class.run_spinner(comando_shell, mensagem)
-        print()
-        print('---' * 30)
-        print('Anydesk fechado, continuando processo..')
-        sleep(2)
+
 
     def removendo_config_anydesk(self):
         print()
@@ -61,8 +58,11 @@ class GeranciadorDePacotes:
         print('---' * 30)
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
 
+        # Verifica se a pasta existe, se for True tudo é removido.
         if os.path.exists(caminho_confi_anydesk):
             shutil.rmtree(caminho_confi_anydesk)
+
+        print('Pasta não existe.')
 
     def abrir_processo(self, mensagem):
         caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
@@ -74,12 +74,12 @@ if __name__ == '__main__':
     if verificar_elevacao():
         obj_pacote = GeranciadorDePacotes()
 
-        # Para inciar, o anydesk é fechado
+        # Para iniciar, o anydesk é fechado
         obj_pacote.remover_processo('Processo do Anydesk sendo finalizado, aguarde...')
 
         # Remove as configurações do anydesk.
         sleep(3)
-        obj_pacote.removendo_config_anydesk()
+        resp_processo = obj_pacote.removendo_config_anydesk()
 
         # Abre o processo pela primeira vez, depois do reset
         sleep(3)
