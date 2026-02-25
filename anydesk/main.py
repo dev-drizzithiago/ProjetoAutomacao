@@ -87,14 +87,22 @@ if __name__ == '__main__':
     if verificar_elevacao():
         obj_pacote = GeranciadorDePacotes()
         obj_pacote.remover_processo()
+
         sleep(5)
         obj_pacote.removendo_config_anydesk()
+
+        sleep(5)
+        obj_pacote.abrir_processo()
+
+        sleep(5)
+        obj_pacote.remover_processo()
+
         sleep(5)
         obj_pacote.abrir_processo()
 
         print()
-        input('Aperte ENTER para continuar...')
-        os.system('cls')
+        print('Finalizando processo...')
+        sleep(3)
 
         for contagem in range(5, 0, -1):
             print()
