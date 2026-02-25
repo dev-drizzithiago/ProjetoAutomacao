@@ -89,23 +89,20 @@ class AlterarPermissaoReunioes:
             # ----------------------------------------------------------------------------------------------\
             # Funcionando
             
-            # 2) Criar o mailbox compartilhado (se não existir)
+            # 2) Criar o mailbox compartilhado (se não existir);
             $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue 
             if (-not $shared) {{
               Write-Host ">> Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')} ..." ` 
               -ForegroundColor Cyan ` 
-              $error = New-Mailbox -Shared -Name "{os.getenv('NOME_GRUPO')}" ` 
-              -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} ` 
+              New-Mailbox -Shared -Name "{os.getenv('NOME_GRUPO')}" `
+              -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} `
               -ErrorAction Stop 
             }} else {{
               Write-Host ">> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} ` 
               -ForegroundColor Yellow
             }}
             echo error
-            # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV
-            #    CSV simples, uma linha por UPN, sem cabeçalho (ex.:
-            #    maria@dominio.com
-            #    joao@dominio.com)
+            # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV;
             $members = @()
             if (Test-Path {os.getenv('PATH_MEMBER_CSV')}) {{
               $members = Get-Content -Path {os.getenv('PATH_MEMBER_CSV')} | `
@@ -114,7 +111,7 @@ class AlterarPermissaoReunioes:
               Write-Warning "Arquivo de membros não encontrado em {os.getenv('PATH_MEMBER_CSV')}. `
               Pule esta etapa ou atualize a variável."
             }}
-            
+
             foreach ($upn in $members) {{
               try {{
                 # Full Access (AutoMapping facilita aparecer no Outlook dos usuários)
@@ -129,7 +126,7 @@ class AlterarPermissaoReunioes:
                   Write-Host "FullAccess já existia para $upn" -ForegroundColor Yellow
                 }} else {{ Write-Warning "Falha FullAccess $upn: $($_.Exception.Message)" }}
               }}
-            
+
               try {{
                 # Send As
                 Add-RecipientPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
@@ -144,23 +141,23 @@ class AlterarPermissaoReunioes:
                 }} else {{ Write-Warning "Falha SendAs $upn: $($_.Exception.Message)" }}
               }}
             }}
-            
+
             # 4) Validações de saída
             Write-Host "`n=== VALIDAÇÕES ===" -ForegroundColor Cyan 
             Write-Host "Mailbox:" -ForegroundColor Cyan 
             Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} | `
             Format-Table DisplayName,PrimarySmtpAddress,RecipientTypeDetails -AutoSize 
-            
+
             Write-Host "`nFullAccess:" -ForegroundColor Cyan 
             Get-MailboxPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} | 
               Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize 
-            
+
             Write-Host "`nSendAs:" -ForegroundColor Cyan 
             Get-RecipientPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} | 
               Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize 
-            
+
             # 5) Desconectar
             Disconnect-ExchangeOnline -Confirm:$false
 
@@ -306,7 +303,7 @@ if __name__ == '__main__':
             continue
 
         if resposta == 1:
-            resultando_conexao = init_obj_calendar.conexao_grupo_gti()
+            resultando_conexao = init_obj_calendar.chamando_obj_conexao()
             for item in resultando_conexao:
                 print(item)
 
