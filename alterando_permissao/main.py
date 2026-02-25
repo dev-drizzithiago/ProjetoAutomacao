@@ -90,27 +90,18 @@ class AlterarPermissaoReunioes:
             # Funcionando
             
             # 2) Criar o mailbox compartilhado (se não existir);
-            $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
-            -ErrorAction SilentlyContinue 
-            
-            # if (-not $shared) {{
-            #     Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Cyan 
-            #     New-Mailbox -Shared `
-            #         -Name "{os.getenv('NOME_GRUPO')}" `
-            #         -PrimarySmtpAddress "{os.getenv('ORGANIZADOR_GRUPO')}" `
-            #         -ErrorAction Stop 
-            # }} else {{
-            #     Write-Host "Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} -ForegroundColor Yellow
-            # }}
+            $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue           
             
             if (-not $shared) {{
-                Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Cyan
+                Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" `
+                -ForegroundColor Cyan
                 New-Mailbox -Shared `
                     -Name "{os.getenv('NOME_GRUPO')}" `
                     -PrimarySmtpAddress "{os.getenv('ORGANIZADOR_GRUPO')}" `
                     -ErrorAction Stop
             }} else {{
-                Write-Host "=> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Yellow
+                Write-Host "=> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')}" `
+                -ForegroundColor Yellow
             }}
 
             
