@@ -94,7 +94,7 @@ class AlterarPermissaoReunioes:
             if (-not $shared) {{
               Write-Host ">> Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')} ..." ` 
               -ForegroundColor Cyan ` 
-              $error = New-Mailbox -Shared -Name "GTI - Inovação TESTE" ` 
+              $error = New-Mailbox -Shared -Name "{os.getenv('NOME_GRUPO')}" ` 
               -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} ` 
               -ErrorAction Stop 
             }} else {{
