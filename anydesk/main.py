@@ -12,7 +12,8 @@ from pathlib import Path
 
 path_home = Path.home()
 pasta_download_onedrive = Path(path_home, 'Downloads')
-path_file_name = os.path.join(pasta_download_onedrive, 'AnyDesk.exe')
+file_name = os.path.join(pasta_download_onedrive, 'AnyDesk.exe')
+path_appdata = Path(path_home, 'AppData', 'Roaming', 'AnyDesk')
 
 
 def verificar_elevacao():
