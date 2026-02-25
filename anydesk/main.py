@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
         # Remove as configurações do anydesk.
         sleep(3)
-        resp_processo = obj_pacote.removendo_config_anydesk()
+        obj_pacote.removendo_config_anydesk()
 
         # Abre o processo pela primeira vez, depois do reset
         sleep(3)
