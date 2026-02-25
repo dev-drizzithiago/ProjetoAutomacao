@@ -76,6 +76,7 @@ class GeranciadorDePacotes:
 
         print()
         print('---' * 30)
+
         # Processa o comando no power shell
         self.init_spinner_class.run_spinner(comando_shell, mensagem)
 
@@ -84,28 +85,32 @@ if __name__ == '__main__':
     if verificar_elevacao():
         obj_pacote = GeranciadorDePacotes()
 
-        # Para iniciar, o anydesk é fechado
+        # Para iniciar o processo, o anydesk precisa ser fechado
         obj_pacote.remover_processo('Processo do Anydesk sendo finalizado, aguarde...')
+        sleep(3)
+        os.system('cls')
 
         # Remove as configurações do anydesk.
-        sleep(3)
         obj_pacote.removendo_config_anydesk()
+        sleep(3)
+        os.system('cls')
 
         # Abre o processo pela primeira vez, depois do reset
-        sleep(3)
         obj_pacote.abrir_processo('reAbrindo o AnyDesk, aguarde...')
+        sleep(3)
+        os.system('cls')
 
         # Geralmente o anydesk não pega de primeira o ID. É preciso fechar e reabri-lo
-        sleep(3)
         obj_pacote.remover_processo('Testando Anydesk, aguarde...')
+        sleep(3)
+        os.system('cls')
 
         # Abre o processo pela segunda vez.
-        sleep(3)
-        obj_pacote.abrir_processo('Finalizando o teste, aguarde...')
-
+        obj_pacote.abrir_processo('Finalizando os testes, aguarde...')
         sleep(5)
         os.system('cls')
 
+        # Faz a contagem para finalizar o sistema.
         for contagem in range(5, 0, -1):
             print()
             print()
