@@ -57,7 +57,7 @@ class GeranciadorDePacotes:
     def removendo_config_anydesk(self):
         os.system('cls')
         print()
-        print('Removendo Configurações do Anydesk no sistema')
+        print('Configurações do Anydesk no sistema sendo removido...')
         print('---' * 30)
         print()
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
@@ -65,8 +65,7 @@ class GeranciadorDePacotes:
         if os.path.exists(caminho_confi_anydesk):
             shutil.rmtree(caminho_confi_anydesk)
 
-        print('Configuração removida, aguardando próximo processo...')
-        sleep(3)
+        print('Configuração removida, próximo reabrindo Anydesk...')
 
     def abrir_processo(self):
         os.system('cls')
