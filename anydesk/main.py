@@ -41,7 +41,7 @@ class GeranciadorDePacotes:
     def remover_processo(self):
         os.system('cls')
         print()
-        print('Fechando Processo do Anydesk, aguarde...')
+        print('Fechando processo do Anydesk, aguarde...')
         print('---' * 30)
         print()
         comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
@@ -52,12 +52,12 @@ class GeranciadorDePacotes:
             text=True, capture_output=True
         )
         if response_powershell.returncode == 0:
-            print('Processo finalizado, aguardando próximo processo...')
+            print('Processo finalizado, próximo ...')
 
     def removendo_config_anydesk(self):
         os.system('cls')
         print()
-        print('Removendo Configurações do Anydesk')
+        print('Removendo Configurações do Anydesk no sistema')
         print('---' * 30)
         print()
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
@@ -88,16 +88,16 @@ if __name__ == '__main__':
         obj_pacote = GeranciadorDePacotes()
         obj_pacote.remover_processo()
 
-        sleep(5)
+        sleep(3)
         obj_pacote.removendo_config_anydesk()
 
-        sleep(5)
+        sleep(3)
         obj_pacote.abrir_processo()
 
-        sleep(5)
+        sleep(3)
         obj_pacote.remover_processo()
 
-        sleep(5)
+        sleep(3)
         obj_pacote.abrir_processo()
 
         print()
