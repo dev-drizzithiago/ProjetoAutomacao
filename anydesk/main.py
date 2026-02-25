@@ -35,8 +35,6 @@ def verificar_elevacao():
     return True
 
 class GeranciadorDePacotes:
-    def __init__(self):
-        pass
 
     def remover_processo(self):
         os.system('cls')
