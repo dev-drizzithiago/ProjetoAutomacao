@@ -93,27 +93,25 @@ class AlterarPermissaoReunioes:
             $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
             -ErrorAction SilentlyContinue 
             
-            if (-not $shared) {{
-                Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Cyan 
-                New-Mailbox -Shared `
-                    -Name "{os.getenv('NOME_GRUPO')}" `
-                    -PrimarySmtpAddress "{os.getenv('ORGANIZADOR_GRUPO')}" `
-                    -ErrorAction Stop 
-            }} else {{
-                Write-Host "Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} -ForegroundColor Yellow
-            }}
-            
-            
-            
             # if (-not $shared) {{
-            #     Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Cyan
+            #     Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Cyan 
             #     New-Mailbox -Shared `
             #         -Name "{os.getenv('NOME_GRUPO')}" `
             #         -PrimarySmtpAddress "{os.getenv('ORGANIZADOR_GRUPO')}" `
-            #         -ErrorAction Stop
+            #         -ErrorAction Stop 
             # }} else {{
-            #     Write-Host "=> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Yellow
+            #     Write-Host "Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} -ForegroundColor Yellow
             # }}
+            
+            if (-not $shared) {{
+                Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Cyan
+                New-Mailbox -Shared `
+                    -Name "{os.getenv('NOME_GRUPO')}" `
+                    -PrimarySmtpAddress "{os.getenv('ORGANIZADOR_GRUPO')}" `
+                    -ErrorAction Stop
+            }} else {{
+                Write-Host "=> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')}" -ForegroundColor Yellow
+            }}
 
             
             # # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV;
