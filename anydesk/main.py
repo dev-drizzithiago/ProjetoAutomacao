@@ -61,8 +61,11 @@ class GeranciadorDePacotes:
         # Verifica se a pasta existe, se for True tudo é removido.
         if os.path.exists(caminho_confi_anydesk):
             shutil.rmtree(caminho_confi_anydesk)
-
-        print('Pasta não existe.')
+        else:
+            print()
+            print('---' * 30)
+            print('Pasta não existe.')
+            sleep(5)
 
     def abrir_processo(self, mensagem):
         caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
