@@ -1,8 +1,9 @@
 import os
 import shutil
 import subprocess
-from platform import system
 from time import sleep
+
+from proccess_spinner import ProcessoRun
 
 import ctypes
 import sys
@@ -36,70 +37,64 @@ def verificar_elevacao():
 
 class GeranciadorDePacotes:
 
-    def remover_processo(self):
-        os.system('cls')
-        print()
-        print('Fechando processo do Anydesk, aguarde...')
-        print('---' * 30)
-        print()
-        comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue | Stop-Process -Force"
-        # comando_shell = "Get-Process -Name 'AnyDesk*' -ErrorAction SilentlyContinue"
+    def __init__(self):
+        self.init_spinner_class = None
 
-        response_powershell = subprocess.run(
-            ['powershell', '-Command', comando_shell],
-            text=True, capture_output=True
-        )
-        if response_powershell.returncode == 0:
-            print('Processo finalizado, próximo ...')
+        self.init_spinner_class = ProcessoRun()
+
+    def remover_processo(self, mensagem):
+        comando_shell = (
+            "Get-Process -Name 'AnyDesk*' "
+            "-ErrorAction SilentlyContinue | "
+            "Stop-Process -Force"
+            )
+
+        self.init_spinner_class.run_spinner(comando_shell, mensagem)
+        print()
+        print('---' * 30)
+        print('Anydesk fechado, continuando processo..')
+        sleep(2)
 
     def removendo_config_anydesk(self):
-        os.system('cls')
         print()
         print('Configurações do Anydesk no sistema sendo removido...')
         print('---' * 30)
-        print()
         caminho_confi_anydesk = r"C:\ProgramData\AnyDesk"
 
         if os.path.exists(caminho_confi_anydesk):
             shutil.rmtree(caminho_confi_anydesk)
 
-        print('Configuração removida, próximo reabrindo Anydesk...')
-
-    def abrir_processo(self):
-        os.system('cls')
-        print()
-        print('Abrindo o AnyDesk, aguarde...')
-        print('---' * 30)
-        print()
+    def abrir_processo(self, mensagem):
         caminho_app = r"C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
         comando_shell = fr'Start-Process "{caminho_app}" -WindowStyle Minimized'
-
-        response_powershell = subprocess.run(
-            ['powershell', '-Command', comando_shell],
-            text=True, capture_output=True
-        )
+        self.init_spinner_class.run_spinner(comando_shell, mensagem)
 
 if __name__ == '__main__':
 
     if verificar_elevacao():
         obj_pacote = GeranciadorDePacotes()
-        obj_pacote.remover_processo()
 
+        # Para inciar, o anydesk é fechado
+        obj_pacote.remover_processo('Processo do Anydesk sendo finalizado, aguarde...')
+
+        # Remove as configurações do anydesk.
         sleep(3)
         obj_pacote.removendo_config_anydesk()
 
+        # Abre o processo pela primeira vez, depois do reset
         sleep(3)
-        obj_pacote.abrir_processo()
+        obj_pacote.abrir_processo('reAbrindo o AnyDesk, aguarde...')
 
+        # Geralmente o anydesk não pega de primeira o ID. É preciso fechar e reabri-lo
         sleep(3)
-        obj_pacote.remover_processo()
+        obj_pacote.remover_processo('Testando Anydesk, aguarde...')
 
+        # Abre o processo pela segunda vez.
         sleep(3)
-        obj_pacote.abrir_processo()
+        obj_pacote.abrir_processo('Finalizando o teste, aguarde...')
 
-        print()
-        print('Finalizando processo...')
-        sleep(3)
+        sleep(5)
+        os.system('cls')
 
         for contagem in range(5, 0, -1):
             print()
