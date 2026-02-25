@@ -1,4 +1,4 @@
-from subprocess import run, PIPE
+from subprocess import run
 import itertools
 from time import sleep
 from threading import Event, Thread
