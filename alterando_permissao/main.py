@@ -90,16 +90,17 @@ class AlterarPermissaoReunioes:
             # Funcionando
             
             # 2) Criar o mailbox compartilhado (se não existir);
-            $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue 
-            $shared 
+            $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
+            -ErrorAction SilentlyContinue 
+            
             if (-not $shared) {{
-              Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}..." ` 
-              -ForegroundColor Cyan ` 
+              Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}..." `
+              -ForegroundColor Cyan 
               New-Mailbox -Shared -Name "{os.getenv('NOME_GRUPO')}" `
               -PrimarySmtpAddress {os.getenv('ORGANIZADOR_GRUPO')} `
               -ErrorAction Stop 
             }} else {{
-              Write-Host ">> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} ` 
+              Write-Host "=> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')} ` 
               -ForegroundColor Yellow
             }}
             
@@ -154,12 +155,13 @@ class AlterarPermissaoReunioes:
             #   Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
             #   Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize 
             # 
-            # Write-Host "`nSendAs:" -ForegroundColor Cyan 
+            # Write-Host "nSendAs:" -ForegroundColor Cyan `
             # Get-RecipientPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} | 
             #   Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
             #   Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize 
             # 
             # # 5) Desconectar
+            
             Disconnect-ExchangeOnline -Confirm:$false
 
         """
