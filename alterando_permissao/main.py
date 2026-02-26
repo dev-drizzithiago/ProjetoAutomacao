@@ -80,10 +80,6 @@ class AlterarPermissaoReunioes:
         self.init_conectar_exchange = ProcessoRun()
 
         comando_shell = rf"""
-            $nomeGrupo = "{os.getenv('NOME_GRUPO')}"
-            $sharedSmtp = "{os.getenv('ORGANIZADOR_GRUPO')}"
-            $usuario    = "{os.getenv('ORGANIZADOR_TESTE')}"
-
             # 1) Importa e conecta ao 365;
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
@@ -95,17 +91,17 @@ class AlterarPermissaoReunioes:
             # Funcionando 
             
             # 2) Criar o mailbox compartilhado (se não existir);
-            $shared = Get-Mailbox -Identity $sharedSmtp -ErrorAction SilentlyContinue           
+            $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue           
             
             if (-not $shared) {{
-                Write-Host "Criando mailbox compartilhado $sharedSmtp" `
+                Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" `
                 -ForegroundColor Cyan
                 New-Mailbox -Shared `
-                    -Name $nomeGrupo `
-                    -PrimarySmtpAddress $sharedSmtp `
+                    -Name "{os.getenv('NOME_GRUPO')}" `
+                    -PrimarySmtpAddress "{os.getenv('ORGANIZADOR_GRUPO')}" `
                     -ErrorAction Stop
             }} else {{
-                Write-Host ">> Mailbox compartilhado já existe: $sharedSmtp" `
+                Write-Host ">> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')}" `
                 -ForegroundColor Yellow
             }}
 
@@ -119,26 +115,28 @@ class AlterarPermissaoReunioes:
             Write-Host "Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan 
 
             try {{
-                Add-MailboxPermission -Identity $sharedSmtp `
-                -User $usuario `
+                Add-MailboxPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" `
+                -User "{os.getenv('ORGANIZADOR_PARTICULAR')}" `
                 -AccessRights FullAccess `
                 -AutoMapping:$true `
                 -ErrorAction Stop
-                Write-Host "✓ FullAccess concedido" -ForegroundColor Green
+                Write-Host "✓ FullAccess concedido" `
+                -ForegroundColor Green
             }} catch {{
                 if ($_.Exception.Message -match 'already on the permission entry list') {{
                     Write-Host "ℹ FullAccess já existia" -ForegroundColor Yellow
                 }} else {{ throw }}
             }}
             
-            Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp..." `
+            Write-Host "Concedendo SendAs a "{os.getenv('ORGANIZADOR_PARTICULAR')}" no shared $sharedSmtp..." `
             -ForegroundColor Cyan
             try {{
-                Add-RecipientPermission -Identity $sharedSmtp `
-                -Trustee $usuario `
+                Add-RecipientPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" `
+                -Trustee "{os.getenv('ORGANIZADOR_PARTICULAR')}" `
                 -AccessRights SendAs `
                 -ErrorAction Stop
-                Write-Host "✓ SendAs concedido" -ForegroundColor Green
+                Write-Host "✓ SendAs concedido" `
+                -ForegroundColor Green
             }} catch {{
                 if ($_.Exception.Message -match 'already has SendAs rights') {{
                     Write-Host "ℹ SendAs já existia" -ForegroundColor Yellow
@@ -148,12 +146,12 @@ class AlterarPermissaoReunioes:
             # Validações rápidas
             Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
             Write-Host "FullAccess:" -ForegroundColor Cyan
-            Get-MailboxPermission -Identity $sharedSmtp | 
+            Get-MailboxPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" | 
               Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
             
             Write-Host "`nSendAs:" -ForegroundColor Cyan
-            Get-RecipientPermission -Identity $sharedSmtp | 
+            Get-RecipientPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" | 
               Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize
 
