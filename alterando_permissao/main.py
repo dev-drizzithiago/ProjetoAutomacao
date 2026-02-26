@@ -98,46 +98,43 @@ class AlterarPermissaoReunioes:
             $shared = Get-Mailbox -Identity $sharedSmtp -ErrorAction SilentlyContinue           
             
             if (-not $shared) {{
-                Write-Host "Criando mailbox compartilhado $sharedSmtp" -ForegroundColor Cyan
-                New-Mailbox -Shared` 
-                    -Name "{os.getenv('NOME_GRUPO')}"` 
-                    -PrimarySmtpAddress $sharedSmtp` 
+                Write-Host "Criando mailbox compartilhado $sharedSmtp" -ForegroundColor Cyan 
+                New-Mailbox -Shared ` 
+                    -Name "{os.getenv('NOME_GRUPO')}" ` 
+                    -PrimarySmtpAddress $sharedSmtp ` 
                     -ErrorAction Stop
             }} else {{
-                Write-Host ">> Mailbox compartilhado já existe: $sharedSmtp"`
-                -ForegroundColor Yellow
+                Write-Host ">> já existe o Mailbox compartilhado com o endereço: $sharedSmtp" -ForegroundColor Yellow 
             }}
 
             # 2° etapa; concedendo permissões e testes
-            # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV;
+            # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV; 
 
             if (-not $sharedSmtp -or -not $usuario) {{
-                throw "Defina ORGANIZADOR_GRUPO (shared SMTP) e USUARIO_TESTE (UPN)."
+                throw "Defina ORGANIZADOR_GRUPO (shared SMTP) e USUARIO_TESTE (UPN)." 
             }}
 
             Write-Host "Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan 
-
             try {{
                 Add-MailboxPermission -Identity $sharedSmtp `
-                -User $usuario -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
-                Write-Host "✓ FullAccess concedido" -ForegroundColor Green
+                -User $usuario -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop 
+                Write-Host "✓ FullAccess concedido" -ForegroundColor Green 
             }} catch {{
                 if ($_.Exception.Message -match 'already on the permission entry list') {{
-                    Write-Host "ℹ FullAccess já existia" -ForegroundColor Yellow
+                    Write-Host "FullAccess já existia" -ForegroundColor Yellow
                 }} else {{ throw }}
             }}
-            
-            Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp..." `
-            -ForegroundColor Cyan
-            try {{
-                Add-RecipientPermission -Identity $sharedSmtp `
-                -Trustee $usuario -AccessRights SendAs -ErrorAction Stop
-                Write-Host "✓ SendAs concedido" -ForegroundColor Green
-            }} catch {{
-                if ($_.Exception.Message -match 'already has SendAs rights') {{
-                    Write-Host "ℹ SendAs já existia" -ForegroundColor Yellow
-                }} else {{ throw }}
-            }}            
+            # Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp..." `
+            # -ForegroundColor Cyan
+            # try {{
+            #     Add-RecipientPermission -Identity $sharedSmtp `
+            #     -Trustee $usuario -AccessRights SendAs -ErrorAction Stop
+            #     Write-Host "✓ SendAs concedido" -ForegroundColor Green
+            # }} catch {{
+            #     if ($_.Exception.Message -match 'already has SendAs rights') {{
+            #         Write-Host "ℹ SendAs já existia" -ForegroundColor Yellow
+            #     }} else {{ throw }}
+            # }}            
             
             # # Validações rápidas
             # Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
