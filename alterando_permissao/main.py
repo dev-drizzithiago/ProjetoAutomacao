@@ -80,22 +80,16 @@ class AlterarPermissaoReunioes:
         self.init_conectar_exchange = ProcessoRun()
 
         comando_shell = rf"""
-        
-            $appID = '{os.getenv('AppId')}' 
-            $organizacao = '{os.getenv('Organization')}' 
-            $pathCertificado = '{os.getenv('PATH_CERTIFICADO')}' 
-            $passCertificado = '{os.getenv('PASSWORD')}' 
-            
             $nomeGrupo = "{os.getenv('NOME_GRUPO')}"
             $sharedSmtp = "{os.getenv('ORGANIZADOR_GRUPO')}"
             $usuario    = "{os.getenv('ORGANIZADOR_TESTE')}"
 
             # 1) Importa e conecta ao 365;
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
-            Connect-ExchangeOnline -AppId $appID `
-              -Organization  $organizacao `
-              -CertificateFilePath  $pathCertificado `
-              -CertificatePassword (ConvertTo-SecureString $passCertificado -AsPlainText -Force) `
+            Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+              -Organization '{os.getenv('Organization')}' `
+              -CertificateFilePath '{os.getenv('PATH_CERTIFICADO')}' `
+              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
               -ShowBanner:$false;
             # ----------------------------------------------------------------------------------------------
             # Funcionando 
