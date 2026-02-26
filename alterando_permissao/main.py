@@ -119,26 +119,27 @@ class AlterarPermissaoReunioes:
             #     Write-Host "✓ FullAccess concedido" -ForegroundColor Green 
             # }} catch {{
             #     if ($_.Exception.Message -match 'already on the permission entry list') {{
-            #         Write-Host "! FullAccess já existia" -ForegroundColor Yellow
+            #         Write-Host "! FullAccess existe para o usuario: $usuario" -ForegroundColor Yellow
             #     }} else {{ throw }}
             # }} 
             
             Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp " -ForegroundColor Cyan
             try {{ 
-                Add-RecipientPermission -Identity $sharedSmtp -Trustee $usuario -AccessRights SendAs -ErrorAction Stop
+                Add-RecipientPermission -Identity $sharedSmtp -Trustee $usuario `
+                  -AccessRights SendAs -Confirm:$false -ErrorAction Stop 
                 Write-Host "✓ SendAs concedido" -ForegroundColor Green
             }} catch {{ 
                 if ($_.Exception.Message -match 'already has SendAs rights') {{ 
-                    Write-Host "! SendAs já existia" -ForegroundColor Yellow
+                    Write-Host "! SendAs existe o usuário: $usuario" -ForegroundColor Yellow
                 }} else {{ throw }} 
             }} 
             
-            # # Validações rápidas
-            Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
-            Write-Host "FullAccess:" -ForegroundColor Cyan
-            Get-MailboxPermission -Identity $sharedSmtp | 
-              Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
-              Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
+            # Validações rápidas
+            # Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
+            # Write-Host "FullAccess:" -ForegroundColor Cyan
+            # Get-MailboxPermission -Identity $sharedSmtp | 
+            #   Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
+            #   Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
             # 
             # Write-Host "`nSendAs:" -ForegroundColor Cyan
             # Get-RecipientPermission -Identity $sharedSmtp | 
