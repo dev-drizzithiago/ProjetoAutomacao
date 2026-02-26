@@ -105,65 +105,58 @@ class AlterarPermissaoReunioes:
                 -ForegroundColor Yellow
             }}
 
-            
+            # 2° etapa; concedendo permissões e testes
             # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV;
-            $members = @()
-            if (Test-Path {os.getenv('PATH_MEMBER_CSV')}) {{
-              $members = Get-Content -Path {os.getenv('PATH_MEMBER_CSV')} | `
-              Where-Object {{ $_ -and $_.Trim() -ne '' }} | ForEach-Object {{ $_.Trim() }}
-            }} else {{
-              Write-Warning "Arquivo de membros não encontrado em {os.getenv('PATH_MEMBER_CSV')}. `
-              Pule esta etapa ou atualize a variável."
+
+            if (-not $sharedSmtp -or -not $usuario) {{
+                throw "Defina ORGANIZADOR_GRUPO (shared SMTP) e USUARIO_TESTE (UPN)."
             }}
-            # 
-            # foreach ($upn in $members) {{
-            #   try {{
-            #     # Full Access (AutoMapping facilita aparecer no Outlook dos usuários)
-            #     Add-MailboxPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
-            #     -User $upn `
-            #     -AccessRights FullAccess `
-            #     -AutoMapping:$true `
-            #     -ErrorAction Stop
-            #     Write-Host "Concedido FullAccess a $upn" -ForegroundColor Green
-            #   }} catch {{
-            #     if ($_.Exception.Message -match 'already on the permission entry list') {{
-            #       Write-Host "FullAccess já existia para $upn" -ForegroundColor Yellow
-            #     }} else {{ Write-Warning "Falha FullAccess $upn: $($_.Exception.Message)" }}
-            #   }}
-            # 
-            #   try {{
-            #     # Send As
-            #     Add-RecipientPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} `
-            #     -Trustee $upn `
-            #     -AccessRights SendAs `
-            #     -ErrorAction Stop 
-            #     Write-Host "Concedido SendAs a $upn" `
-            #     -ForegroundColor Green
-            #   }} catch {{
-            #     if ($_.Exception.Message -match 'already has SendAs rights') {{
-            #       Write-Host "SendAs já existia para $upn" -ForegroundColor Yellow
-            #     }} else {{ Write-Warning "Falha SendAs $upn: $($_.Exception.Message)" }}
-            #   }}
-            # }}
-            # 
-            # # 4) Validações de saída
-            # Write-Host "`n=== VALIDAÇÕES ===" -ForegroundColor Cyan 
-            # Write-Host "Mailbox:" -ForegroundColor Cyan 
-            # Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} | `
-            # Format-Table DisplayName,PrimarySmtpAddress,RecipientTypeDetails -AutoSize 
-            # 
-            # Write-Host "`nFullAccess:" -ForegroundColor Cyan 
-            # Get-MailboxPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} | 
-            #   Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
-            #   Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize 
-            # 
-            # Write-Host "nSendAs:" -ForegroundColor Cyan `
-            # Get-RecipientPermission -Identity {os.getenv('ORGANIZADOR_GRUPO')} | 
-            #   Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
-            #   Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize 
-            # 
-            # # 5) Desconectar
+
+            Write-Host "Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan
+
+            try {{
+                Add-MailboxPermission -Identity $sharedSmtp `
+                -User "{os.getenv('ORGANIZADOR_PARTICULAR')}" `
+                -AccessRights FullAccess `
+                -AutoMapping:$true `
+                -ErrorAction Stop
+                Write-Host "✓ FullAccess concedido" `
+                -ForegroundColor Green
+            }} catch {{
+                if ($_.Exception.Message -match 'already on the permission entry list') {{
+                    Write-Host "ℹ FullAccess já existia" -ForegroundColor Yellow
+                }} else {{ throw }}
+            }}
             
+            Write-Host "Concedendo SendAs a "{os.getenv('ORGANIZADOR_PARTICULAR')}" no shared $sharedSmtp ..." `
+            -ForegroundColor Cyan
+            try {{
+                Add-RecipientPermission -Identity $sharedSmtp `
+                -Trustee "{os.getenv('ORGANIZADOR_PARTICULAR')}" `
+                -AccessRights SendAs `
+                -ErrorAction Stop
+                Write-Host "✓ SendAs concedido" `
+                -ForegroundColor Green
+            }} catch {{
+                if ($_.Exception.Message -match 'already has SendAs rights') {{
+                    Write-Host "ℹ SendAs já existia" -ForegroundColor Yellow
+                }} else {{ throw }}
+            }}            
+            
+            # Validações rápidas
+            Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
+            Write-Host "FullAccess:" -ForegroundColor Cyan
+            Get-MailboxPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" |
+              Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} |
+              Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
+            
+            Write-Host "`nSendAs:" -ForegroundColor Cyan
+            Get-RecipientPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" |
+              Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} |
+              Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize
+
+
+            # 5) Desconectar
             Disconnect-ExchangeOnline -Confirm:$false
         """
 
