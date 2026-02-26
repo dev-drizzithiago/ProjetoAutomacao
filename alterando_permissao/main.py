@@ -79,7 +79,7 @@ class AlterarPermissaoReunioes:
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
 
-        comando_shell = rf"""\
+        comando_shell = rf"""
             # 1) Importa e conecta ao 365;
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
@@ -88,7 +88,7 @@ class AlterarPermissaoReunioes:
               -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
               -ShowBanner:$false;
             # ----------------------------------------------------------------------------------------------
-            # Funcionando
+            # Funcionando 
             
             # 2) Criar o mailbox compartilhado (se não existir);
             $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue           
@@ -112,31 +112,29 @@ class AlterarPermissaoReunioes:
                 throw "Defina ORGANIZADOR_GRUPO (shared SMTP) e USUARIO_TESTE (UPN)."
             }}
 
-            Write-Host "Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan
+            Write-Host "Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan 
 
             try {{
-                Add-MailboxPermission -Identity $sharedSmtp `
+                Add-MailboxPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" `
                 -User "{os.getenv('ORGANIZADOR_PARTICULAR')}" `
                 -AccessRights FullAccess `
                 -AutoMapping:$true `
                 -ErrorAction Stop
-                Write-Host "✓ FullAccess concedido" `
-                -ForegroundColor Green
+                Write-Host "✓ FullAccess concedido" -ForegroundColor Green
             }} catch {{
                 if ($_.Exception.Message -match 'already on the permission entry list') {{
                     Write-Host "ℹ FullAccess já existia" -ForegroundColor Yellow
                 }} else {{ throw }}
             }}
             
-            Write-Host "Concedendo SendAs a "{os.getenv('ORGANIZADOR_PARTICULAR')}" no shared $sharedSmtp ..." `
+            Write-Host "Concedendo SendAs a "{os.getenv('ORGANIZADOR_PARTICULAR')}" no shared $sharedSmtp..." `
             -ForegroundColor Cyan
             try {{
-                Add-RecipientPermission -Identity $sharedSmtp `
+                Add-RecipientPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" `
                 -Trustee "{os.getenv('ORGANIZADOR_PARTICULAR')}" `
                 -AccessRights SendAs `
                 -ErrorAction Stop
-                Write-Host "✓ SendAs concedido" `
-                -ForegroundColor Green
+                Write-Host "✓ SendAs concedido" -ForegroundColor Green
             }} catch {{
                 if ($_.Exception.Message -match 'already has SendAs rights') {{
                     Write-Host "ℹ SendAs já existia" -ForegroundColor Yellow
@@ -146,15 +144,14 @@ class AlterarPermissaoReunioes:
             # Validações rápidas
             Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
             Write-Host "FullAccess:" -ForegroundColor Cyan
-            Get-MailboxPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" |
-              Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} |
+            Get-MailboxPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" | 
+              Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
             
             Write-Host "`nSendAs:" -ForegroundColor Cyan
-            Get-RecipientPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" |
-              Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} |
+            Get-RecipientPermission -Identity "{os.getenv('ORGANIZADOR_GRUPO')}" | 
+              Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
               Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize
-
 
             # 5) Desconectar
             Disconnect-ExchangeOnline -Confirm:$false
