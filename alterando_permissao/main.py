@@ -92,9 +92,9 @@ class AlterarPermissaoReunioes:
 
             # 1) Importa e conecta ao 365;
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
-            Connect-ExchangeOnline -AppId $appID`
-              -Organization  $organizacao`
-              -CertificateFilePath  $pathCertificado`
+            Connect-ExchangeOnline -AppId $appID `
+              -Organization  $organizacao `
+              -CertificateFilePath  $pathCertificado `
               -CertificatePassword (ConvertTo-SecureString $passCertificado -AsPlainText -Force) `
               -ShowBanner:$false;
             # ----------------------------------------------------------------------------------------------
