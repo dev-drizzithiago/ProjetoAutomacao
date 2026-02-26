@@ -79,7 +79,8 @@ class AlterarPermissaoReunioes:
     def chamando_obj_conexao(self):
         self.init_conectar_exchange = ProcessoRun()
 
-        comando_shell = rf"""
+        comando_shell = rf"""\
+            # 1) Importa e conecta ao 365;
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
               -Organization '{os.getenv('Organization')}' `
