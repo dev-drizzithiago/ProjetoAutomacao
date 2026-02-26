@@ -95,14 +95,13 @@ class AlterarPermissaoReunioes:
             # Funcionando 
             
             # 2) Criar o mailbox compartilhado (se não existir);
-            $shared = Get-Mailbox -Identity {os.getenv('ORGANIZADOR_GRUPO')} -ErrorAction SilentlyContinue           
+            $shared = Get-Mailbox -Identity $sharedSmtp -ErrorAction SilentlyContinue           
             
             if (-not $shared) {{
-                Write-Host "Criando mailbox compartilhado {os.getenv('ORGANIZADOR_GRUPO')}" `
-                -ForegroundColor Cyan
-                New-Mailbox -Shared`
-                    -Name "{os.getenv('NOME_GRUPO')}"`
-                    -PrimarySmtpAddress $sharedSmtp`
+                Write-Host "Criando mailbox compartilhado $sharedSmtp" -ForegroundColor Cyan
+                New-Mailbox -Shared` 
+                    -Name "{os.getenv('NOME_GRUPO')}"` 
+                    -PrimarySmtpAddress $sharedSmtp` 
                     -ErrorAction Stop
             }} else {{
                 Write-Host ">> Mailbox compartilhado já existe: $sharedSmtp"`
@@ -119,13 +118,9 @@ class AlterarPermissaoReunioes:
             Write-Host "Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan 
 
             try {{
-                Add-MailboxPermission -Identity $sharedSmtp`
-                -User $usuario`
-                -AccessRights FullAccess`
-                -AutoMapping:$true`
-                -ErrorAction Stop
-                Write-Host "✓ FullAccess concedido"`
-                -ForegroundColor Green
+                Add-MailboxPermission -Identity $sharedSmtp `
+                -User $usuario -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
+                Write-Host "✓ FullAccess concedido" -ForegroundColor Green
             }} catch {{
                 if ($_.Exception.Message -match 'already on the permission entry list') {{
                     Write-Host "ℹ FullAccess já existia" -ForegroundColor Yellow
@@ -135,29 +130,26 @@ class AlterarPermissaoReunioes:
             Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp..." `
             -ForegroundColor Cyan
             try {{
-                Add-RecipientPermission -Identity $sharedSmtp`
-                -Trustee $usuario`
-                -AccessRights SendAs`
-                -ErrorAction Stop
-                Write-Host "✓ SendAs concedido"`
-                -ForegroundColor Green
+                Add-RecipientPermission -Identity $sharedSmtp `
+                -Trustee $usuario -AccessRights SendAs -ErrorAction Stop
+                Write-Host "✓ SendAs concedido" -ForegroundColor Green
             }} catch {{
                 if ($_.Exception.Message -match 'already has SendAs rights') {{
                     Write-Host "ℹ SendAs já existia" -ForegroundColor Yellow
                 }} else {{ throw }}
             }}            
             
-            # Validações rápidas
-            Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
-            Write-Host "FullAccess:" -ForegroundColor Cyan
-            Get-MailboxPermission -Identity $sharedSmtp | 
-              Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
-              Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
-            
-            Write-Host "`nSendAs:" -ForegroundColor Cyan
-            Get-RecipientPermission -Identity $sharedSmtp | 
-              Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
-              Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize
+            # # Validações rápidas
+            # Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
+            # Write-Host "FullAccess:" -ForegroundColor Cyan
+            # Get-MailboxPermission -Identity $sharedSmtp | 
+            #   Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
+            #   Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
+            # 
+            # Write-Host "`nSendAs:" -ForegroundColor Cyan
+            # Get-RecipientPermission -Identity $sharedSmtp | 
+            #   Where-Object {{ $_.Trustee -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
+            #   Select-Object Trustee,AccessRights,IsInherited | Format-Table -AutoSize
 
             # 5) Desconectar
             Disconnect-ExchangeOnline -Confirm:$false
