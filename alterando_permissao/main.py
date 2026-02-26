@@ -124,13 +124,13 @@ class AlterarPermissaoReunioes:
             # }} 
             
             Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp " -ForegroundColor Cyan
-            try {{
+            try {{ 
                 Add-RecipientPermission -Identity $sharedSmtp -Trustee $usuario -AccessRights SendAs -ErrorAction Stop
                 Write-Host "✓ SendAs concedido" -ForegroundColor Green
-            }} catch {{
-                if ($_.Exception.Message -match 'already has SendAs rights') {{
+            }} catch {{ 
+                if ($_.Exception.Message -match 'already has SendAs rights') {{ 
                     Write-Host "! SendAs já existia" -ForegroundColor Yellow
-                }} else {{ throw }}
+                }} else {{ throw }} 
             }} 
             
             # # Validações rápidas
