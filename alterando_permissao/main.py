@@ -134,11 +134,11 @@ class AlterarPermissaoReunioes:
             }} 
             
             # # Validações rápidas
-            # Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
-            # Write-Host "FullAccess:" -ForegroundColor Cyan
-            # Get-MailboxPermission -Identity $sharedSmtp | 
-            #   Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
-            #   Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
+            Write-Host "`n=== Validação de permissões no shared ===" -ForegroundColor Cyan
+            Write-Host "FullAccess:" -ForegroundColor Cyan
+            Get-MailboxPermission -Identity $sharedSmtp | 
+              Where-Object {{ $_.User -notlike 'NT AUTHORITY*' -and -not $_.IsInherited }} | 
+              Select-Object User,AccessRights,IsInherited | Format-Table -AutoSize
             # 
             # Write-Host "`nSendAs:" -ForegroundColor Cyan
             # Get-RecipientPermission -Identity $sharedSmtp | 
