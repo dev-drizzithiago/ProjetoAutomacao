@@ -100,20 +100,20 @@ class AlterarPermissaoReunioes:
                     -PrimarySmtpAddress "{os.getenv('ORGANIZADOR_GRUPO')}" `
                     -ErrorAction Stop
             }} else {{
-                Write-Host "=> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')}" `
+                Write-Host ">> Mailbox compartilhado já existe: {os.getenv('ORGANIZADOR_GRUPO')}" `
                 -ForegroundColor Yellow
             }}
 
             
-            # # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV;
-            # $members = @()
-            # if (Test-Path {os.getenv('PATH_MEMBER_CSV')}) {{
-            #   $members = Get-Content -Path {os.getenv('PATH_MEMBER_CSV')} | `
-            #   Where-Object {{ $_ -and $_.Trim() -ne '' }} | ForEach-Object {{ $_.Trim() }}
-            # }} else {{
-            #   Write-Warning "Arquivo de membros não encontrado em {os.getenv('PATH_MEMBER_CSV')}. `
-            #   Pule esta etapa ou atualize a variável."
-            # }}
+            # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV;
+            $members = @()
+            if (Test-Path {os.getenv('PATH_MEMBER_CSV')}) {{
+              $members = Get-Content -Path {os.getenv('PATH_MEMBER_CSV')} | `
+              Where-Object {{ $_ -and $_.Trim() -ne '' }} | ForEach-Object {{ $_.Trim() }}
+            }} else {{
+              Write-Warning "Arquivo de membros não encontrado em {os.getenv('PATH_MEMBER_CSV')}. `
+              Pule esta etapa ou atualize a variável."
+            }}
             # 
             # foreach ($upn in $members) {{
             #   try {{
