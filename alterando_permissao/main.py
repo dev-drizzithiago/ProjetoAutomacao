@@ -403,17 +403,15 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 3:
-
             print()
             print('Conceder permissão para um grupo Exchange')
             print('---' * 20)
             print()
+            
+            grupo = input('Digite o Grupo para adicionar: ')
 
-            # grupo = input('Digite o Grupo para adicionar: ')
-            # email = input('Conceder permissão para o e-mail: ')
-
-            grupo = 'gti-inovacao@segeticonsultoria.com'
-            email = 'thiago.pinheiro@segeticonsultoria.com'
+            print()
+            email = input('Conceder permissão para o e-mail: ')
 
             resultando_permissao = init_obj_calendar.concedendo_permissoes(grupo, email)
 
