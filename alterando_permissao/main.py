@@ -195,26 +195,27 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def concedendo_permissoes(self, grupo, email):
-        comando_shell = """
-         Write-Host ">> Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan 
+
+        comando_shell = rf"""
+         Write-Host ">> Concedendo FullAccess a {email} no shared $sharedSmtp ..." -ForegroundColor Cyan 
             try {{
-                Add-MailboxPermission -Identity $sharedSmtp `
-                -User $usuario -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop 
+                Add-MailboxPermission -Identity {grupo} `
+                -User {email} -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
                 Write-Host "✓ FullAccess concedido" -ForegroundColor Green 
             }} catch {{
                 if ($_.Exception.Message -match 'already on the permission entry list') {{
-                    Write-Host "! FullAccess existe para o usuario: $usuario" -ForegroundColor Yellow
+                    Write-Host "! FullAccess existe para o usuario: {email}" -ForegroundColor Yellow
                 }} else {{ throw }}
             }} 
             
-            Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp " -ForegroundColor Cyan;
+            Write-Host "Concedendo SendAs a {email} no shared {grupo} " -ForegroundColor Cyan;
             try {{ 
-                Add-RecipientPermission -Identity $sharedSmtp -Trustee $usuario `
+                Add-RecipientPermission -Identity {grupo} -Trustee {email} `
                   -AccessRights SendAs -Confirm:$false -ErrorAction Stop
                 Write-Host "✓ SendAs concedido" -ForegroundColor Green
             }} catch {{ 
                 if ($_.Exception.Message -match 'already has SendAs rights') {{ 
-                    Write-Host "! SendAs existe o usuário: $usuario" -ForegroundColor Yellow
+                    Write-Host "! SendAs existe o usuário: {email}" -ForegroundColor Yellow
                 }} else {{ throw }} 
             }}
         """
