@@ -76,13 +76,13 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
-    def chamando_obj_conexao(self):
+    def chamando_obj_conexao(self, nome_grupo, email_permissao):
         self.init_conectar_exchange = ProcessoRun()
 
         comando_shell = rf"""        
         
-            $sharedSmtp = "{os.getenv('ORGANIZADOR_GRUPO')}"
-            $usuario = "{os.getenv('ORGANIZADOR_TESTE')}"
+            $sharedSmtp = "{nome_grupo}"
+            $usuario = "{email_permissao}"
 
             # 1) Importa e conecta ao 365;
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
@@ -170,22 +170,58 @@ class AlterarPermissaoReunioes:
         # Funcionando
         # ----------------------------------------------------------------------------------------------
         
-        # Permissões de mailbox (EXO V3)
-        Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com"\
+        # Permissões de mailbox (EXO V3)\
         
-        #   Where-Object {{
-        #     -not $_.IsInherited -and
-        #     $_.User -notlike 'NT AUTHORITY*' -and
-        #     $_.User -ne 'S-1-5-32-544' -and     # (Administrators local) opcional
-        #     $_.User -ne 'SELF'
-        #   }} |
+        $teste = Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com"
+        $teste.User
+        
+        # Where-Object {{
+        #   -not $_.IsInherited -and
+        #   $_.User -notlike 'NT AUTHORITY*' -and
+        #   $_.User -ne 'S-1-5-32-544' -and     # (Administrators local) opcional
+        #   $_.User -ne 'SELF'
+        # }} |
         #   Select-Object User, AccessRights, Deny, IsInherited |
         #   Sort-Object User |
-        #   Format-Table -AutoSize """
+        #   Format-Table -AutoSize 
+        
+        """
 
         resultado = self.init_conectar_exchange.run_spinner(
             str(comando_shell).strip(),
             'Verificando permissão ao office 365... '
+        )
+
+        return resultado
+
+    def concedendo_permissoes(self, grupo, email):
+        comando_shell = """
+         Write-Host ">> Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan 
+            try {{
+                Add-MailboxPermission -Identity $sharedSmtp `
+                -User $usuario -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop 
+                Write-Host "✓ FullAccess concedido" -ForegroundColor Green 
+            }} catch {{
+                if ($_.Exception.Message -match 'already on the permission entry list') {{
+                    Write-Host "! FullAccess existe para o usuario: $usuario" -ForegroundColor Yellow
+                }} else {{ throw }}
+            }} 
+            
+            Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp " -ForegroundColor Cyan;
+            try {{ 
+                Add-RecipientPermission -Identity $sharedSmtp -Trustee $usuario `
+                  -AccessRights SendAs -Confirm:$false -ErrorAction Stop
+                Write-Host "✓ SendAs concedido" -ForegroundColor Green
+            }} catch {{ 
+                if ($_.Exception.Message -match 'already has SendAs rights') {{ 
+                    Write-Host "! SendAs existe o usuário: $usuario" -ForegroundColor Yellow
+                }} else {{ throw }} 
+            }}
+        """
+
+        resultado = self.init_conectar_exchange.run_spinner(
+            str(comando_shell).strip(),
+            f'Atribuindo permissão ao grupo {grupo}... '
         )
 
         return resultado
@@ -324,7 +360,16 @@ if __name__ == '__main__':
             continue
 
         if resposta == 1:
-            resultando_conexao = init_obj_calendar.chamando_obj_conexao()
+            print()
+            print('Criar e conceder permissão para novo grupo Exchange')
+            print('---' * 20)
+            print()
+
+            grupo = input('Digite o Grupo para adicionar: ')
+            email = input('Conceder permissão para o e-mail: ')
+
+            resultando_conexao = init_obj_calendar.chamando_obj_conexao(grupo, email)
+
             for item in resultando_conexao:
                 print(item)
 
