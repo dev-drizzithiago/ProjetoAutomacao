@@ -196,6 +196,10 @@ class AlterarPermissaoReunioes:
             'Verificando permissão ao office 365... '
         )
 
+        saida_json = json.loads(resultado)
+
+        print(resultado)
+
         return resultado
 
     def concedendo_permissoes(self, nome_grupo, email_permissao):
@@ -393,10 +397,7 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
-            resultando_permissao = json.loads(init_obj_calendar.verificando_permissoes())
-
-            print(type(resultando_permissao[1]), resultando_permissao[1])
-
+            resultando_permissao = init_obj_calendar.verificando_permissoes()
 
         elif resposta == 3:
             print()
