@@ -376,6 +376,7 @@ if __name__ == '__main__':
 
         elif resposta == 2:
             resultando_permissao = init_obj_calendar.verificando_permissoes()
+            print(type(resultando_permissao))
             print(resultando_permissao)
 
         elif resposta == 3:
