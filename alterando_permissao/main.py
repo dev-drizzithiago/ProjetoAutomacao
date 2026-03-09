@@ -196,7 +196,19 @@ class AlterarPermissaoReunioes:
 
     def concedendo_permissoes(self, grupo, email):
 
-        comando_shell = rf"""
+        comando_shell = rf"""\
+        
+        # 1) Importa e conecta ao 365;
+        
+        Import-Module ExchangeOnlineManagement -ErrorAction Stop;
+        Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+          -Organization '{os.getenv('Organization')}' `
+          -CertificateFilePath '{os.getenv('PATH_CERTIFICADO')}' `
+          -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
+          -ShowBanner:$false;
+        # ----------------------------------------------------------------------------------------------
+        # Funcionando
+            
          Write-Host ">> Concedendo FullAccess a {email} no shared $sharedSmtp ..." -ForegroundColor Cyan 
             try {{
                 Add-MailboxPermission -Identity {grupo} `
@@ -346,9 +358,10 @@ if __name__ == '__main__':
         print(
             '[1] Conceder Permissão\n'
             '[2] Verificar permissões\n'
-            '[3] Verificar Modulo\n'
-            '[4] Analisar ThumpPrint\n'
-            '[5] Criar novo Certificado\n'
+            '[3] Conceder permissões\n'
+            '[] Verificar Modulo\n'
+            '[] Analisar ThumpPrint\n'
+            '[] Criar novo Certificado\n'
             '[0] Sair\n'
         )
         print('---' * 20)
@@ -380,9 +393,21 @@ if __name__ == '__main__':
             print(resultando_permissao)
 
         elif resposta == 3:
-            resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
-            for item in resultando_thumbprint:
-                print(item)
+
+            print()
+            print('Conceder permissão para um grupo Exchange')
+            print('---' * 20)
+            print()
+
+            # grupo = input('Digite o Grupo para adicionar: ')
+            # email = input('Conceder permissão para o e-mail: ')
+
+            grupo = 'gti-inovacao@segeticonsultoria.com'
+            email = 'thiago.pinheiro@segeticonsultoria.com'
+
+            resultando_permissao = init_obj_calendar.concedendo_permissoes(grupo, email)
+
+            print(resultando_permissao)
 
         elif resposta == 4:
             init_obj_calendar.criar_novo_certificado()
