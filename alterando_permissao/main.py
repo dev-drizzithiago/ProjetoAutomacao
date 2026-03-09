@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from os import getenv
 import os
+import json
 
 from conectando_exechange_online import ProcessoRun
 from gerar_certificado_microsoft import GerarCertificado
@@ -392,7 +393,7 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
-            resultando_permissao = init_obj_calendar.verificando_permissoes()
+            resultando_permissao = json.loads(init_obj_calendar.verificando_permissoes())
 
             print(type(resultando_permissao[1]), resultando_permissao[1])
 
