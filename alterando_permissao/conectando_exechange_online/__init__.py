@@ -1,4 +1,5 @@
 from subprocess import run
+import json
 import itertools
 from time import sleep
 from threading import Event, Thread
@@ -15,7 +16,8 @@ class ProcessoRun:
             capture_output=True
         )
         ok = (resultado_processo.returncode == 0)
-        return ok, resultado_processo.stdout, resultado_processo.stderr
+        saida_json = json.loads(resultado_processo.stdout)
+        return ok, saida_json, resultado_processo.stderr
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
