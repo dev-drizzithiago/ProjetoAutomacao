@@ -364,9 +364,9 @@ if __name__ == '__main__':
             '[1] Conceder Permissão\n'
             '[2] Verificar permissões\n'
             '[3] Conceder permissões\n'
-            '[] Verificar Modulo\n'
-            '[] Analisar ThumpPrint\n'
-            '[] Criar novo Certificado\n'
+            # '[] Verificar Modulo\n'
+            # '[] Analisar ThumpPrint\n'
+            # '[] Criar novo Certificado\n'
             '[0] Sair\n'
         )
         print('---' * 20)
