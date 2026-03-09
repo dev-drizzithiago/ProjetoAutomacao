@@ -175,13 +175,16 @@ class AlterarPermissaoReunioes:
         # Permissões de 'FullAccess' (quem pode enviar como o mailbox)     
         $fullAccess = Get-MailboxPermission -Identity $shared |
           Where-Object {{ -not $_.IsInherited -and $_.User -notlike 'NT AUTHORITY*' -and $_.User -ne 'SELF' }} |
-          Select-Object @{{n='Principal';e={{$_.User}}}}, @{{n='Access';e={'FullAccess'}}}, Deny, IsInherited
+          Select-Object @{{n='Principal';e={{$_.User}}}}, `
+          @{{n='Access';e={'FullAccess'}}}, Deny, IsInherited
 
         
         # Permissões de "Send As" (quem pode enviar como o mailbox)        
         $sendAs = Get-RecipientPermission -Identity "gti.inovacao@segeticonsultoria.com" |
           Where-Object {{ -not $_.IsInherited -and $_.Trustee -notlike 'NT AUTHORITY*' }} |
-          Select-Object @{{n='Principal';e={{$_.Trustee}}}}, @{{n='Access';e={'SendAs'}}}, @{{n='Deny';e={{$false}}}}, IsInherited
+          Select-Object @{{n='Principal';e={{$_.Trustee}}}}, `
+          @{{n='Access';e={'SendAs'}}}, `
+          @{{n='Deny';e={{$false}}}}, IsInherited
         $both = @(); $both += $fullAccess; $both += $sendAs
         $both | ConvertTo-Json -Depth 4
 
@@ -391,7 +394,7 @@ if __name__ == '__main__':
         elif resposta == 2:
             resultando_permissao = init_obj_calendar.verificando_permissoes()
 
-            print(type(resultando_permissao), resultando_permissao)
+            print(type(resultando_permissao[1]), resultando_permissao[1])
 
 
         elif resposta == 3:
