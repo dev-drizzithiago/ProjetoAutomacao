@@ -207,29 +207,28 @@ class AlterarPermissaoReunioes:
           -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
           -ShowBanner:$false;
         # ----------------------------------------------------------------------------------------------
-        # Funcionando
             
-         Write-Host ">> Concedendo FullAccess a {email} no shared $sharedSmtp ..." -ForegroundColor Cyan 
-            try {{
-                Add-MailboxPermission -Identity {grupo} `
-                -User {email} -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
-                Write-Host "✓ FullAccess concedido" -ForegroundColor Green 
-            }} catch {{
-                if ($_.Exception.Message -match 'already on the permission entry list') {{
-                    Write-Host "! FullAccess existe para o usuario: {email}" -ForegroundColor Yellow
-                }} else {{ throw }}
-            }} 
-            
-            Write-Host "Concedendo SendAs a {email} no shared {grupo} " -ForegroundColor Cyan;
-            try {{ 
-                Add-RecipientPermission -Identity {grupo} -Trustee {email} `
-                  -AccessRights SendAs -Confirm:$false -ErrorAction Stop
-                Write-Host "✓ SendAs concedido" -ForegroundColor Green
-            }} catch {{ 
-                if ($_.Exception.Message -match 'already has SendAs rights') {{ 
-                    Write-Host "! SendAs existe o usuário: {email}" -ForegroundColor Yellow
-                }} else {{ throw }} 
-            }}
+        Write-Host ">> Concedendo FullAccess a {email} no shared $sharedSmtp ..." -ForegroundColor Cyan 
+        try {{
+            Add-MailboxPermission -Identity {grupo} `
+            -User {email} -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
+            Write-Host "✓ FullAccess concedido" -ForegroundColor Green 
+        }} catch {{
+            if ($_.Exception.Message -match 'already on the permission entry list') {{
+                Write-Host "! FullAccess existe para o usuario: {email}" -ForegroundColor Yellow
+            }} else {{ throw }}
+        }} 
+        
+        Write-Host "Concedendo SendAs a {email} no shared {grupo} " -ForegroundColor Cyan;
+        try {{ 
+            Add-RecipientPermission -Identity {grupo} -Trustee {email} `
+              -AccessRights SendAs -Confirm:$false -ErrorAction Stop
+            Write-Host "✓ SendAs concedido" -ForegroundColor Green
+        }} catch {{ 
+            if ($_.Exception.Message -match 'already has SendAs rights') {{ 
+                Write-Host "! SendAs existe o usuário: {email}" -ForegroundColor Yellow
+            }} else {{ throw }} 
+        }}
         """
 
         resultado = self.init_conectar_exchange.run_spinner(
