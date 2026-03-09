@@ -158,6 +158,7 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def verificando_permissoes(self):
+
         comando_shell = rf"""
         Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
@@ -167,7 +168,26 @@ class AlterarPermissaoReunioes:
               -ShowBanner:$false; 
               
         # Funcionando
-        # ----------------------------------------------------------------------------------------------"""
+        # ----------------------------------------------------------------------------------------------
+        
+        # Permissões de mailbox (EXO V3)
+        $dadoPermissao = Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com"
+        #   Where-Object {{
+        #     -not $_.IsInherited -and
+        #     $_.User -notlike 'NT AUTHORITY*' -and
+        #     $_.User -ne 'S-1-5-32-544' -and     # (Administrators local) opcional
+        #     $_.User -ne 'SELF'
+        #   }} |
+        #   Select-Object User, AccessRights, Deny, IsInherited |
+        #   Sort-Object User |
+        #   Format-Table -AutoSize """
+
+        resultado = self.init_conectar_exchange.run_spinner(
+            str(comando_shell).strip(),
+            'Verificando permissão ao office 365... '
+        )
+
+        return resultado
 
     def _instalando_modulo(self):
         comando_shell = rf"Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"
@@ -286,10 +306,11 @@ if __name__ == '__main__':
     while True:
         print()
         print(
-            '[1] Conectar\n'
-            '[2] Verificar Modulo\n'
-            '[3] Analisar ThumpPrint\n'
-            '[4] Criar novo Certificado\n'
+            '[1] Conceder Permissão\n'
+            '[2] Verificar permissões\n'
+            '[3] Verificar Modulo\n'
+            '[4] Analisar ThumpPrint\n'
+            '[5] Criar novo Certificado\n'
             '[0] Sair\n'
         )
         print('---' * 20)
@@ -307,10 +328,8 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
-            resultando_modulo = init_obj_calendar.verificando_modulo()
-            response = init_obj_calendar.parse_json(resultando_modulo)
-            for item in response:
-                print(item)
+            resultando_permissao = init_obj_calendar.verificando_permissoes()
+            print(resultando_permissao)
 
         elif resposta == 3:
             resultando_thumbprint = init_obj_calendar.analisando_thumbprint()
