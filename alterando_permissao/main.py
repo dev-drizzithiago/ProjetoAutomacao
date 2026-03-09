@@ -173,19 +173,19 @@ class AlterarPermissaoReunioes:
         
         # Permissões de mailbox (EXO V3)\        
         
-        # Permissões de 'FullAccess' (quem pode enviar como o mailbox)     
-        $fullAccess = Get-MailboxPermission -Identity $shared |
-          Where-Object {{ -not $_.IsInherited -and $_.User -notlike 'NT AUTHORITY*' -and $_.User -ne 'SELF' }} |
+        # Permissões de 'FullAccess' (quem pode enviar como o mailbox) 
+        $fullAccess = Get-MailboxPermission -Identity $shared | 
+          Where-Object {{ -not $_.IsInherited -and $_.User -notlike 'NT AUTHORITY*' -and $_.User -ne 'SELF' }} | 
           Select-Object @{{n='Principal';e={{$_.User}}}}, `
-          @{{n='Access';e={'FullAccess'}}}, Deny, IsInherited
-
+          @{{n='Access';e={'FullAccess'}}}, Deny, IsInherited 
         
         # Permissões de "Send As" (quem pode enviar como o mailbox)        
-        $sendAs = Get-RecipientPermission -Identity "gti.inovacao@segeticonsultoria.com" |
-          Where-Object {{ -not $_.IsInherited -and $_.Trustee -notlike 'NT AUTHORITY*' }} |
+        $sendAs = Get-RecipientPermission -Identity "gti.inovacao@segeticonsultoria.com" | 
+          Where-Object {{ -not $_.IsInherited -and $_.Trustee -notlike 'NT AUTHORITY*' }} | 
           Select-Object @{{n='Principal';e={{$_.Trustee}}}}, `
           @{{n='Access';e={'SendAs'}}}, `
-          @{{n='Deny';e={{$false}}}}, IsInherited
+          @{{n='Deny';e={{$false}}}}, IsInherited 
+          
         $both = @(); $both += $fullAccess; $both += $sendAs
         $both | ConvertTo-Json -Depth 4
 
@@ -198,7 +198,7 @@ class AlterarPermissaoReunioes:
 
         saida_json = json.loads(resultado)
 
-        print(resultado)
+        print(saida_json)
 
         return resultado
 
