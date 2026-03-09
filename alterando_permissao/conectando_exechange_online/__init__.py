@@ -10,9 +10,15 @@ class ProcessoRun:
         -ExecutionPolicy Bypass previne bloqueios de execução em ambientes mais restritivos.
         """
         resultado_processo = run(
-            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando_shell],
-            text=True,
-            capture_output=True
+            [
+                "powershell",
+                "-NoProfile",
+                "NonInteractive",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                comando_shell
+            ], text=True, capture_output=True
         )
         ok = (resultado_processo.returncode == 0)
         return ok, resultado_processo.stdout, resultado_processo.stderr
