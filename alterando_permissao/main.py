@@ -172,19 +172,27 @@ class AlterarPermissaoReunioes:
         
         # Permissões de mailbox (EXO V3)\
         
-        $teste = Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com"
-        $teste.User
+        Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com" | 
+            Where-Object {{
+              -not $_.IsInherited -and
+              $_.User -notlike 'NT AUTHORITY*' -and
+              $_.User -ne 'S-1-5-32-544' -and     # (Administrators local) opcional
+              $_.User -ne 'SELF'
+            }} |
+          Select-Object User, AccessRights, Deny, IsInherited |
+          Sort-Object User |
+          Format-Table -AutoSize 
         
-        # Where-Object {{
-        #   -not $_.IsInherited -and
-        #   $_.User -notlike 'NT AUTHORITY*' -and
-        #   $_.User -ne 'S-1-5-32-544' -and     # (Administrators local) opcional
-        #   $_.User -ne 'SELF'
-        # }} |
-        #   Select-Object User, AccessRights, Deny, IsInherited |
-        #   Sort-Object User |
-        #   Format-Table -AutoSize 
-        
+        # Permissões de "Send As" (quem pode enviar como o mailbox)
+        Get-RecipientPermission -Identity "gti.inovacao@segeticonsultoria.com" |
+            Where-Object {{
+              -not $_.IsInherited -and
+              $_.Trustee -notlike 'NT AUTHORITY*'
+            }} |
+            Select-Object Trustee, AccessRights, IsInherited |
+            Sort-Object Trustee |
+            Format-Table -AutoSize
+
         """
 
         resultado = self.init_conectar_exchange.run_spinner(
@@ -390,8 +398,9 @@ if __name__ == '__main__':
 
         elif resposta == 2:
             resultando_permissao = init_obj_calendar.verificando_permissoes()
-            print(type(resultando_permissao))
-            print(resultando_permissao)
+
+            for item in resultando_permissao:
+                print(item)
 
         elif resposta == 3:
 
