@@ -170,28 +170,20 @@ class AlterarPermissaoReunioes:
         # Funcionando
         # ----------------------------------------------------------------------------------------------
         
-        # Permissões de mailbox (EXO V3)\
+        # Permissões de mailbox (EXO V3)\        
         
-        Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com" | 
-            Where-Object {{
-              -not $_.IsInherited -and
-              $_.User -notlike 'NT AUTHORITY*' -and
-              $_.User -ne 'S-1-5-32-544' -and     # (Administrators local) opcional
-              $_.User -ne 'SELF'
-            }} |
-          Select-Object User, AccessRights, Deny, IsInherited |
-          Sort-Object User |
-          Format-Table -AutoSize 
+        # Permissões de 'FullAccess' (quem pode enviar como o mailbox)     
+        $fullAccess = Get-MailboxPermission -Identity $shared |
+          Where-Object {{ -not $_.IsInherited -and $_.User -notlike 'NT AUTHORITY*' -and $_.User -ne 'SELF' }} |
+          Select-Object @{{n='Principal';e={{$_.User}}}}, @{{n='Access';e={'FullAccess'}}}, Deny, IsInherited
+
         
-        # Permissões de "Send As" (quem pode enviar como o mailbox)
-        Get-RecipientPermission -Identity "gti.inovacao@segeticonsultoria.com" |
-            Where-Object {{
-              -not $_.IsInherited -and
-              $_.Trustee -notlike 'NT AUTHORITY*'
-            }} |
-            Select-Object Trustee, AccessRights, IsInherited |
-            Sort-Object Trustee |
-            Format-Table -AutoSize
+        # Permissões de "Send As" (quem pode enviar como o mailbox)        
+        $sendAs = Get-RecipientPermission -Identity "gti.inovacao@segeticonsultoria.com" |
+          Where-Object {{ -not $_.IsInherited -and $_.Trustee -notlike 'NT AUTHORITY*' }} |
+          Select-Object @{{n='Principal';e={{$_.Trustee}}}}, @{{n='Access';e={'SendAs'}}}, @{{n='Deny';e={{$false}}}}, IsInherited
+        $both = @(); $both += $fullAccess; $both += $sendAs
+        $both | ConvertTo-Json -Depth 4
 
         """
 
@@ -399,15 +391,15 @@ if __name__ == '__main__':
         elif resposta == 2:
             resultando_permissao = init_obj_calendar.verificando_permissoes()
 
-            for item in resultando_permissao:
-                print(item)
+            print(type(resultando_permissao), resultando_permissao)
+
 
         elif resposta == 3:
             print()
             print('Conceder permissão para um grupo Exchange')
             print('---' * 20)
             print()
-            
+
             grupo = input('Digite o Grupo para adicionar: ')
 
             print()
