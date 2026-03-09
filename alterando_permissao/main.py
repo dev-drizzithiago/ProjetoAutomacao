@@ -194,11 +194,13 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
-    def concedendo_permissoes(self, grupo, email):
+    def concedendo_permissoes(self, nome_grupo, email_permissao):
 
-        comando_shell = rf"""\
-        
+        comando_shell = rf"""
         # 1) Importa e conecta ao 365;
+        
+        $sharedSmtp = "{nome_grupo}"
+        $usuario = "{email_permissao}"
         
         Import-Module ExchangeOnlineManagement -ErrorAction Stop;
         Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
@@ -208,27 +210,27 @@ class AlterarPermissaoReunioes:
           -ShowBanner:$false;
         # ----------------------------------------------------------------------------------------------
             
-        Write-Host ">> Concedendo FullAccess a {email} no shared $sharedSmtp ..." -ForegroundColor Cyan 
+        Write-Host ">> Concedendo FullAccess a $usuario no shared $sharedSmtp ..." -ForegroundColor Cyan 
         try {{
-            Add-MailboxPermission -Identity "{grupo}" `
-            -User "{email}" -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop
+            Add-MailboxPermission -Identity $sharedSmtp `
+            -User $usuario -AccessRights FullAccess -AutoMapping:$true -ErrorAction Stop 
             Write-Host "✓ FullAccess concedido" -ForegroundColor Green 
         }} catch {{
             if ($_.Exception.Message -match 'already on the permission entry list') {{
-                Write-Host "! FullAccess existe para o usuario: {email}" -ForegroundColor Yellow
+                Write-Host "! FullAccess existe para o usuario: $usuario" -ForegroundColor Yellow
             }} else {{ throw }}
         }} 
         
-        Write-Host "Concedendo SendAs a {email} no shared {grupo} " -ForegroundColor Cyan;
+        Write-Host "Concedendo SendAs a $usuario no shared $sharedSmtp " -ForegroundColor Cyan;
         try {{ 
-            Add-RecipientPermission -Identity "{grupo}" -Trustee "{email}" `
+            Add-RecipientPermission -Identity $sharedSmtp -Trustee $usuario `
               -AccessRights SendAs -Confirm:$false -ErrorAction Stop
             Write-Host "✓ SendAs concedido" -ForegroundColor Green
         }} catch {{ 
             if ($_.Exception.Message -match 'already has SendAs rights') {{ 
-                Write-Host "! SendAs existe o usuário: {email}" -ForegroundColor Yellow
+                Write-Host "! SendAs existe o usuário: $usuario" -ForegroundColor Yellow
             }} else {{ throw }} 
-        }}
+        }} 
         """
 
         resultado = self.init_conectar_exchange.run_spinner(
@@ -407,6 +409,9 @@ if __name__ == '__main__':
             resultando_permissao = init_obj_calendar.concedendo_permissoes(grupo, email)
 
             print(resultando_permissao)
+
+            for item in resultando_permissao:
+                print(item)
 
         elif resposta == 4:
             init_obj_calendar.criar_novo_certificado()
