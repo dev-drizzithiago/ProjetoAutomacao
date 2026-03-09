@@ -157,6 +157,18 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
+    def verificando_permissoes(self):
+        comando_shell = rf"""
+        Import-Module ExchangeOnlineManagement -ErrorAction Stop;
+            Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+              -Organization '{os.getenv('Organization')}' `
+              -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
+              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
+              -ShowBanner:$false; 
+              
+        # Funcionando
+        # ----------------------------------------------------------------------------------------------"""
+
     def _instalando_modulo(self):
         comando_shell = rf"Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
