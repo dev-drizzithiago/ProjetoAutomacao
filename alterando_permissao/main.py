@@ -171,7 +171,8 @@ class AlterarPermissaoReunioes:
         # ----------------------------------------------------------------------------------------------
         
         # Permissões de mailbox (EXO V3)
-        $dadoPermissao = Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com"
+        Get-MailboxPermission -Identity "gti.inovacao@segeticonsultoria.com"\
+        
         #   Where-Object {{
         #     -not $_.IsInherited -and
         #     $_.User -notlike 'NT AUTHORITY*' -and
