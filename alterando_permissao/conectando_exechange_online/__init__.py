@@ -42,19 +42,12 @@ class ProcessoRun:
         try:
             ok, stdout, stderr = self._run_processo_powershell(comando_str)
 
-            print(ok)
-            print(stdout)
-            print(stderr)
-
             if not ok:
                 # Você pode logar o stderr e lançar exceção, se preferir
                 raise RuntimeError(f"Falha PowerShell: {stderr.strip()}")
 
             return stdout
+
         finally:
             stop_event.set()
             _thread.join()
-
-if __name__ == '__main__':
-    init_obj_conexao_exchange_online = ProcessoRun()
-    init_obj_conexao_exchange_online.run_spinner('thiago', '123')
