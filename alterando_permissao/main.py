@@ -158,13 +158,13 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
-    def verificando_permissoes(self, grupo, email):
+    def verificando_permissoes(self, grupo_pesquisa: str):
 
-        comando_shell = rf"""\
+        comando_shell = rf"""
         
-        $sharedSmtp = {grupo}
+        $sharedSmtp = "{grupo_pesquisa}"
         
-        Import-Module ExchangeOnlineManagement -ErrorAction Stop;
+        Import-Module ExchangeOnlineManagement -ErrorAction Stop; 
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
               -Organization '{os.getenv('Organization')}' `
               -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
@@ -174,34 +174,33 @@ class AlterarPermissaoReunioes:
         # Funcionando
         # ----------------------------------------------------------------------------------------------
         
-        # Permissões de mailbox (EXO V3)\        
+        # Permissões de mailbox (EXO V3)
         
         # Permissões de 'FullAccess' (quem pode enviar como o mailbox) 
-        $fullAccess = Get-MailboxPermission -Identity $sharedSmtp |  
+        $fullAccess = Get-MailboxPermission -Identity $sharedSmtp | 
           Where-Object {{ -not $_.IsInherited -and $_.User -notlike 'NT AUTHORITY*' -and $_.User -ne 'SELF' }} | 
-          Select-Object @{{n='Principal';e={{$_.User}}}}, `
-          @{{n='Access';e={'FullAccess'}}}, Deny, IsInherited 
+          Select-Object @{{ n='Principal';e={{$_.User}} }}, @{{n='Access';e={{'FullAccess'}} }}, Deny, IsInherited 
         
-        # Permissões de "Send As" (quem pode enviar como o mailbox)        
+        # Permissões de "Send As" (quem pode enviar como o mailbox) 
         $sendAs = Get-RecipientPermission -Identity $sharedSmtp | 
           Where-Object {{ -not $_.IsInherited -and $_.Trustee -notlike 'NT AUTHORITY*' }} | 
-          Select-Object @{{n='Principal';e={{$_.Trustee}}}}, `
-          @{{n='Access';e={'SendAs'}}}, `
-          @{{n='Deny';e={{$false}}}}, IsInherited 
+          Select-Object @{{ n='Principal';e={{$_.Trustee}} }}, @{{n='Access';e={{'SendAs'}} }}, `
+          @{{ n='Deny';e={{$false}} }}, IsInherited 
           
         $both = @(); $both += $fullAccess; $both += $sendAs
         $both | ConvertTo-Json -Depth 4
-
+        
+        Disconnect-ExchangeOnline -Confirm:$false | Out-Null
         """
 
         resultado = self.init_conectar_exchange.run_spinner(
             str(comando_shell).strip(),
             'Verificando permissão ao office 365... '
         )
-        print(resultado)
 
-        # saida_json = json.loads(resultado)
-        # return saida_json
+        saida_json = json.loads(resultado)
+
+        return saida_json
 
     def concedendo_permissoes(self, nome_grupo, email_permissao):
 
@@ -398,7 +397,15 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
-            resultando_permissao = init_obj_calendar.verificando_permissoes(os.getenv('CALENDARIO_GRUPO'), '')
+
+            print()
+            print('Criar e conceder permissão para novo grupo Exchange')
+            print('---' * 20)
+            print()
+
+            grupo_pesquisa = input('Digite o Grupo para pesquisa: ')
+            resultando_permissao = init_obj_calendar.verificando_permissoes(grupo_pesquisa)
+            print(resultando_permissao)
 
         elif resposta == 3:
             print()
