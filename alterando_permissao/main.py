@@ -158,9 +158,12 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
-    def verificando_permissoes(self):
+    def verificando_permissoes(self, grupo, email):
 
-        comando_shell = rf"""
+        comando_shell = rf"""\
+        
+        $sharedSmtp = {grupo}
+        
         Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
               -Organization '{os.getenv('Organization')}' `
@@ -174,13 +177,13 @@ class AlterarPermissaoReunioes:
         # Permissões de mailbox (EXO V3)\        
         
         # Permissões de 'FullAccess' (quem pode enviar como o mailbox) 
-        $fullAccess = Get-MailboxPermission -Identity $shared | 
+        $fullAccess = Get-MailboxPermission -Identity $sharedSmtp |  
           Where-Object {{ -not $_.IsInherited -and $_.User -notlike 'NT AUTHORITY*' -and $_.User -ne 'SELF' }} | 
           Select-Object @{{n='Principal';e={{$_.User}}}}, `
           @{{n='Access';e={'FullAccess'}}}, Deny, IsInherited 
         
         # Permissões de "Send As" (quem pode enviar como o mailbox)        
-        $sendAs = Get-RecipientPermission -Identity "gti.inovacao@segeticonsultoria.com" | 
+        $sendAs = Get-RecipientPermission -Identity $sharedSmtp | 
           Where-Object {{ -not $_.IsInherited -and $_.Trustee -notlike 'NT AUTHORITY*' }} | 
           Select-Object @{{n='Principal';e={{$_.Trustee}}}}, `
           @{{n='Access';e={'SendAs'}}}, `
@@ -195,12 +198,10 @@ class AlterarPermissaoReunioes:
             str(comando_shell).strip(),
             'Verificando permissão ao office 365... '
         )
+        print(resultado)
 
-        saida_json = json.loads(resultado)
-
-        print(saida_json)
-
-        return resultado
+        # saida_json = json.loads(resultado)
+        # return saida_json
 
     def concedendo_permissoes(self, nome_grupo, email_permissao):
 
@@ -397,7 +398,7 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
-            resultando_permissao = init_obj_calendar.verificando_permissoes()
+            resultando_permissao = init_obj_calendar.verificando_permissoes(os.getenv('CALENDARIO_GRUPO'), '')
 
         elif resposta == 3:
             print()
