@@ -38,9 +38,19 @@ class ProcessoRun:
         stop_event = Event()
         _thread = Thread(target=self._spinner, args=(stop_event, texto_spinner), daemon=True)
         _thread.start()
+
         try:
-            result = self._run_processo_powershell(comando_str)
-            return result
+            ok, stdout, stderr = self._run_processo_powershell(comando_str)
+
+            print(ok)
+            print(stdout)
+            print(stderr)
+
+            if not ok:
+                # Você pode logar o stderr e lançar exceção, se preferir
+                raise RuntimeError(f"Falha PowerShell: {stderr.strip()}")
+
+            return stdout
         finally:
             stop_event.set()
             _thread.join()
