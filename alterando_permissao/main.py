@@ -3,6 +3,8 @@ from os import getenv
 import os
 import json
 
+from pprint import pprint
+
 from conectando_exechange_online import ProcessoRun
 from gerar_certificado_microsoft import GerarCertificado
 
