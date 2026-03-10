@@ -7,6 +7,7 @@ class ProcessoRun:
     def _run_processo_powershell(self, comando_shell):
         """
         -NoProfile ajuda a evitar que perfis do PowerShell alterem o comportamento.
+        -NonInteractive evita prompts.
         -ExecutionPolicy Bypass previne bloqueios de execução em ambientes mais restritivos.
         """
         resultado_processo = run(
@@ -15,8 +16,7 @@ class ProcessoRun:
                 "-NoProfile",
                 "-NonInteractive",
                 "-ExecutionPolicy",
-                "Bypass",
-                "-Command",
+                "Bypass", "-Command",
                 comando_shell
             ], text=True, capture_output=True
         )
