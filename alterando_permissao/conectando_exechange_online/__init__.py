@@ -1,5 +1,6 @@
 from subprocess import run
 import itertools
+import json
 from time import sleep
 from threading import Event, Thread
 
@@ -13,15 +14,15 @@ class ProcessoRun:
             [
                 "powershell",
                 "-NoProfile",
-                "NonInteractive",
+                "-NonInteractive",
                 "-ExecutionPolicy",
                 "Bypass",
                 "-Command",
                 comando_shell
             ], text=True, capture_output=True
         )
-        ok = (resultado_processo.returncode == 0)
-        return ok, resultado_processo.stdout, resultado_processo.stderr
+        dados_json = json.loads(resultado_processo.stdout)
+        return dados_json
 
     def _spinner(self, stop_event, prefix='Processando... '):
         ciclo = itertools.cycle(['|', '/', '-', '\\'])
