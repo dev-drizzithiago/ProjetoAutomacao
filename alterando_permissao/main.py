@@ -407,18 +407,21 @@ if __name__ == '__main__':
             print('---' * 20)
             print()
 
-            grupo_pesquisa = input('Digite o Grupo para pesquisa: ')
+            # grupo_pesquisa = input('Digite o Grupo para pesquisa: ')
+            grupo_pesquisa = 'gti.inovacao@segeticonsultoria.com'
             resultado_permissao = init_obj_calendar.verificando_permissoes(grupo_pesquisa)
 
             print()
             for item in resultado_permissao:
+
                 if item['Access'] == 'FullAccess':
                     dict_permissao_grupo['FullAccess'] = [item['Principal']]
-                    lista_permissao.append(dict_permissao_grupo)
+
 
                 elif item['Access'] == 'SendAs':
                     dict_permissao_grupo['SendAs'] = [item['Principal']]
-                    lista_permissao.append(dict_permissao_grupo)
+
+
 
             print(lista_permissao)
 
