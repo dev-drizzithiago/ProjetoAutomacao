@@ -209,8 +209,22 @@ class AlterarPermissaoReunioes:
             # ----------------------------------------------------------------------------------------------
             # Funcionando 
         
-        Add-MailboxFolderPermission -Identity "{shared}:\Calendário" -User "{usuario}" -AccessRights {permissao}
+        try {{
+        Add-MailboxFolderPermission -Identity "{shared}:\Calendário" -User "{usuario}" -AccessRights {permissao} `
+        -ErrorAction Stop | Out-Null
         
+            Write-Host "✓ Permissão concedida... " -ForegroundColor Green
+        }} catch {{
+            Write-Host "{{$_.Exception.Message}} >> "
+            try {{            
+                Set-MailboxFolderPermission -Identity "{shared}:\Calendário" -User "{usuario}" -AccessRights {permissao} `
+                -ErrorAction Stop | Out-Null
+                
+                Write-Host "✓ Permissão atualizada... " -ForegroundColor Green
+            }} catch {{
+                Write-Host "{{$_.Exception.Message}} "
+            }}
+        }}        
         """
 
         resultado = self.init_conectar_exchange.run_spinner(
@@ -423,19 +437,47 @@ if __name__ == '__main__':
             print(response)
 
         elif resposta == 6:
+
+            dict_permissoes = {
+                'A':'Owner',  # Permissão total
+                'B':'PublishingEditor',  # É usado mais quando há estrutura de subpastas (incomum em calendários).
+                'C':'Editor',  # Isso permite que qualquer membro autorizado edite e reorganize reuniões
+                # dentro do calendário do shared
+                'G':'Reviewer',  #  Usuário que só precisa visualizar reuniões do calendário de outro.
+            }
             print()
             print('Criar e conceder permissão para novo grupo Exchange')
             print('---' * 20)
             print()
 
-            # (Editor, Author, Reviewer
-            # email = input('Digital seu e-mail: ')
-            # tipo_acesso = input('Digital seu e-mail: ')
+            calendario = input('E-mail do calendário: ')
+            usuario = input('Digital seu e-mail: ')
 
-            calendario = os.getenv('calendario_organizador')
-            usuario = os.getenv('ORGANIZADOR_TESTE')
-            tipo_acesso = 'Editor'
+            while True:
+                print(
+                    """
+                    [A] Owner' >> Permissão total
+                    [B] PublishingEditor' >> É usado mais quando há estrutura de subpastas (incomum em calendários).
+                    [C] Editor >> Permite que membros autorizado edite e reorganize reuniões do calendário do shared
+                    [G] Reviewer' >> Usuário que só precisa visualizar reuniões do calendário de outro.
+                    """
+                )
+                print()
+                print('---' * 20)
 
+                permissao = input('Escolha uma Permissão: ').upper()
+
+                if permissao in 'ABCDEFGHIJ':
+                    tipo_acesso = dict_permissoes[permissao]
+                    break
+                else:
+                    print()
+                    print('---' * 20)
+                    print("Opção inválida...")
+                    sleep(2)
+
+            print()
+            print('---' * 20)
             response = init_obj_calendar.compartilhando_caixa_calendario(calendario, usuario, tipo_acesso)
             print(response)
 
