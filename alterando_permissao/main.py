@@ -202,7 +202,16 @@ class AlterarPermissaoReunioes:
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
         return resultado
 
-    def _verif_calendarios(self, email):
+    def _verif_calendarios(self, email: str):
+        """
+        Lista as permissões da pasta de calendário do mailbox {email} no Exchange Online:
+
+        Ex:
+        Usuário com calendário em PT‑BR: joao@contoso.com:\Calendário
+        Usuário com calendário em EN: joao@contoso.com:\Calendar
+
+        """
+
         comando_shell = rf"""
         Import-Module ExchangeOnlineManagement -ErrorAction Stop; 
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
@@ -212,8 +221,15 @@ class AlterarPermissaoReunioes:
               -ShowBanner:$false;
         # Funcionando
         # ----------------------------------------------------------------------------------------------
-        
-        Get-MailboxFolderPermission -Identity '{email}:\Calendário'
+                
+        $mbx = '{email}'
+        $calName = (Get-MailboxFolderStatistics -Identity $mbx | 
+                    Where-Object {{ $_.FolderType -eq 'Calendar' }} | 
+                    Select-Object -First 1 -ExpandProperty Name) 
+                    
+        Get-MailboxFolderPermission -Identity "$mbx:\$calName" 
+        Select-Object Identity, FolderName, User, AccessRights, IsInherited | 
+          ConvertTo-Json -Depth 4 -Compress
         
         # Desconecta do exchange
         Disconnect-ExchangeOnline -Confirm:$false | Out-Null
