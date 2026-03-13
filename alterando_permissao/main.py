@@ -1,3 +1,6 @@
+from collections import defaultdict
+from pkgutil import iter_modules
+
 from dotenv import load_dotenv
 from os import getenv
 import os
@@ -399,7 +402,7 @@ if __name__ == '__main__':
 
         elif resposta == 2:
 
-            dict_permissao_grupo = {}
+            dict_permissao_grupo = defaultdict(list)
             lista_permissao = []
 
             print()
@@ -415,15 +418,16 @@ if __name__ == '__main__':
             for item in resultado_permissao:
 
                 if item['Access'] == 'FullAccess':
-                    dict_permissao_grupo['FullAccess'] = [item['Principal']]
+                    dict_permissao_grupo['FullAccess'].append(item['Principal'])
 
 
                 elif item['Access'] == 'SendAs':
-                    dict_permissao_grupo['SendAs'] = [item['Principal']]
+                    dict_permissao_grupo['SendAs'].append(item['Principal'])
 
 
 
-            print(lista_permissao)
+            for k, v in dict_permissao_grupo.items():
+                print(k, v)
 
         elif resposta == 3:
             print()
