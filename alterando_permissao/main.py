@@ -424,8 +424,6 @@ if __name__ == '__main__':
                 elif item['Access'] == 'SendAs':
                     dict_permissao_grupo['SendAs'].append(item['Principal'])
 
-
-
             for k, v in dict_permissao_grupo.items():
                 print(k, v)
 
