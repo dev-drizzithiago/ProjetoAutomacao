@@ -202,9 +202,23 @@ class AlterarPermissaoReunioes:
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
         return resultado
 
-    def _verif_calendarios(self):
-        comando_shell = rf"Get-MailboxFolderPermission -Identity '{os.getenv('MAIL_CONEXAO')}:\Calendário'"
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
+    def _verif_calendarios(self, email):
+        comando_shell = rf"""
+        Import-Module ExchangeOnlineManagement -ErrorAction Stop; 
+            Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+              -Organization '{os.getenv('Organization')}' `
+              -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
+              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
+              -ShowBanner:$false;
+        # Funcionando
+        # ----------------------------------------------------------------------------------------------
+        
+        Get-MailboxFolderPermission -Identity '{email}:\Calendário'
+        
+        # Desconecta do exchange
+        Disconnect-ExchangeOnline -Confirm:$false | Out-Null
+        """
+        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Verificando seu calendário... ')
         print(resultado)
 
     def analisando_thumbprint(self):
@@ -289,10 +303,12 @@ if __name__ == '__main__':
     while True:
         print()
         print(
-            '[1] Criar um e-mail Shared e atribuir permissão para um usuário\n'
-            '[2] Verificar as permissões de um grupo\n'
-            '[3] Conceder permissões de um grupo para um determinado usuário\n'
+            '[1] Criar um e-mail Shared e atribuir permissão para um  \n'
+            '[2] Verificar as permissões de um grupo \n'
+            '[3] Conceder permissões de um grupo para um determinado usuário \n'
             '[4] Analisar "Thumbprint" e "HasPrivateKey" \n'
+            '[5] Analisar Calendário do usuário \n'
+            
             '[0] Sair\n'
         )
         print('---' * 20)
@@ -356,6 +372,17 @@ if __name__ == '__main__':
 
         elif resposta == 4:
             response = init_obj_calendar.analisando_thumbprint()
+            print(response)
+
+        elif resposta == 5:
+            print()
+            print('Criar e conceder permissão para novo grupo Exchange')
+            print('---' * 20)
+            print()
+
+            email = input('Digital seu e-mail: ')
+
+            response = init_obj_calendar._verif_calendarios(email)
             print(response)
 
         elif resposta == 0:
