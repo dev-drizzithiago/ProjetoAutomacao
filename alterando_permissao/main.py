@@ -1,5 +1,6 @@
 from collections import defaultdict
 from pkgutil import iter_modules
+from time import sleep
 
 from dotenv import load_dotenv
 from os import getenv
@@ -25,62 +26,6 @@ class AlterarPermissaoReunioes:
 
     def __init__(self):
         self.init_conectar_exchange = ProcessoRun()
-
-    def conexao_grupo_gti(self):
-        comando_shell = rf"""
-            Import-Module ExchangeOnlineManagement -ErrorAction Stop;
-                Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
-                  -Organization '{os.getenv('Organization')}' `
-                  -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
-                  -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
-                  -ShowBanner:$false; 
-                  
-            # Funcionando
-            # ----------------------------------------------------------------------------------------------
-
-            # Parâmetros
-            $groupNameOrSmtp = "{os.getenv('NOME_GRUPO')}"     # pode ser nome do Team ou smtp do grupo
-
-            # Resolve o Microsoft 365 Group
-            $grp = Get-UnifiedGroup -Identity $groupNameOrSmtp -ErrorAction Stop; 
-            
-            # Pegue o SMTP do GroupMailbox
-            $groupSmtp = $grp.PrimarySmtpAddress;
-            
-            Get-EXORecipient -PrimarySmtpAddress $groupSmtp -RecipientTypeDetails GroupMailbox | 
-            Format-Table DisplayName,PrimarySmtpAddress,RecipientTypeDetails
-                
-            # $principal = "{os.getenv('ORGANIZADOR_GRUPO')}" `
-            # $calendarIdentity {os.getenv('ORGANIZADOR_GRUPO')}:\Calendar `
-            # try {{
-            #     Set-MailboxFolderPermission `
-            #     -Identity $calendarIdentity `
-            #     -User $principal `
-            #     -AccessRights Editor `
-            #     -ErrorAction Stop
-            # }} catch {{
-            #     if ($_.Exception.Message -match "Cannot find an existing permission entry") {{
-            #         Add-MailboxFolderPermission `
-            #         -Identity $calendarIdentity `
-            #         User $principal `
-            #         -AccessRights Editor ´
-            #         -ErrorAction Stop
-            #     }} elseif ($_.Exception.Message -match "already has") {{
-            #         # já possui a entrada — segue
-            #     }} else {{
-            #         throw
-            #     }}
-            # }}
-            
-            Get-EXOMailboxFolderPermission -Identity $calendarIdentity | Format-Table -AutoSize
-        """
-
-        resultado = self.init_conectar_exchange.run_spinner(
-            str(comando_shell).strip(),
-            'Conectando ao office 365... '
-        )
-
-        return resultado
 
     def chamando_obj_conexao(self, nome_grupo, email_permissao):
         self.init_conectar_exchange = ProcessoRun()
@@ -258,59 +203,32 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def _verif_calendarios(self):
-
         comando_shell = rf"Get-MailboxFolderPermission -Identity '{os.getenv('MAIL_CONEXAO')}:\Calendário'"
-
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
-
         print(resultado)
 
-    def editando_calendario(self):
-
-        # Dar acesso de Editor a todos da organização (cuidado!)
-        # Isso torna o calendário do organizador editável por qualquer usuário interno.
-        # Use apenas se for realmente a intenção:
-        comando_shell = (
-            rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-            rf"-User Default -AccessRights Editor"
-        )
-
-        # # Crie/Use um grupo de segurança ou de distribuição com os convidados da reunião e conceda Editor
-        # comando_shell = (
-        #     rf"Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-        #     rf"-User 'Grupo-Convidados@empresa.com' -AccessRights Editor"
-        # )
-
-        #Tornar alguém delegado com poder de edição Delegados recebem comportamento especial
-        # (encaminhamento de convites, etc.):
-        # -SharingPermissionFlags Delegate adiciona como delegado do calendário do usuário.
-        # comando_shell = (
-        #     "Add - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-        #     "-User 'assistente@empresa.com' -AccessRights Editor -SharingPermissionFlags Delegate"
-        # )
-
-        # Ajustar uma permissão que já existe (em vez de adicionar)
-        # comando_shell = (
-        #     "Set - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' `"
-        #     "-User 'usuario@empresa.com' -AccessRights Editor"
-        # )
-
-        # comando_shell = (
-        #     # Conferir
-        #     "Get - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "
-        #
-        #     # Remover a permissão de alguém
-        #     "Remove - MailboxFolderPermission - Identity 'organizador@empresa.com:\Calendar' "
-        #     "-User 'usuario@empresa.com' - Confirm "
-        # )
-
-        # comando_shell = "Disconnect-ExchangeOnline"
-
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
-        return resultado
-
     def analisando_thumbprint(self):
-        # Liste de forma completa
+        """
+        Esse método serve para mostrar alguns parâmetros para o acesso do 365 via certificado.
+        As informações poder ser utilizadas na conexão para cara comando ao 365
+
+        >> Get-ChildItem Cert:\CurrentUser\My: Lista todos os certificados armazenados no repositório Pessoal do
+        Usuário Atual (Store: CurrentUser\My).
+        * Essa “unidade” Cert:\ é o provedor de certificados do PowerShell.
+        * Cada item retornado é um certificado (objeto X509Certificate2).
+
+        >> Select-Object Subject, Thumbprint, HasPrivateKey; Extrai apenas 3 propriedades úteis de cada certificado:
+        * Subject → para quem o certificado foi emitido (DN).
+        * Thumbprint → impressão digital (hash) única do certificado; é o valor que você costuma usar para
+        identificar/casar o certificado em scripts.
+        * HasPrivateKey → indica se a chave privada está presente (⚠️ necessária para assinar/obter tokens
+        com MSAL ou conectar no EXO por certificado).
+
+        >> Format-List;
+        * Formata a saída como lista (uma entrada por certificado, em múltiplas linhas).
+        * Observação importante para automação: Format-* (ex.: Format-List, Format-Table) serve só para visualização.
+        Se você vai consumir no Python, é melhor não formatar ou converter para JSON
+        """
         comando_shell = (
             'Get-ChildItem Cert:\CurrentUser\My |'
             'Select-Object Subject, Thumbprint, HasPrivateKey |'
@@ -321,6 +239,10 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def criar_novo_certificado(self):
+        """
+        O certificado pode ser usado em outras aplicações, porém caso seja o primeiro para acessar o office 365 é
+        preciso que seja carregado no site do Entra ID.
+        """
 
         # Ajuste estes caminhos conforme o seu projeto:
         OUT_DIR = r"C:\Temp"  # use um diretório existente
@@ -353,28 +275,15 @@ class AlterarPermissaoReunioes:
         print("  KEY (privada PEM):", KEY_PEM)
         print("  PFX:", PFX_PATH)
 
-    def _verificar_certificados(self):
-        # Verifica o certificado da máquina.
-        # comando_shell = (
-        #     'Get-ChildItem Cert:\LocalMachine\My '
-        # )
-
-        # Verifica o certificado do usuário
-        comando_shell = (
-                'Get - ChildItem Cert:\CurrentUser\My '
-        )
-
 if __name__ == '__main__':
     init_obj_calendar = AlterarPermissaoReunioes()
     while True:
         print()
         print(
-            '[1] Conceder Permissão\n'
-            '[2] Verificar permissões\n'
-            '[3] Conceder permissões\n'
-            # '[] Verificar Modulo\n'
-            # '[] Analisar ThumpPrint\n'
-            # '[] Criar novo Certificado\n'
+            '[1] Criar um e-mail Shared e atribuir permissão para um usuário\n'
+            '[2] Verificar as permissões de um grupo\n'
+            '[3] Conceder permissões de um grupo para um determinado usuário\n'
+            '[4] Analisar "Thumbprint" e "HasPrivateKey" \n'
             '[0] Sair\n'
         )
         print('---' * 20)
@@ -401,25 +310,22 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
-
-            dict_permissao_grupo = defaultdict(list)
-            lista_permissao = []
-
             print()
             print('Analisar permissão de um grupo')
             print('---' * 20)
             print()
 
             # grupo_pesquisa = input('Digite o Grupo para pesquisa: ')
-            grupo_pesquisa = 'gti.inovacao@segeticonsultoria.com'
+            grupo_pesquisa = os.getenv('ORGANIZADOR_GRUPO')
             resultado_permissao = init_obj_calendar.verificando_permissoes(grupo_pesquisa)
 
             print()
+            dict_permissao_grupo = defaultdict(list)
+
             for item in resultado_permissao:
 
                 if item['Access'] == 'FullAccess':
                     dict_permissao_grupo['FullAccess'].append(item['Principal'])
-
 
                 elif item['Access'] == 'SendAs':
                     dict_permissao_grupo['SendAs'].append(item['Principal'])
@@ -440,8 +346,14 @@ if __name__ == '__main__':
             resultando_processo = init_obj_calendar.concedendo_permissoes(grupo, email)
 
         elif resposta == 4:
-            init_obj_calendar.criar_novo_certificado()
+            response = init_obj_calendar.analisando_thumbprint()
+            print(response)
 
+        elif resposta == 0:
+            print()
+            print('Finalizando o programa...')
+            print('---' * 20)
+            sleep(2)
         else:
             print()
             print('---' * 20)
