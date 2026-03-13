@@ -57,7 +57,7 @@ class AlterarPermissaoReunioes:
             }} 
 
             # 2° etapa; concedendo permissões e testes
-            # 3) Conceder permissões (FullAccess + SendAs) aos membros listados no CSV; 
+            # Conceder permissões (FullAccess + SendAs) aos membros listados no CSV; 
 
             if (-not $sharedSmtp -or -not $usuario) {{
                 throw "Defina ORGANIZADOR_GRUPO (shared SMTP) e USUARIO_TESTE (UPN)." 
