@@ -197,10 +197,9 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
-    def compartilhando_caixa_calendario(self, calendario_shared, usuario,  permissao):
+    def compartilhando_caixa_calendario(self, shared, usuario,  permissao):
 
         comando_shell = rf"""
-        # 1) Importa e conecta ao 365;
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
               -Organization '{os.getenv('Organization')}' `
@@ -209,18 +208,14 @@ class AlterarPermissaoReunioes:
               -ShowBanner:$false;
             # ----------------------------------------------------------------------------------------------
             # Funcionando 
-            
-        # 2) Conceder Editor
-        Add-MailboxFolderPermission -Identity "{calendario_shared}:\Calendário" -User "{usuario}" -AccessRights {permissao}
         
-        # 3) Ajustar permissão existente
-        Set-MailboxFolderPermission -Identity "{calendario_shared}:\Calendário" -User "{usuario}" -AccessRights {permissao}
-
+        Add-MailboxFolderPermission -Identity "{shared}:\Calendário" -User "{usuario}" -AccessRights {permissao}
+        
         """
-        
+
         resultado = self.init_conectar_exchange.run_spinner(
             comando_shell,
-            'Verificando seu calendário... '
+            f'Compartilhando o calendário com o usuário {usuario}... '
         )
         return resultado
 
@@ -418,7 +413,7 @@ if __name__ == '__main__':
 
         elif resposta == 5:
             print()
-            print('Criar e conceder permissão para novo grupo Exchange')
+            print('Verificar calendário do usuário')
             print('---' * 20)
             print()
 
@@ -437,10 +432,11 @@ if __name__ == '__main__':
             # email = input('Digital seu e-mail: ')
             # tipo_acesso = input('Digital seu e-mail: ')
 
-            email = os.getenv('ORGANIZADOR_TESTE')
+            calendario = os.getenv('calendario_organizador')
+            usuario = os.getenv('ORGANIZADOR_TESTE')
             tipo_acesso = 'Editor'
 
-            response = init_obj_calendar.compartilhando_caixa_calendario(email, tipo_acesso)
+            response = init_obj_calendar.compartilhando_caixa_calendario(calendario, usuario, tipo_acesso)
             print(response)
 
         elif resposta == 0:
