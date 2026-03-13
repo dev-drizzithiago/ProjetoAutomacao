@@ -398,7 +398,10 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
+
             dict_permissao_grupo = {}
+            lista_permissao = []
+
             print()
             print('Analisar permissão de um grupo')
             print('---' * 20)
@@ -417,7 +420,7 @@ if __name__ == '__main__':
                     dict_permissao_grupo = {
                         'SendAs': [item['Principal']]
                     }
-
+            print(dict_permissao_grupo)
         elif resposta == 3:
             print()
             print('Conceder permissão para um grupo Exchange')
