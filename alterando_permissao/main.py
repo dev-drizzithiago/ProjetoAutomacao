@@ -201,7 +201,6 @@ class AlterarPermissaoReunioes:
         )
 
         saida_json = json.loads(resultado)
-
         return saida_json
 
     def concedendo_permissoes(self, nome_grupo, email_permissao):
@@ -399,15 +398,25 @@ if __name__ == '__main__':
                 print(item)
 
         elif resposta == 2:
-
+            dict_permissao_grupo = {}
             print()
-            print('Criar e conceder permissão para novo grupo Exchange')
+            print('Analisar permissão de um grupo')
             print('---' * 20)
             print()
 
             grupo_pesquisa = input('Digite o Grupo para pesquisa: ')
-            resultando_permissao = init_obj_calendar.verificando_permissoes(grupo_pesquisa)
-            print(resultando_permissao)
+            resultado_permissao = init_obj_calendar.verificando_permissoes(grupo_pesquisa)
+
+            print()
+            for item in resultado_permissao:
+                if item['Access'] == 'FullAccess':
+                    dict_permissao_grupo = {
+                        'FullAccess': [item['Principal']]
+                    }
+                elif item['Access'] == 'SendAs':
+                    dict_permissao_grupo = {
+                        'SendAs': [item['Principal']]
+                    }
 
         elif resposta == 3:
             print()
@@ -419,13 +428,7 @@ if __name__ == '__main__':
 
             print()
             email = input('Conceder permissão para o e-mail: ')
-
-            resultando_permissao = init_obj_calendar.concedendo_permissoes(grupo, email)
-
-            print(resultando_permissao)
-
-            for item in resultando_permissao:
-                print(item)
+            resultando_processo = init_obj_calendar.concedendo_permissoes(grupo, email)
 
         elif resposta == 4:
             init_obj_calendar.criar_novo_certificado()
