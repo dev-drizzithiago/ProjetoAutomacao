@@ -208,7 +208,7 @@ class AlterarPermissaoReunioes:
               -ShowBanner:$false;
             # ----------------------------------------------------------------------------------------------
             # Funcionando 
-        
+        # Verificar sobre os calendários e calendar
         try {{
         Add-MailboxFolderPermission -Identity "{shared}:\Calendário" -User "{usuario}" -AccessRights {permissao} `
         -ErrorAction Stop | Out-Null
@@ -456,10 +456,10 @@ if __name__ == '__main__':
             while True:
                 print(
                     """
-                    [A] Owner' >> Permissão total
-                    [B] PublishingEditor' >> É usado mais quando há estrutura de subpastas (incomum em calendários).
-                    [C] Editor >> Permite que membros autorizado edite e reorganize reuniões do calendário do shared
-                    [G] Reviewer' >> Usuário que só precisa visualizar reuniões do calendário de outro.
+            [A] Owner'              >> Permissão total
+            [B] PublishingEditor'   >> É usado mais quando há estrutura de subpastas (incomum em calendários).
+            [C] Editor              >> Permite que membros autorizado edite e reorganize reuniões do calendário do shared
+            [G] Reviewer'           >> Usuário que só precisa visualizar reuniões do calendário de outro.
                     """
                 )
                 print()
