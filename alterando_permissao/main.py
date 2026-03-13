@@ -413,14 +413,15 @@ if __name__ == '__main__':
             print()
             for item in resultado_permissao:
                 if item['Access'] == 'FullAccess':
-                    dict_permissao_grupo = {
-                        'FullAccess': [item['Principal']]
-                    }
+                    dict_permissao_grupo['FullAccess'] = [item['Principal']]
+                    lista_permissao.append(dict_permissao_grupo)
+
                 elif item['Access'] == 'SendAs':
-                    dict_permissao_grupo = {
-                        'SendAs': [item['Principal']]
-                    }
-            print(dict_permissao_grupo)
+                    dict_permissao_grupo['SendAs'] = [item['Principal']]
+                    lista_permissao.append(dict_permissao_grupo)
+
+            print(lista_permissao)
+
         elif resposta == 3:
             print()
             print('Conceder permissão para um grupo Exchange')
