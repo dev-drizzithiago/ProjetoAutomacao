@@ -151,7 +151,7 @@ class AlterarPermissaoReunioes:
         saida_json = json.loads(resultado)
         return saida_json
 
-    def concedendo_permissoes(self, nome_grupo, email_permissao):
+    def concedendo_permissoes_shared(self, nome_grupo, email_permissao):
 
         comando_shell = rf"""
         # 1) Importa e conecta ao 365;
@@ -197,6 +197,33 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
+    def compartilhando_caixa_calendario(self, calendario_shared, usuario,  permissao):
+
+        comando_shell = rf"""
+        # 1) Importa e conecta ao 365;
+            Import-Module ExchangeOnlineManagement -ErrorAction Stop;
+            Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+              -Organization '{os.getenv('Organization')}' `
+              -CertificateFilePath '{os.getenv('PATH_CERTIFICADO')}' `
+              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
+              -ShowBanner:$false;
+            # ----------------------------------------------------------------------------------------------
+            # Funcionando 
+            
+        # 2) Conceder Editor
+        Add-MailboxFolderPermission -Identity "{calendario_shared}:\Calendário" -User "{usuario}" -AccessRights {permissao}
+        
+        # 3) Ajustar permissão existente
+        Set-MailboxFolderPermission -Identity "{calendario_shared}:\Calendário" -User "{usuario}" -AccessRights {permissao}
+
+        """
+        
+        resultado = self.init_conectar_exchange.run_spinner(
+            comando_shell,
+            'Verificando seu calendário... '
+        )
+        return resultado
+
     def _instalando_modulo(self):
         comando_shell = rf"Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
@@ -221,21 +248,19 @@ class AlterarPermissaoReunioes:
               -ShowBanner:$false;
         # Funcionando
         # ----------------------------------------------------------------------------------------------
-                
-        $mbx = '{email}'
-        $calName = (Get-MailboxFolderStatistics -Identity $mbx | 
-                    Where-Object {{ $_.FolderType -eq 'Calendar' }} | 
-                    Select-Object -First 1 -ExpandProperty Name) 
-                    
-        Get-MailboxFolderPermission -Identity "$mbx:\$calName" 
-        Select-Object Identity, FolderName, User, AccessRights, IsInherited | 
-          ConvertTo-Json -Depth 4 -Compress
+                         
+        Get-MailboxFolderPermission -Identity '{email}:\Calendário'
         
         # Desconecta do exchange
         Disconnect-ExchangeOnline -Confirm:$false | Out-Null
         """
-        resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Verificando seu calendário... ')
-        print(resultado)
+
+        resultado = self.init_conectar_exchange.run_spinner(
+            comando_shell,
+            'Verificando seu calendário... '
+        )
+
+        return resultado
 
     def analisando_thumbprint(self):
         """
@@ -324,6 +349,7 @@ if __name__ == '__main__':
             '[3] Conceder permissões de um grupo para um determinado usuário \n'
             '[4] Analisar "Thumbprint" e "HasPrivateKey" \n'
             '[5] Analisar Calendário do usuário \n'
+            '[6] Compartilhar calendário \n'
             
             '[0] Sair\n'
         )
@@ -384,7 +410,7 @@ if __name__ == '__main__':
 
             print()
             email = input('Conceder permissão para o e-mail: ')
-            resultando_processo = init_obj_calendar.concedendo_permissoes(grupo, email)
+            resultando_processo = init_obj_calendar.concedendo_permissoes_shared(grupo, email)
 
         elif resposta == 4:
             response = init_obj_calendar.analisando_thumbprint()
@@ -396,9 +422,25 @@ if __name__ == '__main__':
             print('---' * 20)
             print()
 
-            email = input('Digital seu e-mail: ')
-
+            # email = input('Digital seu e-mail: ')
+            email = os.getenv('ORGANIZADOR_TESTE')
             response = init_obj_calendar._verif_calendarios(email)
+            print(response)
+
+        elif resposta == 6:
+            print()
+            print('Criar e conceder permissão para novo grupo Exchange')
+            print('---' * 20)
+            print()
+
+            # (Editor, Author, Reviewer
+            # email = input('Digital seu e-mail: ')
+            # tipo_acesso = input('Digital seu e-mail: ')
+
+            email = os.getenv('ORGANIZADOR_TESTE')
+            tipo_acesso = 'Editor'
+
+            response = init_obj_calendar.compartilhando_caixa_calendario(email, tipo_acesso)
             print(response)
 
         elif resposta == 0:
