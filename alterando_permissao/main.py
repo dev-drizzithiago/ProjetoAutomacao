@@ -209,8 +209,16 @@ class AlterarPermissaoReunioes:
 
     def analisando_thumbprint(self):
         """
-        Esse método serve para mostrar alguns parâmetros para o acesso do 365 via certificado.
-        As informações poder ser utilizadas na conexão para cara comando ao 365
+        Objetivo: verificar se o certificado PFX instalado (que você usa no Connect-ExchangeOnline e no MSAL
+        para o Graph) está realmente no repositório correto do Windows do usuário que está executando o script,
+        e confirmar o Thumbprint e se a chave privada está presente.
+
+        Uso típico no seu fluxo:
+
+        Antes de conectar ao EXO por certificado ou gerar token MSAL, você confere se o cert está visível em
+        CurrentUser\My. Copia/valida o Thumbprint e HasPrivateKey=True.
+        Se não aparecer, normalmente o PFX foi importado no repositório errado (ex.: LocalMachine\My) ou
+        sem chave exportável; ou o processo está rodando sob uma conta diferente.
 
         >> Get-ChildItem Cert:\CurrentUser\My: Lista todos os certificados armazenados no repositório Pessoal do
         Usuário Atual (Store: CurrentUser\My).
@@ -229,6 +237,7 @@ class AlterarPermissaoReunioes:
         * Observação importante para automação: Format-* (ex.: Format-List, Format-Table) serve só para visualização.
         Se você vai consumir no Python, é melhor não formatar ou converter para JSON
         """
+
         comando_shell = (
             'Get-ChildItem Cert:\CurrentUser\My |'
             'Select-Object Subject, Thumbprint, HasPrivateKey |'
