@@ -7,7 +7,15 @@ from os import getenv
 import os
 import json
 
-from pprint import pprint
+import logging
+logging.basicConfig(
+    level=logging.INFO, # Nível mínimo de log
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("logs.log"), # Salva em arquivo
+        logging.StreamHandler(),  # Também mostra no console
+    ]
+)
 
 from conectando_exechange_online import ProcessoRun
 from gerar_certificado_microsoft import GerarCertificado
@@ -29,7 +37,7 @@ class AlterarPermissaoReunioes:
 
     def chamando_obj_conexao(self, nome_grupo, email_permissao):
         self.init_conectar_exchange = ProcessoRun()
-
+        logging.info('Criando e-mail shared e concedendo permissão de "FullAccess + SendAs"')
         comando_shell = rf"""        
         
             $sharedSmtp = "{nome_grupo}"
@@ -110,6 +118,8 @@ class AlterarPermissaoReunioes:
 
     def verificando_permissoes(self, grupo_pesquisa: str):
 
+        logging.info(f'Verificando permissão do grupo {grupo_pesquisa}')
+
         comando_shell = rf"""
         
         $sharedSmtp = "{grupo_pesquisa}"
@@ -149,9 +159,14 @@ class AlterarPermissaoReunioes:
         )
 
         saida_json = json.loads(resultado)
+
+        logging.info(f"{saida_json}")
+
         return saida_json
 
     def concedendo_permissoes_shared(self, nome_grupo, email_permissao):
+
+        logging.info(f'concedendo permissão do usuário {nome_grupo} ao grupo {email_permissao}')
 
         comando_shell = rf"""
         # 1) Importa e conecta ao 365;
@@ -391,8 +406,8 @@ if __name__ == '__main__':
             print('---' * 20)
             print()
 
-            # grupo_pesquisa = input('Digite o Grupo para pesquisa: ')
-            grupo_pesquisa = os.getenv('ORGANIZADOR_GRUPO')
+            grupo_pesquisa = input('Digite o Grupo para pesquisa: ')
+            # grupo_pesquisa = os.getenv('ORGANIZADOR_GRUPO')
             resultado_permissao = init_obj_calendar.verificando_permissoes(grupo_pesquisa)
 
             print()
@@ -431,9 +446,10 @@ if __name__ == '__main__':
             print('---' * 20)
             print()
 
-            # email = input('Digital seu e-mail: ')
-            email = os.getenv('ORGANIZADOR_TESTE')
+            email = input('Digital seu e-mail: ')
+            # email = os.getenv('ORGANIZADOR_TESTE')
             response = init_obj_calendar._verif_calendarios(email)
+
             print(response)
 
         elif resposta == 6:
