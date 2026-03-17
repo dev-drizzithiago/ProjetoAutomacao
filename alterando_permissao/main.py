@@ -316,10 +316,11 @@ class AlterarPermissaoReunioes:
         Se você vai consumir no Python, é melhor não formatar ou converter para JSON
         """
 
-        comando_shell = (
-            'Get-ChildItem Cert:\CurrentUser\My | ' 
-            'Select-Object Subject, Thumbprint, HasPrivateKey | ' 
-            'Format-List'
+        comando_shell = ("""
+            Get-ChildItem Cert:\CurrentUser\My |  
+            Select-Object Subject, Thumbprint, HasPrivateKey |  
+            Format-List
+            """
         )
 
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Analisando o Thumbprint... ')
