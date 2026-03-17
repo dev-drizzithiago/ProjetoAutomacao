@@ -35,9 +35,9 @@ class AlterarPermissaoReunioes:
     def __init__(self):
         self.init_conectar_exchange = ProcessoRun()
 
-    def chamando_obj_conexao(self, nome_grupo, email_permissao):
+    def criar_conceder_permissao_shared(self, nome_grupo, email_permissao):
         self.init_conectar_exchange = ProcessoRun()
-        logging.info('Criando e-mail shared e concedendo permissão de "FullAccess + SendAs"')
+        logging.info('\nCriando e-mail shared e concedendo permissão de "FullAccess + SendAs"')
         comando_shell = rf"""        
         
             $sharedSmtp = "{nome_grupo}"
@@ -118,7 +118,7 @@ class AlterarPermissaoReunioes:
 
     def verificando_permissoes(self, grupo_pesquisa: str):
 
-        logging.info(f'Verificando permissão do grupo {grupo_pesquisa}')
+        logging.info(f'\nVerificando permissão do grupo {grupo_pesquisa}')
 
         comando_shell = rf"""
         
@@ -159,14 +159,11 @@ class AlterarPermissaoReunioes:
         )
 
         saida_json = json.loads(resultado)
-
-        logging.info(f"{saida_json}")
-
         return saida_json
 
     def concedendo_permissoes_shared(self, nome_grupo, email_permissao):
 
-        logging.info(f'concedendo permissão do usuário {nome_grupo} ao grupo {email_permissao}')
+        logging.info(f'\nconcedendo permissão do usuário {nome_grupo} ao grupo {email_permissao}')
 
         comando_shell = rf"""
         # 1) Importa e conecta ao 365;
@@ -212,7 +209,7 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
-    def _verif_calendarios(self, email: str):
+    def verif_calendarios(self, email: str):
         """
         Lista as permissões da pasta de calendário do mailbox {email} no Exchange Online:
 
@@ -221,7 +218,7 @@ class AlterarPermissaoReunioes:
         Usuário com calendário em EN: joao@contoso.com:\Calendar
 
         """
-        logging.info(f'Analisando calendário para o usuário {email}')
+        logging.info(f'\nAnalisando calendário para o usuário {email}')
 
         comando_shell = rf"""
         Import-Module ExchangeOnlineManagement -ErrorAction Stop; 
@@ -244,12 +241,10 @@ class AlterarPermissaoReunioes:
             'Verificando seu calendário... '
         )
 
-        logging.info(f'{resultado}')
-
         return resultado
 
-    def _compartilhando_caixa_calendario(self, shared, usuario,  permissao):
-
+    def compartilhar_caixa_calendario(self, shared, usuario, permissao):
+        logging(f'\nCaixa {shared} sendo compartilhada com o usuário {usuario} com a permissão {permissao}')
         comando_shell = rf"""
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
@@ -284,6 +279,7 @@ class AlterarPermissaoReunioes:
         )
         return resultado
 
+    # Métodos do sistema; sem interação com o usuário
     def _instalando_modulo(self):
         comando_shell = rf"Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
@@ -397,7 +393,7 @@ if __name__ == '__main__':
             grupo = input('Digite o Grupo para adicionar: ')
             email = input('Conceder permissão para o e-mail: ')
 
-            resultando_conexao = init_obj_calendar.chamando_obj_conexao(grupo, email)
+            resultando_conexao = init_obj_calendar.criar_conceder_permissao_shared(grupo, email)
 
             for item in resultando_conexao:
                 print(item)
@@ -445,10 +441,10 @@ if __name__ == '__main__':
             print()
 
             email = input('Digital seu e-mail: ')
-            response = init_obj_calendar._verif_calendarios(email)
+            response = init_obj_calendar.verif_calendarios(email)
             print(response)
 
-        elif resposta == 6:
+        elif resposta == 5:
             dict_permissoes = {
                 'A':'Owner',  # Permissão total
                 'B':'PublishingEditor',  # É usado mais quando há estrutura de subpastas (incomum em calendários).
@@ -489,7 +485,7 @@ if __name__ == '__main__':
 
             print()
             print('---' * 20)
-            response = init_obj_calendar.compartilhando_caixa_calendario(calendario, usuario, tipo_acesso)
+            response = init_obj_calendar.compartilhar_caixa_calendario(calendario, usuario, tipo_acesso)
             print(response)
 
         elif resposta == 0:
