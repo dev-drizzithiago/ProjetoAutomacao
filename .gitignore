@@ -19,3 +19,4 @@ teste_velocidade_v1/.~lock.data.csv\#
 *.pem
 *.cer
 *.pfx
+*.log
