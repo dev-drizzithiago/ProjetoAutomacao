@@ -212,7 +212,43 @@ class AlterarPermissaoReunioes:
 
         return resultado
 
-    def compartilhando_caixa_calendario(self, shared, usuario,  permissao):
+    def _verif_calendarios(self, email: str):
+        """
+        Lista as permissões da pasta de calendário do mailbox {email} no Exchange Online:
+
+        Ex:
+        Usuário com calendário em PT‑BR: joao@contoso.com:\Calendário
+        Usuário com calendário em EN: joao@contoso.com:\Calendar
+
+        """
+        logging.info(f'Analisando calendário para o usuário {email}')
+
+        comando_shell = rf"""
+        Import-Module ExchangeOnlineManagement -ErrorAction Stop; 
+            Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
+              -Organization '{os.getenv('Organization')}' `
+              -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
+              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
+              -ShowBanner:$false;
+        # Funcionando
+        # ----------------------------------------------------------------------------------------------
+
+        Get-MailboxFolderPermission -Identity '{email}:\Calendário'
+
+        # Desconecta do exchange
+        Disconnect-ExchangeOnline -Confirm:$false | Out-Null
+        """
+
+        resultado = self.init_conectar_exchange.run_spinner(
+            comando_shell,
+            'Verificando seu calendário... '
+        )
+
+        logging.info(f'{resultado}')
+
+        return resultado
+
+    def _compartilhando_caixa_calendario(self, shared, usuario,  permissao):
 
         comando_shell = rf"""
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
@@ -251,39 +287,6 @@ class AlterarPermissaoReunioes:
     def _instalando_modulo(self):
         comando_shell = rf"Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force"
         resultado = self.init_conectar_exchange.run_spinner(comando_shell, 'Conectando ao office 365... ')
-        return resultado
-
-    def _verif_calendarios(self, email: str):
-        """
-        Lista as permissões da pasta de calendário do mailbox {email} no Exchange Online:
-
-        Ex:
-        Usuário com calendário em PT‑BR: joao@contoso.com:\Calendário
-        Usuário com calendário em EN: joao@contoso.com:\Calendar
-
-        """
-
-        comando_shell = rf"""
-        Import-Module ExchangeOnlineManagement -ErrorAction Stop; 
-            Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
-              -Organization '{os.getenv('Organization')}' `
-              -CertificateFilePath 'C:\\Temp\\ExchangeOnlineAutomation.pfx' `
-              -CertificatePassword (ConvertTo-SecureString '{os.getenv('PASSWORD')}' -AsPlainText -Force) `
-              -ShowBanner:$false;
-        # Funcionando
-        # ----------------------------------------------------------------------------------------------
-                         
-        Get-MailboxFolderPermission -Identity '{email}:\Calendário'
-        
-        # Desconecta do exchange
-        Disconnect-ExchangeOnline -Confirm:$false | Out-Null
-        """
-
-        resultado = self.init_conectar_exchange.run_spinner(
-            comando_shell,
-            'Verificando seu calendário... '
-        )
-
         return resultado
 
     def analisando_thumbprint(self):
@@ -370,10 +373,9 @@ if __name__ == '__main__':
         print(
             '[1] Criar um e-mail Shared e atribuir permissão para um  \n'
             '[2] Verificar as permissões de um grupo \n'
-            '[3] Conceder permissões de um grupo para um determinado usuário \n'
-            '[4] Analisar "Thumbprint" e "HasPrivateKey" \n'
-            '[5] Analisar Calendário do usuário \n'
-            '[6] Compartilhar calendário \n'
+            '[3] Conceder permissões de um grupo para um determinado usuário \n' 
+            '[4] Analisar Calendário do usuário \n'
+            '[5] Compartilhar calendário \n'
             
             '[0] Sair\n'
         )
@@ -437,23 +439,16 @@ if __name__ == '__main__':
             resultando_processo = init_obj_calendar.concedendo_permissoes_shared(grupo, email)
 
         elif resposta == 4:
-            response = init_obj_calendar.analisando_thumbprint()
-            print(response)
-
-        elif resposta == 5:
             print()
             print('Verificar calendário do usuário')
             print('---' * 20)
             print()
 
             email = input('Digital seu e-mail: ')
-            # email = os.getenv('ORGANIZADOR_TESTE')
             response = init_obj_calendar._verif_calendarios(email)
-
             print(response)
 
         elif resposta == 6:
-
             dict_permissoes = {
                 'A':'Owner',  # Permissão total
                 'B':'PublishingEditor',  # É usado mais quando há estrutura de subpastas (incomum em calendários).
