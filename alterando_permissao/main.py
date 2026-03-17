@@ -317,8 +317,8 @@ class AlterarPermissaoReunioes:
         """
 
         comando_shell = (
-            'Get-ChildItem Cert:\CurrentUser\My |'
-            'Select-Object Subject, Thumbprint, HasPrivateKey |'
+            'Get-ChildItem Cert:\CurrentUser\My | ' 
+            'Select-Object Subject, Thumbprint, HasPrivateKey | ' 
             'Format-List'
         )
 
