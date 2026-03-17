@@ -244,7 +244,7 @@ class AlterarPermissaoReunioes:
         return resultado
 
     def compartilhar_caixa_calendario(self, shared, usuario, permissao):
-        logging(f'\nCaixa {shared} sendo compartilhada com o usuário {usuario} com a permissão {permissao}')
+        logging.info(f'\nCaixa {shared} sendo compartilhada com o usuário {usuario} com a permissão {permissao}')
         comando_shell = rf"""
             Import-Module ExchangeOnlineManagement -ErrorAction Stop;
             Connect-ExchangeOnline -AppId '{os.getenv('AppId')}' `
@@ -266,7 +266,7 @@ class AlterarPermissaoReunioes:
                 Set-MailboxFolderPermission -Identity "{shared}:\Calendário" -User "{usuario}" -AccessRights {permissao} `
                 -ErrorAction Stop | Out-Null
                 
-                Write-Host "✓ Permissão atualizada... " -ForegroundColor Green
+                Write-Host "✓ Permissão atualizada para {permissao} " -ForegroundColor Green
             }} catch {{
                 Write-Host "{{$_.Exception.Message}} "
             }}
@@ -372,7 +372,7 @@ if __name__ == '__main__':
             '[2] Verificar as permissões de um grupo \n'
             '[3] Conceder permissões de um grupo para um determinado usuário \n' 
             '[4] Analisar Calendário do usuário \n'
-            '[5] Compartilhar calendário \n'
+            '[5] Compartilhar/Alterar permissão do calendário \n'
             
             '[0] Sair\n'
         )
