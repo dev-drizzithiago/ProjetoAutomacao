@@ -14,9 +14,19 @@ class CTkToolTip:
         self._after_id: str | None = None
         self._tooltip_window: ctk.CTkToplevel | None = None
 
-        widget.bind("<Enter>", self._schedule, add="+")
-        widget.bind("<Leave>", self._hide, add="+")
-        widget.bind("<ButtonPress>", self._hide, add="+")
+        self._bind_recursive(widget)
+
+    def _bind_recursive(self, widget: ctk.CTkBaseClass) -> None:
+        # Alguns widgets compostos do customtkinter (ex.: CTkSegmentedButton)
+        # não implementam bind() diretamente e lançam NotImplementedError.
+        # Nesse caso, o tooltip é aplicado recursivamente aos widgets internos.
+        try:
+            widget.bind("<Enter>", self._schedule, add="+")
+            widget.bind("<Leave>", self._hide, add="+")
+            widget.bind("<ButtonPress>", self._hide, add="+")
+        except NotImplementedError:
+            for child in widget.winfo_children():
+                self._bind_recursive(child)
 
     def _schedule(self, _event: object = None) -> None:
         self._cancel()

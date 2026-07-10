@@ -1,6 +1,7 @@
 """Janela principal do CorrecaoSistema (customtkinter)."""
 from __future__ import annotations
 
+import os
 import sys
 import threading
 import webbrowser
@@ -26,6 +27,8 @@ class App(ctk.CTk):
 
         self.logger = EventLogger()
         self._busy = False
+        self._progress_line_active = False
+        self._progress_line_start = "end"
 
         self._build_layout()
         self.logger.info("Aplicação iniciada.")
@@ -132,9 +135,17 @@ class App(ctk.CTk):
     def _on_appearance_change(self, value: str) -> None:
         ctk.set_appearance_mode(value)
 
-    def _log_to_console(self, message: str) -> None:
+    def _log_to_console(self, message: str, overwrite: bool = False) -> None:
+        """Registra uma mensagem no console. Se overwrite=True, substitui a
+        última linha em vez de acrescentar uma nova (usado pelas barras de
+        progresso do DISM/SFC, que atualizam a mesma linha continuamente)."""
         self.console.configure(state="normal")
+        if overwrite and self._progress_line_active:
+            self.console.delete(self._progress_line_start, "end-1c")
+        if overwrite:
+            self._progress_line_start = self.console.index("end-1c")
         self.console.insert("end", message + "\n")
+        self._progress_line_active = overwrite
         self.console.see("end")
         self.console.configure(state="disabled")
 
@@ -164,8 +175,8 @@ class App(ctk.CTk):
         def task() -> None:
             self.logger.info("Diagnóstico completo iniciado pelo usuário.")
 
-            def on_output(line: str) -> None:
-                self.after(0, self._log_to_console, line)
+            def on_output(line: str, overwrite: bool = False) -> None:
+                self.after(0, self._log_to_console, line, overwrite)
 
             def on_progress(current: int, total: int, name: str) -> None:
                 self.after(0, self._set_progress, current, total, name)
@@ -255,7 +266,12 @@ class App(ctk.CTk):
             target, args = sys.executable, ""
         else:
             # Execução via script: dispara o mesmo interpretador com main.py.
-            target, args = sys.executable, f'"{sys.argv[0]}"'
+            # Caminho absoluto é obrigatório aqui: o Agendador de Tarefas roda o
+            # processo com diretório de trabalho padrão (System32), não a pasta
+            # do projeto, então um caminho relativo faria o Python não achar
+            # main.py (mesma causa do bug de elevação UAC já corrigido).
+            script_path = os.path.abspath(sys.argv[0])
+            target, args = sys.executable, f'"{script_path}"'
         result = scheduler.create_logon_task(target, args)
         self._log_to_console(result.message)
         if result.success:

@@ -14,10 +14,35 @@ from app.constants import LOGS_DIR
 
 def main() -> None:
     if not is_admin():
-        relaunch_as_admin()
+        accepted = relaunch_as_admin()
+        if not accepted:
+            import ctypes
+
+            ctypes.windll.user32.MessageBoxW(
+                None,
+                "A elevação de Administrador foi cancelada ou falhou.\n"
+                "O CorrecaoSistema precisa ser executado como Administrador.",
+                "CorrecaoSistema",
+                0x10,  # MB_ICONERROR
+            )
         sys.exit(0)
 
-    from app.gui import run
+    try:
+        from app.gui import run
+    except ModuleNotFoundError as exc:
+        import ctypes
+
+        ctypes.windll.user32.MessageBoxW(
+            None,
+            f"Dependência ausente: {exc.name}\n\n"
+            "As bibliotecas do CorrecaoSistema não estão instaladas neste "
+            "interpretador Python. Execute o app usando o arquivo Iniciar.bat "
+            "(ele usa o ambiente virtual correto do projeto) em vez de abrir "
+            "main.py diretamente.",
+            "CorrecaoSistema - Dependência ausente",
+            0x10,  # MB_ICONERROR
+        )
+        sys.exit(1)
 
     run()
 
