@@ -1,4 +1,13 @@
+
+
+
 # CLAUDE.md - Configurações e Diretrizes do Projeto
+
+# Colinha
+# <contexto>quem você é e o que está acontecendo</contexto>
+# <dados>números, textos, inputs</dados>
+# <tarefa>o que você quer que ele faça</tarefa>
+# <formato>como quer a resposta</formato>
 
 ## Perfil do Usuário & Nível Técnico
 - **Desenvolvedor:** Programador Pleno / Administrador de TI.
