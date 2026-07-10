@@ -27,9 +27,22 @@ def main() -> None:
             )
         sys.exit(0)
 
+    silent = "--silent" in sys.argv[1:]
+
     try:
+        if silent:
+            # Disparado pela tarefa agendada no Logon: roda o diagnóstico
+            # completo em segundo plano, sem abrir nenhuma janela.
+            from app.headless import run_silent_diagnostics
+
+            run_silent_diagnostics()
+            return
+
         from app.gui import run
     except ModuleNotFoundError as exc:
+        if silent:
+            # Sem GUI para mostrar o erro; grava só no log de falhas.
+            raise
         import ctypes
 
         ctypes.windll.user32.MessageBoxW(

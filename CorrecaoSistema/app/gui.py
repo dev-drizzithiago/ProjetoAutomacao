@@ -92,7 +92,9 @@ class App(ctk.CTk):
         CTkToolTip(
             self.btn_schedule,
             "Registra o CorrecaoSistema no Agendador de Tarefas do Windows para "
-            "iniciar automaticamente a cada logon, com privilégios de Administrador.",
+            "rodar automaticamente a cada logon, com privilégios de Administrador. "
+            "Executa em segundo plano (sem abrir janela): faz o diagnóstico "
+            "completo e gera o relatório PDF silenciosamente.",
         )
 
         self.btn_unschedule = ctk.CTkButton(
@@ -261,9 +263,11 @@ class App(ctk.CTk):
         self._run_async(task)
 
     def _schedule_logon_task(self) -> None:
+        # --silent: no logon o app roda o diagnóstico completo e gera o
+        # relatório PDF em segundo plano, sem abrir nenhuma janela.
         if getattr(sys, "frozen", False):
-            # Executável gerado via PyInstaller: roda diretamente, sem argumentos.
-            target, args = sys.executable, ""
+            # Executável gerado via PyInstaller: roda diretamente.
+            target, args = sys.executable, "--silent"
         else:
             # Execução via script: dispara o mesmo interpretador com main.py.
             # Caminho absoluto é obrigatório aqui: o Agendador de Tarefas roda o
@@ -271,7 +275,7 @@ class App(ctk.CTk):
             # do projeto, então um caminho relativo faria o Python não achar
             # main.py (mesma causa do bug de elevação UAC já corrigido).
             script_path = os.path.abspath(sys.argv[0])
-            target, args = sys.executable, f'"{script_path}"'
+            target, args = sys.executable, f'"{script_path}" --silent'
         result = scheduler.create_logon_task(target, args)
         self._log_to_console(result.message)
         if result.success:
