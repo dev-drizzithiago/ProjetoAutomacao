@@ -24,7 +24,10 @@ No topo da janela fica um indicador (badge) de status:
 
 Abaixo do badge, uma linha de **status** mostra o resultado da última ação executada, com horário.
 
-Na parte inferior, o painel **Histórico de Execução** lista os eventos registrados no log do dia (sucesso, avisos e erros), atualizado automaticamente após cada ação.
+Na parte inferior, duas abas organizam as informações:
+
+- **Pontos de Restauração** — lista todos os pontos de restauração já existentes no Windows (consultados via `Get-ComputerRestorePoint`), com número, data/hora de criação, tipo e descrição. Um resumo no topo mostra o total encontrado e a data do mais recente. Atualiza automaticamente ao abrir o app e após criar um novo ponto.
+- **Histórico de Execução** — lista os eventos registrados no log do dia (sucesso, avisos e erros), atualizado automaticamente após cada ação.
 
 ## 4. Os botões
 
@@ -58,6 +61,24 @@ Remove a tarefa agendada criada pelo botão anterior, desativando a criação au
 - Se a tarefa não existir (nunca foi instalada, ou já removida), o app retorna um aviso — não é um erro crítico.
 
 > Não há confirmação antes de remover — a ação é imediata.
+
+### 4.4 "Gerar Relatório PDF" (botão azul-escuro)
+
+Gera um relatório PDF corporativo contendo:
+
+- Total de pontos de restauração encontrados no sistema e a data do mais recente.
+- Tabela completa com todos os pontos de restauração (número, data/hora, descrição e tipo).
+- Tabela com o histórico de execução recente (log do dia).
+
+O arquivo é salvo automaticamente em:
+
+```
+%UserProfile%\Documents\pointRestaurations\relatorios\relatorio_AAAA-MM-DD_HHMMSS.pdf
+```
+
+- **O que esperar:** o botão fica desabilitado e muda para "Gerando..." enquanto o PDF é montado.
+- **Sucesso:** o status mostra o caminho completo do arquivo gerado.
+- Requer Administrador pelo mesmo motivo do botão de criação — a consulta aos pontos de restauração (`Get-ComputerRestorePoint`) também exige privilégios elevados.
 
 ## 5. Onde ficam os registros (logs)
 

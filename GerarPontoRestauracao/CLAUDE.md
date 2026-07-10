@@ -22,7 +22,7 @@
 ## Comandos Úteis do Projeto
 - **Instalação de Dependências:** `pip install customtkinter`
 - **Execução do Script:** `python main.py`
-- **Compilação do Executável (com UAC Admin):** `pyinstaller --noconfirm --onedir --windowed --uac-admin --name "pointRestaurations" main.py`
+- **Compilação do Executável (com UAC Admin e ícone):** `pyinstaller --noconfirm --onedir --windowed --uac-admin --icon "pointRestaurations/assets/icon.ico" --add-data "pointRestaurations/assets;pointRestaurations/assets" --name "pointRestaurations" main.py`
 
 "Skills/Diretrizes"
 ## Automatização de Relatórios (PDF)
