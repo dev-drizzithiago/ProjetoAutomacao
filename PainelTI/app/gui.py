@@ -8,7 +8,7 @@ from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 
-from app import backup_usuario, instaladores, manutencao_windows, network_share, wifi_manager
+from app import backup_usuario, dominio, instaladores, manutencao_windows, network_share, wifi_manager
 from app.constants import ICON_PATH, RELATORIOS_DIR
 from app.logger import EventLogger
 from app.modules import (
@@ -58,6 +58,7 @@ class App(ctk.CTk):
         self.tabview.grid(row=1, column=0, sticky="nsew", padx=16, pady=(8, 4))
 
         aba_rede = self.tabview.add("Rede")
+        aba_dominio = self.tabview.add("Domínio")
         aba_manutencao = self.tabview.add("Manutenção")
         aba_diagnostico = self.tabview.add("Diagnóstico & Restauração")
         aba_instalacao = self.tabview.add("Instalação de Apps")
@@ -68,6 +69,7 @@ class App(ctk.CTk):
         aba_mikrotik = self.tabview.add("Mikrotik")
 
         self._build_rede_tab(aba_rede)
+        self._build_dominio_tab(aba_dominio)
         self._build_manutencao_tab(aba_manutencao)
         self._build_diagnostico_tab(aba_diagnostico)
         self._build_instalacao_tab(aba_instalacao)
@@ -182,6 +184,54 @@ class App(ctk.CTk):
             )
             btn_remover.grid(row=0, column=3, padx=2)
             CTkToolTip(btn_remover, "Remove esta rede da lista salva (não desconecta a rede no Windows).")
+
+    # ---------------------------------------------------------- aba: Domínio
+    def _build_dominio_tab(self, aba: ctk.CTkFrame) -> None:
+        aba.grid_columnconfigure(0, weight=1)
+
+        frame = ctk.CTkFrame(aba)
+        frame.grid(row=0, column=0, sticky="ew", padx=8, pady=8)
+        frame.grid_columnconfigure((0, 1), weight=1)
+
+        ctk.CTkLabel(frame, text="Entrada no Domínio", font=ctk.CTkFont(size=15, weight="bold")).grid(
+            row=0, column=0, columnspan=2, padx=12, pady=(10, 4), sticky="w"
+        )
+        ctk.CTkLabel(
+            frame,
+            text="Configure uma vez; depois é só clicar em 'Entrar no Domínio' em cada máquina nova.",
+            text_color=("gray40", "gray70"),
+        ).grid(row=1, column=0, columnspan=2, padx=12, pady=(0, 8), sticky="w")
+
+        config_atual = dominio.carregar_config()
+
+        self.entry_dominio_nome = ctk.CTkEntry(frame, placeholder_text="Domínio (ex.: empresa.local)")
+        self.entry_dominio_nome.insert(0, config_atual.dominio)
+        self.entry_dominio_nome.grid(row=2, column=0, columnspan=2, padx=12, pady=4, sticky="ew")
+        CTkToolTip(self.entry_dominio_nome, "Nome do domínio Active Directory (ex.: empresa.local).")
+
+        self.entry_dominio_usuario = ctk.CTkEntry(frame, placeholder_text="Usuário (ex.: DOMINIO\\ti)")
+        self.entry_dominio_usuario.insert(0, config_atual.usuario)
+        self.entry_dominio_usuario.grid(row=3, column=0, padx=(12, 6), pady=4, sticky="ew")
+        CTkToolTip(self.entry_dominio_usuario, "Usuário com permissão de adicionar computadores ao domínio.")
+
+        self.entry_dominio_senha = ctk.CTkEntry(frame, placeholder_text="Senha", show="*")
+        self.entry_dominio_senha.insert(0, config_atual.senha)
+        self.entry_dominio_senha.grid(row=3, column=1, padx=(6, 12), pady=4, sticky="ew")
+        CTkToolTip(self.entry_dominio_senha, "Senha do usuário acima (armazenada localmente em texto simples, em config/dominio.json).")
+
+        botoes = ctk.CTkFrame(frame, fg_color="transparent")
+        botoes.grid(row=4, column=0, columnspan=2, padx=12, pady=(8, 12), sticky="w")
+
+        btn_salvar = ctk.CTkButton(botoes, text="Salvar Configuração", command=self._salvar_config_dominio)
+        btn_salvar.grid(row=0, column=0, padx=(0, 6))
+
+        self.btn_entrar_dominio = self._botao_acao(botoes, "Entrar no Domínio", self._entrar_no_dominio)
+        self.btn_entrar_dominio.grid(row=0, column=1, padx=6)
+        CTkToolTip(
+            self.btn_entrar_dominio,
+            "Adiciona esta máquina ao domínio configurado (Add-Computer). Requer "
+            "Administrador. Ao concluir, pede pra reiniciar o Windows.",
+        )
 
     # ------------------------------------------------------- aba: Manutenção
     def _build_manutencao_tab(self, aba: ctk.CTkFrame) -> None:
@@ -891,6 +941,50 @@ class App(ctk.CTk):
             self.after(0, self._set_busy, False)
 
         self._run_async(task)
+
+    # -------------------------------------------------------------- ações: Domínio
+    def _salvar_config_dominio(self) -> None:
+        config = dominio.ConfigDominio(
+            dominio=self.entry_dominio_nome.get().strip(),
+            usuario=self.entry_dominio_usuario.get().strip(),
+            senha=self.entry_dominio_senha.get(),
+        )
+        dominio.salvar_config(config)
+        self.logger.success("Configuração de domínio salva.")
+        self._log_to_console("Configuração de domínio salva.")
+
+    def _entrar_no_dominio(self) -> None:
+        config = dominio.ConfigDominio(
+            dominio=self.entry_dominio_nome.get().strip(),
+            usuario=self.entry_dominio_usuario.get().strip(),
+            senha=self.entry_dominio_senha.get(),
+        )
+        if not config.dominio or not config.usuario or not config.senha:
+            messagebox.showwarning("PainelTI", "Preencha domínio, usuário e senha antes de continuar.")
+            return
+
+        dominio.salvar_config(config)
+
+        def task() -> None:
+            self.logger.info(f"Entrada no domínio '{config.dominio}' solicitada.")
+            resultado = dominio.entrar_no_dominio(config)
+            self._registrar_resultado(resultado)
+            if resultado.success:
+                self.after(0, self._oferecer_reiniciar_windows, resultado.message)
+            else:
+                self.after(0, messagebox.showerror, "PainelTI", resultado.message)
+            self.after(0, self._set_busy, False)
+
+        self._run_async(task)
+
+    def _oferecer_reiniciar_windows(self, message: str) -> None:
+        resposta = messagebox.askyesno("PainelTI", message + "\n\nReiniciar o Windows agora?")
+        if not resposta:
+            return
+        resultado = dominio.reiniciar_windows()
+        self._log_to_console(resultado.message)
+        if not resultado.success:
+            messagebox.showerror("PainelTI", resultado.message)
 
     # ------------------------------------------------------- ações: Manutenção
     def _resetar_anydesk(self) -> None:

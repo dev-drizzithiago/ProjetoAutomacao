@@ -138,9 +138,39 @@ def _run_powershell(command: str, timeout: int = 120) -> subprocess.CompletedPro
     )
 
 
+def garantir_protecao_sistema_ativa(unidade: str = "C:\\") -> OperationResult:
+    """Ativa a Proteção do Sistema (System Restore) na unidade, com 5% do disco
+    reservado para pontos de restauração. No Windows 10/11 essa proteção vem
+    **desativada por padrão** — sem isso, `Checkpoint-Computer` falha (às
+    vezes silenciosamente) mesmo com privilégio de Administrador."""
+    try:
+        resultado = _run_powershell(f'Enable-ComputerRestore -Drive "{unidade}"', timeout=30)
+    except (subprocess.TimeoutExpired, OSError) as error:
+        return OperationResult(False, f"Falha ao ativar a Proteção do Sistema: {error}")
+
+    if resultado.returncode != 0:
+        return OperationResult(False, (resultado.stderr or "Falha ao ativar a Proteção do Sistema.").strip())
+
+    try:
+        subprocess.run(
+            ["vssadmin", "resize", "shadowstorage", f"/for={unidade}", f"/on={unidade}", "/maxsize=5%"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        pass  # a proteção já foi ativada; o tamanho reservado é só um ajuste fino, não crítico
+
+    return OperationResult(True, f"Proteção do Sistema ativa em {unidade} (5% de espaço reservado).")
+
+
 def create_restore_point(description: str | None = None) -> OperationResult:
     """Cria um ponto de restauração via PowerShell. Requer Administrador. O
     Windows limita, por padrão, a 1 ponto a cada 24h quando criado por script."""
+    protecao = garantir_protecao_sistema_ativa()
+    if not protecao.success:
+        return protecao
+
     description = description or f"PainelTI - {datetime.now():%d/%m/%Y %H:%M}"
     command = f"Checkpoint-Computer -Description '{description}' -RestorePointType 'MODIFY_SETTINGS'"
 
@@ -337,6 +367,9 @@ def _schtask_existe(nome_tarefa: str) -> bool:
 # Ponto de restauração — gatilho por logon (dispara toda vez que alguém loga;
 # na prática cria só 1x/dia por causa do limite do próprio Windows).
 def create_logon_task() -> OperationResult:
+    protecao = garantir_protecao_sistema_ativa()
+    if not protecao.success:
+        return protecao
     return _criar_schtask(TASK_NAME, "--silent", ["/SC", "ONLOGON"])
 
 
@@ -351,6 +384,9 @@ def task_exists() -> bool:
 # Ponto de restauração — gatilho diário fixo (garante 1x/dia mesmo que a
 # máquina fique ligada dias sem novo logon; convive com o gatilho de logon acima).
 def create_daily_checkpoint_task(hora: str = "08:00") -> OperationResult:
+    protecao = garantir_protecao_sistema_ativa()
+    if not protecao.success:
+        return protecao
     return _criar_schtask(TASK_NAME_DAILY, "--silent", ["/SC", "DAILY", "/ST", hora])
 
 

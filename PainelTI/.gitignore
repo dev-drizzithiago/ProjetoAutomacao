@@ -6,9 +6,10 @@ build/
 dist/
 *.spec
 
-# Contém senhas de Wi-Fi em texto simples — não deve ir para o controle de
-# versão. Fica no disco para ser distribuído manualmente junto com o app.
+# Contém senhas de Wi-Fi/domínio em texto simples — não deve ir para o
+# controle de versão. Fica no disco para ser distribuído manualmente junto com o app.
 config/wifi_profiles.json
+config/dominio.json
 
 # Efeito colateral do alterando_permissao/main.py legado (logging.basicConfig
 # grava aqui quando o diretório de trabalho é PainelTI/).
