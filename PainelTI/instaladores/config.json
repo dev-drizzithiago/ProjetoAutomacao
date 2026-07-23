@@ -1,0 +1,7 @@
+{
+  "AnyDesk.exe": "--install \"C:\\Program Files (x86)\\AnyDesk\" --start-with-win --silent",
+  "ChromeSetup.exe": "/silent /install",
+  "Firefox Installer.exe": "-ms",
+  "setup-lightshot.exe": "/VERYSILENT /NORESTART /SUPPRESSMSGBOXES",
+  "winrar-x64-723br.exe": "/S"
+}
