@@ -23,3 +23,7 @@ teste_velocidade_v1/.~lock.data.csv\#
 alterando_permissao/env_old
 utilitarios_segeti/env_old
 *.iml
+/GerarPontoRestauracao/dist
+/CorrecaoSistema/build
+/GerarPontoRestauracao/build
+/GerarPontoRestauracao/Lib
