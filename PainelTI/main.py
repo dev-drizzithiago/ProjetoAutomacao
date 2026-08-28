@@ -40,6 +40,14 @@ def main() -> None:
         executar_diagnostico_silencioso()
         return
 
+    if "--watchdog-silencioso" in sys.argv[1:]:
+        # Disparado pela tarefa agendada repetitiva: verifica os apps
+        # monitorados e reabre os que não estiverem rodando, sem abrir janela.
+        from app.watchdog_manager import executar_watchdog_silencioso
+
+        executar_watchdog_silencioso()
+        return
+
     try:
         from app.gui import run
     except ModuleNotFoundError as exc:

@@ -8,7 +8,7 @@ from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 
-from app import backup_usuario, dominio, instaladores, manutencao_windows, network_share, wifi_manager
+from app import backup_usuario, dominio, instaladores, manutencao_windows, network_share, watchdog_manager, wifi_manager
 from app.constants import ICON_PATH, RELATORIOS_DIR
 from app.logger import EventLogger
 from app.modules import (
@@ -41,6 +41,9 @@ class App(ctk.CTk):
         self._interfaces_detectadas: list[dict] = []
         self._instaladores_encontrados: list = []
         self._pastas_extras_backup: list[str] = backup_usuario.carregar_pastas_extras()
+        self._apps_watchdog: list[watchdog_manager.WatchdogApp] = watchdog_manager.carregar_apps()
+        self._intervalo_watchdog: int = watchdog_manager.carregar_intervalo_minutos()
+        self._processos_disponiveis_watchdog: list[tuple[str, str]] = []
 
         self._build_layout()
         self.logger.info("Aplicação iniciada.")
@@ -67,6 +70,7 @@ class App(ctk.CTk):
         aba_rede_segeti = self.tabview.add("Rede SEGETI")
         aba_exchange = self.tabview.add("Exchange Online")
         aba_mikrotik = self.tabview.add("Mikrotik")
+        aba_watchdog = self.tabview.add("Watchdog")
 
         self._build_rede_tab(aba_rede)
         self._build_dominio_tab(aba_dominio)
@@ -78,6 +82,7 @@ class App(ctk.CTk):
         self._build_rede_segeti_tab(aba_rede_segeti)
         self._build_exchange_tab(aba_exchange)
         self._build_mikrotik_tab(aba_mikrotik)
+        self._build_watchdog_tab(aba_watchdog)
 
         self._build_console()
 
@@ -814,6 +819,200 @@ class App(ctk.CTk):
             "Conecta ao MikroTik, busca os logs de DHCP recentes e testa (ping) os "
             "IPs encontrados. Requer o pacote 'librouteros' e o .env "
             "(mikro_USERNAME/mikro_PASSWORD/mikro_HOST_FW/mikro_PORT_FW) configurados.",
+        )
+
+    # ---------------------------------------------------------- aba: Watchdog
+    def _build_watchdog_tab(self, aba: ctk.CTkFrame) -> None:
+        aba.grid_columnconfigure(0, weight=1)
+
+        frame_processos = ctk.CTkFrame(aba)
+        frame_processos.grid(row=0, column=0, sticky="ew", padx=8, pady=(8, 4))
+        frame_processos.grid_columnconfigure(0, weight=1)
+
+        ctk.CTkLabel(frame_processos, text="Programas em Execução", font=ctk.CTkFont(size=15, weight="bold")).grid(
+            row=0, column=0, padx=12, pady=(10, 4), sticky="w"
+        )
+        ctk.CTkLabel(
+            frame_processos,
+            text="Abra o programa desejado antes de atualizar a lista, depois clique em 'Monitorar'.",
+            text_color=("gray40", "gray70"),
+        ).grid(row=1, column=0, padx=12, pady=(0, 4), sticky="w")
+
+        btn_atualizar_processos = ctk.CTkButton(
+            frame_processos, text="Atualizar Lista de Programas", command=self._atualizar_lista_processos_watchdog
+        )
+        btn_atualizar_processos.grid(row=2, column=0, padx=12, pady=(0, 8), sticky="w")
+        CTkToolTip(btn_atualizar_processos, "Lista os programas com processo em execução nesta máquina agora.")
+
+        self.lista_processos_watchdog_frame = ctk.CTkScrollableFrame(frame_processos, height=160)
+        self.lista_processos_watchdog_frame.grid(row=3, column=0, padx=12, pady=(0, 12), sticky="ew")
+        self.lista_processos_watchdog_frame.grid_columnconfigure(0, weight=1)
+
+        frame_monitorados = ctk.CTkFrame(aba)
+        frame_monitorados.grid(row=1, column=0, sticky="ew", padx=8, pady=4)
+        frame_monitorados.grid_columnconfigure(0, weight=1)
+
+        ctk.CTkLabel(frame_monitorados, text="Apps Monitorados (Auto-Restart)", font=ctk.CTkFont(size=15, weight="bold")).grid(
+            row=0, column=0, padx=12, pady=(10, 4), sticky="w"
+        )
+
+        self.lista_apps_watchdog_frame = ctk.CTkScrollableFrame(frame_monitorados, height=140)
+        self.lista_apps_watchdog_frame.grid(row=1, column=0, padx=12, pady=(0, 12), sticky="ew")
+        self.lista_apps_watchdog_frame.grid_columnconfigure(0, weight=1)
+
+        frame_ativacao = ctk.CTkFrame(aba)
+        frame_ativacao.grid(row=2, column=0, sticky="ew", padx=8, pady=4)
+
+        ctk.CTkLabel(frame_ativacao, text="Ativação", font=ctk.CTkFont(size=15, weight="bold")).grid(
+            row=0, column=0, columnspan=4, padx=12, pady=(10, 4), sticky="w"
+        )
+
+        ctk.CTkLabel(frame_ativacao, text="Verificar a cada (minutos):").grid(
+            row=1, column=0, padx=(12, 6), pady=(0, 12), sticky="w"
+        )
+
+        self.entry_intervalo_watchdog = ctk.CTkEntry(frame_ativacao, width=60)
+        self.entry_intervalo_watchdog.insert(0, str(self._intervalo_watchdog))
+        self.entry_intervalo_watchdog.grid(row=1, column=1, padx=6, pady=(0, 12))
+
+        self.btn_ativar_watchdog = self._botao_acao(frame_ativacao, "Ativar Watchdog", self._ativar_watchdog)
+        self.btn_ativar_watchdog.grid(row=1, column=2, padx=6, pady=(0, 12))
+        CTkToolTip(
+            self.btn_ativar_watchdog,
+            f"Registra a tarefa '{watchdog_manager.TASK_NAME_WATCHDOG}', que verifica os apps "
+            "monitorados no intervalo escolhido e reabre qualquer um que tenha fechado.",
+        )
+
+        btn_desativar_watchdog = ctk.CTkButton(
+            frame_ativacao, text="Desativar", fg_color="transparent", border_width=1,
+            command=self._desativar_watchdog,
+        )
+        btn_desativar_watchdog.grid(row=1, column=3, padx=(6, 12), pady=(0, 12))
+        CTkToolTip(btn_desativar_watchdog, f"Remove a tarefa agendada '{watchdog_manager.TASK_NAME_WATCHDOG}'.")
+
+        self.label_status_watchdog = ctk.CTkLabel(frame_ativacao, text="")
+        self.label_status_watchdog.grid(row=2, column=0, columnspan=4, padx=12, pady=(0, 10), sticky="w")
+
+        self._render_lista_apps_watchdog()
+        self._atualizar_status_watchdog()
+
+    def _atualizar_lista_processos_watchdog(self) -> None:
+        self._processos_disponiveis_watchdog = watchdog_manager.listar_processos_em_execucao()
+
+        for child in self.lista_processos_watchdog_frame.winfo_children():
+            child.destroy()
+
+        if not self._processos_disponiveis_watchdog:
+            vazio = ctk.CTkLabel(self.lista_processos_watchdog_frame, text="Nenhum programa encontrado.")
+            vazio.grid(row=0, column=0, padx=8, pady=8, sticky="w")
+            return
+
+        nomes_monitorados = {a.name for a in self._apps_watchdog}
+
+        for i, (nome, caminho) in enumerate(self._processos_disponiveis_watchdog):
+            row = ctk.CTkFrame(self.lista_processos_watchdog_frame, fg_color="transparent")
+            row.grid(row=i, column=0, sticky="ew", pady=2)
+            row.grid_columnconfigure(0, weight=1)
+
+            ctk.CTkLabel(row, text=f"{nome}   —   {caminho}", anchor="w").grid(
+                row=0, column=0, padx=(4, 8), sticky="ew"
+            )
+
+            if nome in nomes_monitorados:
+                ctk.CTkLabel(row, text="já monitorado", text_color=("gray40", "gray70")).grid(row=0, column=1, padx=6)
+            else:
+                btn_monitorar = ctk.CTkButton(
+                    row, text="Monitorar", width=90,
+                    command=lambda n=nome, c=caminho: self._adicionar_app_watchdog(n, c),
+                )
+                btn_monitorar.grid(row=0, column=1, padx=6)
+
+    def _adicionar_app_watchdog(self, nome: str, caminho: str) -> None:
+        self._apps_watchdog = watchdog_manager.adicionar_ou_atualizar_app(self._apps_watchdog, nome, caminho)
+        watchdog_manager.salvar_apps(self._apps_watchdog)
+        self._log_to_console(f"'{nome}' adicionado ao Watchdog ({caminho}).")
+        self._render_lista_apps_watchdog()
+        self._atualizar_lista_processos_watchdog()
+        self._atualizar_status_watchdog()
+
+    def _render_lista_apps_watchdog(self) -> None:
+        for child in self.lista_apps_watchdog_frame.winfo_children():
+            child.destroy()
+
+        if not self._apps_watchdog:
+            vazio = ctk.CTkLabel(self.lista_apps_watchdog_frame, text="Nenhum app monitorado ainda.")
+            vazio.grid(row=0, column=0, padx=8, pady=8, sticky="w")
+            return
+
+        for i, app in enumerate(self._apps_watchdog):
+            row = ctk.CTkFrame(self.lista_apps_watchdog_frame, fg_color="transparent")
+            row.grid(row=i, column=0, sticky="ew", pady=2)
+            row.grid_columnconfigure(0, weight=1)
+
+            ctk.CTkLabel(row, text=app.name, anchor="w").grid(row=0, column=0, padx=(4, 8), sticky="ew")
+
+            switch = ctk.CTkSwitch(
+                row, text="Ativo" if app.enabled else "Pausado", width=80,
+                command=lambda a=app: self._alternar_app_watchdog(a),
+            )
+            (switch.select if app.enabled else switch.deselect)()
+            switch.grid(row=0, column=1, padx=6)
+
+            btn_remover = ctk.CTkButton(
+                row, text="Remover", width=70, fg_color="transparent", border_width=1,
+                command=lambda a=app: self._remover_app_watchdog(a),
+            )
+            btn_remover.grid(row=0, column=2, padx=2)
+
+    def _alternar_app_watchdog(self, app: watchdog_manager.WatchdogApp) -> None:
+        self._apps_watchdog = watchdog_manager.alternar_app(self._apps_watchdog, app.name)
+        watchdog_manager.salvar_apps(self._apps_watchdog)
+        self._log_to_console(f"'{app.name}' {'pausado' if app.enabled else 'ativado'} no Watchdog.")
+        self._render_lista_apps_watchdog()
+
+    def _remover_app_watchdog(self, app: watchdog_manager.WatchdogApp) -> None:
+        self._apps_watchdog = watchdog_manager.remover_app(self._apps_watchdog, app.name)
+        watchdog_manager.salvar_apps(self._apps_watchdog)
+        self._log_to_console(f"'{app.name}' removido do Watchdog.")
+        self._render_lista_apps_watchdog()
+        self._atualizar_lista_processos_watchdog()
+        self._atualizar_status_watchdog()
+
+    def _ativar_watchdog(self) -> None:
+        if not self._apps_watchdog:
+            messagebox.showwarning("PainelTI", "Adicione ao menos um app para monitorar antes de ativar.")
+            return
+
+        texto_intervalo = self.entry_intervalo_watchdog.get().strip()
+        if not texto_intervalo.isdigit() or int(texto_intervalo) < 1:
+            messagebox.showwarning("PainelTI", "Informe um intervalo válido em minutos (mínimo 1).")
+            return
+        intervalo = int(texto_intervalo)
+
+        def task() -> None:
+            self.logger.info(f"Ativação do Watchdog solicitada (a cada {intervalo} min).")
+            watchdog_manager.salvar_apps(self._apps_watchdog, intervalo)
+            resultado = watchdog_manager.criar_tarefa_watchdog(intervalo)
+            self._registrar_resultado(resultado)
+            if resultado.success:
+                self._intervalo_watchdog = intervalo
+                self.after(0, messagebox.showinfo, "PainelTI", resultado.message)
+            else:
+                self.after(0, messagebox.showerror, "PainelTI", resultado.message)
+            self.after(0, self._atualizar_status_watchdog)
+            self.after(0, self._set_busy, False)
+
+        self._run_async(task)
+
+    def _desativar_watchdog(self) -> None:
+        resultado = watchdog_manager.remover_tarefa_watchdog()
+        self._registrar_resultado(resultado)
+        self._atualizar_status_watchdog()
+
+    def _atualizar_status_watchdog(self) -> None:
+        ativo = watchdog_manager.tarefa_watchdog_existe()
+        self.label_status_watchdog.configure(
+            text=f"Status: {'ativo' if ativo else 'inativo'} ({len(self._apps_watchdog)} app(s) na lista)."
         )
 
     def _build_console(self) -> None:

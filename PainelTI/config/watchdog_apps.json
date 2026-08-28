@@ -1,0 +1,4 @@
+{
+  "check_interval_minutes": 5,
+  "watchdog_apps": []
+}
